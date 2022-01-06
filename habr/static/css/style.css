@@ -81,17 +81,23 @@ body {
     align-items: center;
 } 
 
+.main-wrapper .topNavbar .accaunt .personalAccount,
 .main-wrapper .topNavbar .accaunt .loginRegister {
     display: flex;
     height: 26px;
     align-items: center;
-} 
+}
+
+.main-wrapper .topNavbar .accaunt .loginRegister {
+    display: none;
+}
 
 .main-wrapper .topNavbar .accaunt .loginRegister {
     width: 122px;
     height: 26px;
 } 
 
+.main-wrapper .topNavbar .accaunt .personalAccount a,
 .main-wrapper .topNavbar .accaunt .loginRegister a {
     width: 120px;
     height: 26px;
@@ -109,6 +115,7 @@ body {
 
 /* end .top-navbar */
 
+
 /* start .footer  */
 .main-footer {
     height: 396px;
@@ -118,16 +125,276 @@ body {
     background: #1E212C;
 }
 
-.main-footer .topFooter{
+.main-footer .wrapper {
+    width: 1230px;
+    margin: 0 auto;
+}
+
+.main-footer .topFooter {
     height: 338px;
     width: 100%;
     display: flex;
 }
 
-.main-footer .bottomFooter{
+.main-footer .topFooter .wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 218px;
+    margin: 80px auto;
+}
+
+.main-footer .topFooter .wrapper .aboutUs {
+    display: flex;
+    width: 280px;
+    height: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.main-footer .topFooter .wrapper .aboutUs .logo img {
+    width: 160px;
+    height: 32px;
+    border-radius: 3px;
+    opacity: .75;
+}
+
+.main-footer .topFooter .wrapper .aboutUs .socialNetworks {
+    display: flex;
+    justify-content: space-between;
+    width: 244px;
+}
+
+.main-footer .topFooter .wrapper .aboutUs .desc {
+    font-family: arial;
+    font-size: 11px;
+    line-height: 150%;
+    color: #FFFFFF;
+    opacity: 0.6;
+    width: 100%;
+}
+
+.main-footer .topFooter .wrapper .siteMap {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    opacity: 0.6;
+}
+
+.main-footer .topFooter .wrapper .siteMap .title {
+    font-family: arial;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin: 0 0 20px ;
+}
+
+.main-footer .topFooter .wrapper .siteMap .menu {
+    height: 162px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    list-style: none;
+}
+
+.main-footer .topFooter .wrapper .siteMap .menu a {
+    text-decoration: none;
+    font-family: arial;
+    font-size: 16px;
+    line-height: 160%;
+    color: #FFFFFF;
+}
+
+.main-footer .topFooter .wrapper .siteMap .menu a:hover {
+    color: #FF3F3A;
+}
+
+.main-footer .topFooter .wrapper .team {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    opacity: 0.6;
+}
+
+.main-footer .topFooter .wrapper .team .title {
+    font-family: arial;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin: 0 0 20px ;
+}
+
+.main-footer .topFooter .wrapper .team .players {
+    height: 162px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.main-footer .topFooter .wrapper .team .players .player {
+    font-family: arial;
+    font-size: 16px;
+    line-height: 160%;
+    color: #FFFFFF;
+}
+
+.main-footer .topFooter .wrapper .subscribe {
+    height: 100%;
+    width: 274px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    opacity: 0.6;
+}
+
+.main-footer .topFooter .wrapper .subscribe .title{
+    font-family: arial;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 150%;
+    align-items: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+}
+
+.main-footer .topFooter .wrapper .contactUs {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    opacity: 0.6;
+}
+
+.main-footer .topFooter .wrapper .contactUs .title {
+    font-family: arial;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin: 0 0 20px ;
+}
+
+.main-footer .topFooter .wrapper .contactUs .mail,
+.main-footer .topFooter .wrapper .contactUs .phone {
+    display: flex;
+    margin-bottom: 6px;
+    align-items: flex-end;
+}
+
+.main-footer .topFooter .wrapper .contactUs .mail .icon,
+.main-footer .topFooter .wrapper .contactUs .phone .icon {
+    margin-right: 10px;
+}
+
+.main-footer .topFooter .wrapper .contactUs .mail .text a,
+.main-footer .topFooter .wrapper .contactUs .phone .text {
+    text-decoration: none;
+    font-family: arial;
+    font-size: 16px;
+    line-height: 160%;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+}
+
+.main-footer .topFooter .wrapper .subscribe .subsForm {
+    width: 285px;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+.main-footer .topFooter .wrapper .subscribe .subsForm form {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+}
+.main-footer .topFooter .wrapper .subscribe .subsForm input {
+    width: 268px;
+    height: 36px;
+    padding-left: 16px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #FFFFFF;
+    margin: 20px 0 10px;
+}
+
+.main-footer .topFooter .wrapper .subscribe .subsForm button {
+    position: absolute;
+    top: 20px;
+    right: 18px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: url(/static/img/LineStroke.png) no-repeat center;
+    cursor: pointer;
+}
+
+.main-footer .topFooter .wrapper .subscribe .desc {
+    font-family: arial;
+    font-size: 10px;
+    line-height: 150%;
+    color: #FFFFFF;
+}
+
+
+.main-footer .bottomFooter {
     height: 58px;
-    background: #FFFFFF;
-    opacity: 0.05;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.main-footer .bottomFooter .wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.main-footer .bottomFooter .wrapper .madeWith {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    font-family: arial;
+    font-size: 12px;
+    line-height: 150%;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+}
+
+.main-footer .bottomFooter .wrapper .madeWith .image {
+    margin: 0 5px;
+}
+
+.main-footer .bottomFooter .wrapper .goToTop a {
+    font-family: arial;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 150%;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    opacity: 0.6;
+    text-decoration: none;
 }
 
 /* end .footer  */
@@ -179,23 +446,24 @@ body {
 
 .content .main .menu .side .sort {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-end;
+    justify-content: flex-start;
     width: 300px;
     height: 44px;
     margin: 0 30px;
 }
-
-.content .main .menu .side .sort .sortlike,
-.content .main .menu .side .sort .sortDate {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.content .main .menu .side .sort .title {
+    font-family: arial;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    color: #9A9CA5;
+    margin: 0 0 2px;
 }
 
 .content .main .menu .side .sort a {
     display: block;
-    margin-left: 10px;
+    margin-left: 20px;
     text-decoration: none;
     font-family: arial;
     font-weight: bold;
@@ -225,6 +493,7 @@ body {
     font-size: 16px;
     line-height: 160%;
     color: #424551;
+    opacity: .6;
 }
 
 .content .main .menu .side .category .categoriItems {
@@ -268,7 +537,7 @@ body {
     width: 44px;
     height: 44px;
     border: none;
-    background: url(img/search.png) no-repeat center;
+    background: url(/static/img/search.png) no-repeat center;
     cursor: pointer;
 }
 
