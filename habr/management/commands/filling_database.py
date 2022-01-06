@@ -16,6 +16,10 @@ class Command(BaseCommand):
         text = Text('ru')
         img_cls = BinaryFile()
 
+        # CREATE USERS
+        #TODO add create users in database
+
+        #CREATE ARTICLES
         for i in range(1):
             new_article = Article(article_title = text.title(),
                                   article_subtitle = text.title(),
@@ -30,7 +34,21 @@ class Command(BaseCommand):
                 new_article.article_main_img.save(file_name, data, True)
 
             os.remove(file_name)
+            new_article.save()
 
+        # CREATE LIKES
+        # TODO add users in likes
+        for item in Article.objects.all():
+            new_like = ArticleLike(article_like=True)
+            new_like.article_to_like = item
+            new_like.save()
+
+      # CREATE COMMENTS
+        # TODO add users in comments
+        for item in Article.objects.all():
+            new_comment = ArticleComment(comment_text = text.text(quantity=2))
+            new_comment.article_to_comment = item
+            new_comment.save()
 
 # if __name__ == "__main__":
 #     img = BinaryFile()
