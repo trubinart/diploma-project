@@ -6,30 +6,31 @@ from mimesis.enums import ImageFile
 from django.core.management.base import BaseCommand
 from django.core.files import File
 
-from articleapp.models import Article, ArticleLike, ArticleComment
+from mainapp.models import Article, ArticleLike, ArticleComment
 from authapp.models import User
+
 
 class Command(BaseCommand):
     help = 'Create Articles, Likes and Comments'
 
     def handle(self, *args, **options):
-        #GENERATE PROJECTS
+        # GENERATE PROJECTS
         text = Text('ru')
         img_cls = BinaryFile()
 
         # CREATE USERS
-        #TODO add create users in database
+        # TODO add create users in database
 
-        #CREATE ARTICLES
+        # CREATE ARTICLES
         for i in range(20):
             # create article
-            new_article = Article(article_title = text.title(),
-                                  article_subtitle = text.title(),
-                                  article_text = text.text(quantity=15))
+            new_article = Article(article_title=text.title(),
+                                  article_subtitle=text.title(),
+                                  article_text=text.text(quantity=15))
             # set author
             new_article.user = random.choice(User.objects.all())
 
-            #create and set article images
+            # create and set article images
             file_name = f'{text.word()}.png'
             with open(file_name, 'wb') as file:
                 file.write(img_cls.image(file_type=ImageFile.PNG))
@@ -50,9 +51,9 @@ class Command(BaseCommand):
             new_like.user = random.choice(User.objects.all())
             new_like.save()
 
-      # CREATE COMMENTS
+        # CREATE COMMENTS
         for item in Article.objects.all():
-            new_comment = ArticleComment(comment_text = text.text(quantity=2))
+            new_comment = ArticleComment(comment_text=text.text(quantity=2))
             new_comment.article_to_comment = item
             new_comment.user = random.choice(User.objects.all())
             new_comment.save()
