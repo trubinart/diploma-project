@@ -25,3 +25,4 @@ class User(AbstractUser):
     email = models.EmailField(verbose_name='email', unique=True, blank=True)
     password = models.CharField(verbose_name='password', max_length=25, blank=True)
     birthday = models.DateField(verbose_name='birthday', null=True, blank=True)
+    avatar = models.ImageField(upload_to='user_avatars')
