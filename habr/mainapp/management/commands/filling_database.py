@@ -1,10 +1,13 @@
 import random
 import os
+import requests
 
-from mimesis import Text, BinaryFile
-from mimesis.enums import ImageFile
+from mimesis import Text, BinaryFile, Person, Datetime
+from mimesis import Internet
+
 from django.core.management.base import BaseCommand
 from django.core.files import File
+
 
 from mainapp.models import Article, ArticleLike, ArticleComment
 from authapp.models import User
@@ -19,25 +22,58 @@ class Command(BaseCommand):
         img_cls = BinaryFile()
 
         # CREATE USERS
-        # TODO add create users in database
+        person = Person()
+        birthday = Datetime()
+
+        print('Заполняю таблицу USERS')
+
+        for _ in range(30):
+            username = person.username(mask='C')
+            user = User(
+                first_name=person.first_name(gender=None),
+                last_name=person.last_name(gender=None),
+                username=username,
+                email=person.email(domains=None, unique=True),
+                password=person.password(length=8),
+                birthday=birthday.formatted_datetime(fmt="%Y-%m-%d"))
+
+            # TODO указать размер картинки для аватарки
+            img_url = Internet().stock_image(width=1920, height=1080, keywords=['люди'])
+            img_file = requests.get(img_url)
+
+            file_name = f'{username}.png'
+            with open(file_name, 'wb') as file:
+                file.write(img_file.content)
+
+            with open(file_name, 'rb') as file:
+                data = File(file)
+                user.avatar.save(file_name, data, True)
+
+            os.remove(file_name)
+            user.save()
 
         # CREATE ARTICLES
-        for i in range(20):
+        print('Заполняю таблицу ARTICLES')
+        for i in range(30):
             # create article
-            new_article = Article(article_title=text.title(),
-                                  article_subtitle=text.title(),
-                                  article_text=text.text(quantity=15))
+            new_article = Article(title=text.title(),
+                                  subtitle=text.sentence(),
+                                  text=text.text(quantity=15))
             # set author
             new_article.user = random.choice(User.objects.all())
 
             # create and set article images
+            # TODO указать размер картинки для статей
+            img_url = Internet().stock_image(width=1920, height=1080, keywords=['природа'])
+            img_file = requests.get(img_url)
+
             file_name = f'{text.word()}.png'
             with open(file_name, 'wb') as file:
-                file.write(img_cls.image(file_type=ImageFile.PNG))
+                file.write(img_file.content)
 
             with open(file_name, 'rb') as file:
                 data = File(file)
-                new_article.article_main_img.save(file_name, data, True)
+                new_article.main_img.save(file_name, data, True)
 
             os.remove(file_name)
 
@@ -45,15 +81,17 @@ class Command(BaseCommand):
             new_article.save()
 
         # CREATE LIKES
-        for item in Article.objects.all():
-            new_like = ArticleLike(article_like=True)
-            new_like.article_to_like = item
-            new_like.user = random.choice(User.objects.all())
+        print('Заполняю таблицу LIKES')
+        for item in User.objects.all():
+            new_like = ArticleLike(like=True)  # вот здесь указывает на ошибку лишнего аргумента
+            new_like.article_like = random.choice(Article.objects.all())
+            new_like.user = item
             new_like.save()
 
         # CREATE COMMENTS
-        for item in Article.objects.all():
-            new_comment = ArticleComment(comment_text=text.text(quantity=2))
-            new_comment.article_to_comment = item
-            new_comment.user = random.choice(User.objects.all())
+        print('Заполняю таблицу COMMENTS')
+        for item in User.objects.all():
+            new_comment = ArticleComment(text=text.text(quantity=2))
+            new_comment.article_comment = random.choice(Article.objects.all())
+            new_comment.user = item
             new_comment.save()
