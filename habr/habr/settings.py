@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp',
-    'articleapp',
     'authapp',
 ]
 
@@ -115,7 +114,7 @@ STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
 
-#Media Files for Users and Articles
+# Media Files for Users and Articles
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -130,5 +129,6 @@ AUTH_USER_MODEL = 'authapp.User'
 # HERE STARTS DYNACONF EXTENSION LOAD (Keep at the very bottom of settings.py)
 # Read more at https://dynaconf.readthedocs.io/en/latest/guides/django.html
 import dynaconf  # noqa
+
 settings = dynaconf.DjangoDynaconf(__name__)  # noqa
 # HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)

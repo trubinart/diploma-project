@@ -7,13 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
         {% if title %}
-        {{ title|title}}
+            {{ title|title }}
         {% else %}
-        diploma-project
+            diploma-project
         {% endif %}
     </title>
     {% block css %}
-    <link rel="stylesheet" type="text/css" href={% static 'css/style.css' %}>
+        <link rel="stylesheet" type="text/css" href={% static 'css/style.css' %}>
     {% endblock %}
 
     {% block js %}
@@ -24,25 +24,25 @@
 <div class="main-wrapper">
     <div class="top-main">
         {% block menu %}
-        <div class="topNavbar">
-            <div class="logo">
-                <img src={% static 'img/logo.png' %} alt="logo">
+            <div class="topNavbar">
+                <div class="logo">
+                    <img src={% static 'img/logo.png' %} alt="logo">
+                </div>
+                {% include 'mainapp/includes/inc-menu.html' %}
+                <div class="accaunt">
+                    <div class="profile">
+                        <img src={% static 'img/Profile.png' %} alt="Profile">
+                    </div>
+                    <div class="loginRegister">
+                        <a href="#">Login</a>
+                        /&nbsp;&nbsp;
+                        <a href="#"> Register</a>
+                    </div>
+                    <div class="personalAccount">
+                        <a href="#">My Account</a>
+                    </div>
+                </div>
             </div>
-            {% include 'mainapp/includes/inc-menu.html'%}
-            <div class="accaunt">
-                <div class="profile">
-                    <img src={% static 'img/Profile.png' %} alt="Profile">
-                </div>
-                <div class="loginRegister">
-                    <a href="#">Login</a>
-                    /&nbsp;&nbsp;
-                    <a href="#"> Register</a>
-                </div>
-                <div class="personalAccount">
-                    <a href="#">My Account</a>
-                </div>
-            </div>
-        </div>
         {% endblock %}
         <div class="content">
             {% block content %}
@@ -51,113 +51,113 @@
         </div>
     </div>
     {% block footer %}
-    <div class="main-footer">
-        <div class="topFooter">
-            <div class="wrapper">
-                <div class="aboutUs">
-                    <div class="logo">
-                        <img src={% static 'img/logo.png' %} alt="logo">
+        <div class="main-footer">
+            <div class="topFooter">
+                <div class="wrapper">
+                    <div class="aboutUs">
+                        <div class="logo">
+                            <img src={% static 'img/logo.png' %} alt="logo">
+                        </div>
+                        <div class="desc">
+                            Мы собрались в рамках курса «Командная разработка по методологии Agile: SCRUM». <br>
+                            Цель - получение необходимых знаний о командной работе
+                            и проектной деятельности c использованием Agile подхода и фреймворка Scrum, а так же
+                            закрепления и углубления знаний, полученных на предыдущих курсах.
+                        </div>
+                        <div class="socialNetworks">
+                            <a href="#"><img src={% static 'img/Facebook.png' %} alt="facebook"></a>
+                            <a href="#"><img src={% static 'img/Instagram.png' %} alt="instagram"></a>
+                            <a href="#"><img src={% static 'img/telegram.png' %} alt="telegram"></a>
+                            <a href="#"><img src={% static 'img/YouTube.png' %} alt="yuoTube"></a>
+                            <a href="#"><img src={% static 'img/Twitter.png' %} alt="twitter"></a>
+                            <a href="#"><img src={% static 'img/Linked-In.png' %} alt="liked-in"></a>
+                        </div>
                     </div>
-                    <div class="desc">
-                        Мы собрались в рамках курса «Командная разработка по методологии Agile: SCRUM». <br>
-                        Цель - получение необходимых знаний о командной работе
-                        и проектной деятельности c использованием Agile подхода и фреймворка Scrum, а так же
-                        закрепления и углубления знаний, полученных на предыдущих курсах.
+                    <div class="siteMap">
+                        <div class="title">
+                            SITE MAP
+                        </div>
+                        {% include 'mainapp/includes/inc-menu.html' %}
                     </div>
-                    <div class="socialNetworks">
-                        <a href="#"><img src={% static 'img/Facebook.png' %} alt="facebook"></a>
-                        <a href="#"><img src={% static 'img/Instagram.png' %} alt="instagram"></a>
-                        <a href="#"><img src={% static 'img/telegram.png' %} alt="telegram"></a>
-                        <a href="#"><img src={% static 'img/YouTube.png' %} alt="yuoTube"></a>
-                        <a href="#"><img src={% static 'img/Twitter.png' %} alt="twitter"></a>
-                        <a href="#"><img src={% static 'img/Linked-In.png' %} alt="liked-in"></a>
+                    <div class="team">
+                        <div class="title">
+                            Team:
+                        </div>
+                        <div class="players">
+                            <div class="player">
+                                Артем
+                            </div>
+                            <div class="player">
+                                Вася
+                            </div>
+                            <div class="player">
+                                Вера
+                            </div>
+                            <div class="player">
+                                Евгений
+                            </div>
+                            <div class="player">
+                                Юрий
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contactUs">
+                        <div class="title">
+                            CONTACT US
+                        </div>
+                        <div class="phone">
+                            <div class="icon">
+                                <img src={% static 'img/iPhone.png' %} alt="iPhone">
+                            </div>
+                            <div class="text">
+                                (405) 555-0128
+                            </div>
+                        </div>
+                        <div class="mail">
+                            <div class="icon">
+                                <img src={% static 'img/Mail.png' %} alt="Mail">
+                            </div>
+                            <div class="text">
+                                <a href="mailto:test@test.com">test@test.com</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subscribe">
+                        <div class="title">
+                            SIGN UP TO OUR NEWSLETTER
+                        </div>
+                        <div class="subsForm">
+                            <form>
+                                <input type="text" placeholder="Email address">
+                                <button type="submit"></button>
+                            </form>
+                        </div>
+                        <div class="desc">
+                            *Subscribe to our newsletter to receive communications and early updates from Team Number
+                            Two SEO Agency.
+                        </div>
                     </div>
                 </div>
-                <div class="siteMap">
-                    <div class="title">
-                        SITE MAP
-                    </div>
-                   {% include 'mainapp/includes/inc-menu.html'%}
-                </div>
-                <div class="team">
-                    <div class="title">
-                        Team:
-                    </div>
-                    <div class="players">
-                        <div class="player">
-                            Артем
+            </div>
+            <div class="bottomFooter">
+                <div class="wrapper">
+                    <div class="madeWith">
+                        <div class="text">
+                            © All rights reserved. Made with
                         </div>
-                        <div class="player">
-                            Вася
-                        </div>
-                        <div class="player">
-                            Вера
-                        </div>
-                        <div class="player">
-                            Евгений
-                        </div>
-                        <div class="player">
-                            Юрий
-                        </div>
-                    </div>
-                </div>
-                <div class="contactUs">
-                    <div class="title">
-                        CONTACT US
-                    </div>
-                    <div class="phone">
-                        <div class="icon">
-                            <img src={% static 'img/iPhone.png' %} alt="iPhone">
+                        <div class="image">
+                            <img src={% static 'img/heart.png' %} alt="Heart">
                         </div>
                         <div class="text">
-                            (405) 555-0128
+                            by Team Number Two
                         </div>
                     </div>
-                    <div class="mail">
-                        <div class="icon">
-                            <img src={% static 'img/Mail.png' %} alt="Mail">
-                        </div>
-                        <div class="text">
-                            <a href="mailto:test@test.com">test@test.com</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="subscribe">
-                    <div class="title">
-                        SIGN UP TO OUR NEWSLETTER
-                    </div>
-                    <div class="subsForm">
-                        <form>
-                            <input type="text" placeholder="Email address">
-                            <button type="submit"></button>
-                        </form>
-                    </div>
-                    <div class="desc">
-                        *Subscribe to our newsletter to receive communications and early updates from Team Number
-                        Two SEO Agency.
+                    <div class="goToTop">
+                        <a href="#" title="Вернуться к началу" class="topbutton">GO TO TOP</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="bottomFooter">
-            <div class="wrapper">
-                <div class="madeWith">
-                    <div class="text">
-                        © All rights reserved. Made with
-                    </div>
-                    <div class="image">
-                        <img src={% static 'img/heart.png' %} alt="Heart">
-                    </div>
-                    <div class="text">
-                        by Team Number Two
-                    </div>
-                </div>
-                <div class="goToTop">
-                    <a href="#" title="Вернуться к началу" class="topbutton">GO TO TOP</a>
-                </div>
-            </div>
-        </div>
-    </div>
     {% endblock %}
 </div>
 </body>
