@@ -1,6 +1,7 @@
-from django.db import models
 import uuid
 
+from django.db import models
+from authapp.models import User
 
 class BaseModel(models.Model):
     """
@@ -22,21 +23,21 @@ class Article(BaseModel):
     article_subtitle = models.CharField(max_length=100, unique=True)
     article_main_img = models.ImageField(upload_to='article_images')
     article_text = models.TextField(max_length=300, verbose_name='Text Article')
-    # user = models.ForeignKey(Users, on_delete=models.DO_NOTHING, verbose_name='Author article')
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article', related_name='article_author')
 
 
 class ArticleLike(BaseModel):
     """
     Models for Articles Likes
     """
-    article_to_like = models.ForeignKey(Article, on_delete=models.DO_NOTHING, verbose_name='Article for like')
-    # user = models.OneToOneField(Users, on_delete=models.DO_NOTHING, verbose_name='Like Author')
+    article_to_like = models.ForeignKey(Article, on_delete=models.DO_NOTHING, verbose_name='Article for like', related_name='article_like')
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, verbose_name='Like Author', related_name='like_author')
 
 
 class ArticleComment(BaseModel):
     """
     Models for Articles Comments
     """
-    article_to_comment = models.ForeignKey(Article, on_delete=models.DO_NOTHING, verbose_name='Article for comment')
+    article_to_comment = models.ForeignKey(Article, on_delete=models.DO_NOTHING, verbose_name='Article for comment', related_name='article_comment')
     comment_text = models.TextField(max_length=300, verbose_name='Comment text')
-    # user = models.OneToOneField(Users, on_delete=models.DO_NOTHING, verbose_name='Comment Author')
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, verbose_name='Comment Author', related_name='comment_author')
