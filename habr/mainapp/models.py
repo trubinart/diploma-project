@@ -30,6 +30,9 @@ class Article(BaseModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         db_table = 'article'
         ordering = ['-created_timestamp']
@@ -90,6 +93,9 @@ class ArticleLike(BaseModel):
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING, verbose_name='Like Author',
                                 related_name='like_author')
 
+    def __str__(self):
+        return self.user.username
+
     class Meta:
         db_table = 'article_likes'
         ordering = ['-created_timestamp']
@@ -104,6 +110,9 @@ class ArticleComment(BaseModel):
     text = models.TextField(max_length=300, verbose_name='Comment text')
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING, verbose_name='Comment Author',
                                 related_name='comment_author')
+
+    def __str__(self):
+        return self.article_comment.user.username
 
     class Meta:
         db_table = 'article_comments'

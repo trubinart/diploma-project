@@ -27,3 +27,6 @@ class User(AbstractUser, BaseModel):
     birthday = models.DateField(verbose_name='birthday', null=True, blank=True)
     avatar = models.ImageField(upload_to='user_avatars')
     date_joined = False
+
+    def __str__(self):
+        return self.username
