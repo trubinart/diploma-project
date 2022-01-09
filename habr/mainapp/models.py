@@ -67,7 +67,7 @@ class Article(BaseModel):
           Method called from Article Item.
           All likes sorted by date descending order.
           """
-        return ArticleLike.objects.select_related('article_like').filterç(article_like=self.id)
+        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id)
 
     def get_comments_by_article_id(self) -> QuerySet:
         """
@@ -77,7 +77,7 @@ class Article(BaseModel):
           Method called from Article Item.
           All likes sorted by date descending order.
           """
-        return ArticleComment.objects.select_related('article_comment').filterç(article_like=self.id)
+        return ArticleComment.objects.select_related('article_comment').filter(article_like=self.id)
 
 
 class ArticleLike(BaseModel):
