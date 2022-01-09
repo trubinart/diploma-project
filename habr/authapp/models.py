@@ -15,7 +15,7 @@ class BaseModel(models.Model):
         return cls.objects.filter(id=search_id)
 
 
-class User(AbstractUser):
+class User(AbstractUser, BaseModel):
     """
     Model for users
     """
@@ -26,3 +26,7 @@ class User(AbstractUser):
     password = models.CharField(verbose_name='password', max_length=25, blank=True)
     birthday = models.DateField(verbose_name='birthday', null=True, blank=True)
     avatar = models.ImageField(upload_to='user_avatars')
+    date_joined = False
+
+    def __str__(self):
+        return self.username
