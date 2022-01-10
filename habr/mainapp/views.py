@@ -1,12 +1,6 @@
-from django.shortcuts import render
+from django.views.generic import ListView, DetailView
 
-# Тестова ф-я для отдачи главной
-# def main(request):
-#     content = {
-#         'title': 'главная'
-#     }
-#     return render(request, 'mainapp/index.html', content)
-from django.views.generic import ListView
+from mainapp.models import Article
 
 
 class MainListView(ListView):
@@ -24,16 +18,14 @@ class MainListView(ListView):
         return context
 
 
-class ArticleListView(ListView):
+class ArticleDetailView(DetailView):
     """Класс для вывода страницы статьи и подборок «Хабров» """
     template_name = 'mainapp/article_page.html'
-
-    def get_queryset(self):
-        # Заглушка на время отсутствия модели...
-        return
+    model = Article
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Статья'
         context['title'] = title
+        print(context)
         return context
