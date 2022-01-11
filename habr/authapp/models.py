@@ -17,16 +17,21 @@ class BaseModel(models.Model):
 
 class User(AbstractUser, BaseModel):
     """
-    Model for users
+    Model for user`s registration
     """
-    first_name = models.CharField(verbose_name='first_name', max_length=25, blank=True)
-    last_name = models.CharField(verbose_name='last_name', max_length=25, blank=True)
     username = models.CharField(verbose_name='user_name', unique=True, max_length=25, blank=True)
     email = models.EmailField(verbose_name='email', unique=True, blank=True)
     password = models.CharField(verbose_name='password', max_length=25, blank=True)
-    birthday = models.DateField(verbose_name='birthday', null=True, blank=True)
-    avatar = models.ImageField(upload_to='user_avatars')
-    date_joined = False
 
     def __str__(self):
         return self.username
+
+
+class UserProfile(User):
+    """
+    Model for users
+    """
+    name = models.CharField(verbose_name='first_last_name', max_length=100, blank=True)
+    birthday = models.DateField(verbose_name='birthday', null=True, blank=True)
+    bio = models.TextField(verbose_name='description', max_length=250)
+    avatar = models.ImageField(upload_to='user_avatars')
