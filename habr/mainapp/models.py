@@ -7,6 +7,17 @@ from django.core.paginator import Paginator
 from authapp.models import User
 
 
+class ArticleCategories(models.Model):
+    """
+    Models for Article Categories
+    """
+    name = models.CharField(max_length=32, unique=True, verbose_name='name categories')
+    is_active = models.BooleanField(verbose_name='active', default=True)
+
+    def __str__(self):
+        return self.name
+
+
 class BaseModel(models.Model):
     """
     Global model. Set id and created_timestamp for all children models.
@@ -23,7 +34,9 @@ class Article(BaseModel):
     """
     Models for Articles
     """
-    title = models.CharField(max_length=100)
+    num_article = models.PositiveIntegerField(unique=True)
+    categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE)
+    title = models.CharField(max_length=60)
     subtitle = models.CharField(max_length=100)
     main_img = models.ImageField(upload_to='article_images')
     text = models.TextField(max_length=300, verbose_name='Text Article')
@@ -50,7 +63,7 @@ class Article(BaseModel):
         return Article.objects.all()
 
     @classmethod
-    def get_all_articles_in_pagination(cls, pagination_page: str) -> Paginator:
+    def get_all_articles_in_pagination(cls, pagination_page: int) -> Paginator:
         """
         :param: desired count page in pagination
         :return: QuerySet with all ARTICLES in DataBase in Pagination object
