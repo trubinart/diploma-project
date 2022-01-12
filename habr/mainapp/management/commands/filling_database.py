@@ -1,7 +1,6 @@
 import random
 import os
 import requests
-import datetime
 
 from mimesis import Text, BinaryFile, Person, Datetime
 from mimesis import Internet
@@ -65,7 +64,6 @@ class Command(BaseCommand):
         for i in range(30):
             # create article
             new_article = Article(
-                num_article=datetime.datetime.today().strftime("%d%m%H%M%S%f")[:-4],
                 title=text.title(),
                 subtitle=text.sentence(),
                 text=text.text(quantity=15))

@@ -1,4 +1,6 @@
 import uuid
+import datetime
+from time import sleep
 
 from django.db import models
 from django.db.models.query import QuerySet
@@ -30,11 +32,18 @@ class BaseModel(models.Model):
         return cls.objects.filter(id=search_id)
 
 
+# function for creating a unique article number
+def uniq_number_article():
+    gen_number = datetime.datetime.today().strftime("%d%m%H%M%S%f")[:-4]
+    sleep(0.1)
+    return gen_number
+
+
 class Article(BaseModel):
     """
     Models for Articles
     """
-    num_article = models.PositiveIntegerField(unique=True)
+    num_article = models.PositiveIntegerField(default=uniq_number_article, unique=True)
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE)
     title = models.CharField(max_length=60)
     subtitle = models.CharField(max_length=100)
