@@ -18,7 +18,7 @@ class ArticleCategories(models.Model):
 
     def __str__(self):
         return self.name
-
+    #TODO наследовать от басе моделс
 
 class BaseModel(models.Model):
     """
@@ -43,12 +43,14 @@ class Article(BaseModel):
     """
     Models for Articles
     """
+    #TODO переименовать num_article
+    #TODO добавить verbose_name
     num_article = models.PositiveIntegerField(default=uniq_number_article, unique=True)
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE)
     title = models.CharField(max_length=60)
     subtitle = models.CharField(max_length=100)
     main_img = models.ImageField(upload_to='article_images')
-    text = models.TextField(max_length=300, verbose_name='Text Article')
+    text = models.TextField(max_length=300, verbose_name='Text Article') #TODO увеличить 5000 символов
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
 
