@@ -27,10 +27,11 @@ class User(AbstractUser, BaseModel):
         return self.username
 
 
-class UserProfile(User):
+class UserProfile(models.Model):
     """
     Model for users
     """
+    user = models.OneToOneField(User, unique=True, null=False, db_index=True, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='first_last_name', max_length=100, blank=True)
     birthday = models.DateField(verbose_name='birthday', null=True, blank=True)
     bio = models.TextField(verbose_name='description', max_length=250)
