@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView
 
 from mainapp.models import Article
+from authapp.models import User
 
 
 class MainListView(ListView):
