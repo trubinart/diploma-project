@@ -1,13 +1,13 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-import mainapp.views as mainapp
+from mainapp.views import MainListView, ArticleListView
 from authapp.views import RegistrationViews
 
 urlpatterns = [
-    path('', mainapp.MainListView.as_view(), name='main'),
-    path('article/', mainapp.ArticleListView.as_view(), name='article'),
+    path('', MainListView.as_view(), name='main'),
+    path('article/', ArticleListView.as_view(), name='article'),
     path('registration/',RegistrationViews.as_view()),
     path('admin/', admin.site.urls),
 ]

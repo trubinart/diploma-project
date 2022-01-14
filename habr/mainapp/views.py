@@ -1,26 +1,20 @@
 from django.shortcuts import render
-
-# Тестова ф-я для отдачи главной
-# def main(request):
-#     content = {
-#         'title': 'главная'
-#     }
-#     return render(request, 'mainapp/index.html', content)
 from django.views.generic import ListView
 
+from mainapp.models import Article
 
 class MainListView(ListView):
     """Класс для вывода списка «Хабров» на главной """
     template_name = 'mainapp/index.html'
+    paginate_by = 9
+    model = Article
 
-    def get_queryset(self):
-        # Заглушка на время отсутствия модели...
-        return
+    #Статьи передаются в шаблон автоматически в переменную page_obj
+    # По ней нужно пройтись циклом и вызвать атрибуты статьи
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Главная'
-        context['title'] = title
+        context['title'] = 'Главная'
         return context
 
 

@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block content %}
+
+
     <div class="main">
         <div class="title">
             Все публикации
@@ -441,27 +443,27 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
             </div>
             <div class="paginator">
+                {% if page_obj.has_previous %}
                 <div class="pagLeft">
                     <a href="#"><img src={% static 'img/pagLeft.png' %} alt="left"></a>
                 </div>
+                {% endif %}
+
+                {% for num_page in page_obj.paginator.page_range %}
                 <div class="pagNum">
-                    <a href="#">1</a>
+                    <a href="?page={{ num_page }}">{{ num_page }}</a>
                 </div>
-                <div class="pagNum">
-                    <a href="#">2</a>
-                </div>
-                <div class="pagNum">
-                    <a href="#">3</a>
-                </div>
-                <div class="pagNum">
-                    <a href="#">4</a>
-                </div>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
                 <div class="pagRight">
-                    <a href="#"><img src={% static 'img/pagRight.png' %} alt="right"></a>
+                    <a href="?page={{ page_obj.next_page_number }}"><img src={% static 'img/pagRight.png' %} alt="right"></a>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

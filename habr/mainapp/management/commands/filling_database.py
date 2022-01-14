@@ -24,40 +24,40 @@ class Command(BaseCommand):
         person = Person()
         birthday = Datetime()
 
-        print('Заполняю таблицу USERS')
-
-        for _ in range(30):
-            username = person.username(mask='C')
-            user = User(
-                first_name=person.first_name(gender=None),
-                last_name=person.last_name(gender=None),
-                username=username,
-                email=person.email(domains=None, unique=True),
-                password=person.password(length=8),
-                birthday=birthday.formatted_datetime(fmt="%Y-%m-%d"))
-
-            # TODO указать размер картинки для аватарки
-            img_url = Internet().stock_image(width=1920, height=1080, keywords=['люди'])
-            img_file = requests.get(img_url)
-
-            file_name = f'{username}.png'
-            with open(file_name, 'wb') as file:
-                file.write(img_file.content)
-
-            with open(file_name, 'rb') as file:
-                data = File(file)
-                user.avatar.save(file_name, data, True)
-
-            os.remove(file_name)
-            user.save()
-
-        # CREATE ARTICLE CATEGORIES
-        ARTICLE_CATEGORIES = ['Дизайн', 'Веб-разработка', 'Мобильная разработка', 'Маркетинг']
-
-        print('Заполняю таблицу ARTICLE CATEGORIES')
-        for categories in ARTICLE_CATEGORIES:
-            new_categories = ArticleCategories(name=categories)
-            new_categories.save()
+        # print('Заполняю таблицу USERS')
+        #
+        # for _ in range(30):
+        #     username = person.username(mask='C')
+        #     user = User(
+        #         first_name=person.first_name(gender=None),
+        #         last_name=person.last_name(gender=None),
+        #         username=username,
+        #         email=person.email(domains=None, unique=True),
+        #         password=person.password(length=8),
+        #         birthday=birthday.formatted_datetime(fmt="%Y-%m-%d"))
+        #
+        #     # TODO указать размер картинки для аватарки
+        #     img_url = Internet().stock_image(width=1920, height=1080, keywords=['люди'])
+        #     img_file = requests.get(img_url)
+        #
+        #     file_name = f'{username}.png'
+        #     with open(file_name, 'wb') as file:
+        #         file.write(img_file.content)
+        #
+        #     with open(file_name, 'rb') as file:
+        #         data = File(file)
+        #         user.avatar.save(file_name, data, True)
+        #
+        #     os.remove(file_name)
+        #     user.save()
+        #
+        # # CREATE ARTICLE CATEGORIES
+        # ARTICLE_CATEGORIES = ['Дизайн', 'Веб-разработка', 'Мобильная разработка', 'Маркетинг']
+        #
+        # print('Заполняю таблицу ARTICLE CATEGORIES')
+        # for categories in ARTICLE_CATEGORIES:
+        #     new_categories = ArticleCategories(name=categories)
+        #     new_categories.save()
 
         # CREATE ARTICLES
         print('Заполняю таблицу ARTICLES')
@@ -90,18 +90,18 @@ class Command(BaseCommand):
             # save article
             new_article.save()
 
-        # CREATE LIKES
-        print('Заполняю таблицу LIKES')
-        for item in User.objects.all():
-            new_like = ArticleLike(like=True)  # вот здесь указывает на ошибку лишнего аргумента
-            new_like.article_like = random.choice(Article.objects.all())
-            new_like.user = item
-            new_like.save()
-
-        # CREATE COMMENTS
-        print('Заполняю таблицу COMMENTS')
-        for item in User.objects.all():
-            new_comment = ArticleComment(text=text.text(quantity=2))
-            new_comment.article_comment = random.choice(Article.objects.all())
-            new_comment.user = item
-            new_comment.save()
+        # # CREATE LIKES
+        # print('Заполняю таблицу LIKES')
+        # for item in User.objects.all():
+        #     new_like = ArticleLike(like=True)  # вот здесь указывает на ошибку лишнего аргумента
+        #     new_like.article_like = random.choice(Article.objects.all())
+        #     new_like.user = item
+        #     new_like.save()
+        #
+        # # CREATE COMMENTS
+        # print('Заполняю таблицу COMMENTS')
+        # for item in User.objects.all():
+        #     new_comment = ArticleComment(text=text.text(quantity=2))
+        #     new_comment.article_comment = random.choice(Article.objects.all())
+        #     new_comment.user = item
+        #     new_comment.save()
