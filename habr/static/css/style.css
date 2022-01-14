@@ -665,6 +665,7 @@ body {
 
 .content .main .paginator {
     display: flex;
+    flex-wrap: wrap;
     height: 30px;
     justify-content: center;
     align-items: center;
