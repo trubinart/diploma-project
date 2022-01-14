@@ -1402,9 +1402,58 @@ body {
     padding: 5px 0 5px 0;
 }
 
+.content .main .contentLK .mainLK .baseBlokLK .LastName {
+    padding: 5px 0 5px 0;
+}
+
+.content .main .contentLK .mainLK .baseBlokLK .Birthdate {
+    padding: 5px 0 5px 0;
+}
+
+.content .main .contentLK .mainLK .baseBlokLK .shortDescription {
+    padding: 5px 0 5px 0;
+}
+
 .content .main .contentLK .mainLK .baseBlokLK .inputFild {
     padding: 10px 10px 10px 10px;
     width: 260px;
 }
+
+/* .content .main .contentLK .mainLK .baseBlokLK .blokButton {
+    background: #FFFFFF;
+    height: 50px;
+    width: 200px;
+    margin: 10px auto;
+    padding: 10px;
+    color: #ED6B6A;
+    text-transform: uppercase;
+    font-size: 12px;
+
+} */
+
+.content .main .contentLK .mainLK .baseBlokLK .blokButton .form-control[type="submit"] {
+    background: #FFFFFF;
+    height: 50px;
+    width: 200px;
+    margin: 10px auto;
+    padding: 10px;
+    color: #ED6B6A;
+    text-transform: uppercase;
+    font-size: 12px;
+
+}
+
+.content .main .contentLK .mainLK .baseBlokLK .blokButton .form-control[type="submit"]:hover {
+    background: #ED6B6A;
+    height: 50px;
+    width: 200px;
+    margin: 10px auto;
+    padding: 10px;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    font-size: 12px;
+
+}
+
 
 /* end .baseBlokLK */
