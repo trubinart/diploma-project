@@ -1,4 +1,6 @@
 import uuid
+import datetime
+from time import sleep
 
 from django.db import models
 from django.db.models.query import QuerySet
@@ -19,14 +21,35 @@ class BaseModel(models.Model):
         return cls.objects.filter(id=search_id)
 
 
+class ArticleCategories(BaseModel):
+    """
+    Models for Article Categories
+    """
+    name = models.CharField(max_length=32, unique=True, verbose_name='name categories')
+    is_active = models.BooleanField(default=True, verbose_name='active')
+
+    def __str__(self):
+        return self.name
+
+
+# function for creating a unique article number
+def uniq_number_article():
+    gen_number = datetime.datetime.today().strftime("%d%m%H%M%S%f")[:-4]
+    sleep(0.1)
+    return gen_number
+
+
 class Article(BaseModel):
     """
     Models for Articles
     """
-    title = models.CharField(max_length=100)
-    subtitle = models.CharField(max_length=100)
-    main_img = models.ImageField(upload_to='article_images')
-    text = models.TextField(max_length=300, verbose_name='Text Article')
+    article_number = models.PositiveIntegerField(default=uniq_number_article, unique=True,
+                                                 verbose_name='article number')
+    categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE, verbose_name='categories')
+    title = models.CharField(max_length=60, verbose_name='title')
+    subtitle = models.CharField(max_length=100, verbose_name='subtitle')
+    main_img = models.ImageField(upload_to='article_images', verbose_name='img')
+    text = models.TextField(max_length=5000, verbose_name='Text Article')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
 
@@ -50,7 +73,7 @@ class Article(BaseModel):
         return Article.objects.all()
 
     @classmethod
-    def get_all_articles_in_pagination(cls, pagination_page: str) -> Paginator:
+    def get_all_articles_in_pagination(cls, pagination_page: int) -> Paginator:
         """
         :param: desired count page in pagination
         :return: QuerySet with all ARTICLES in DataBase in Pagination object
@@ -90,11 +113,7 @@ class Article(BaseModel):
 
     def get_other_articles_by_author(self) -> QuerySet:
         """
-        :param: None
-        :return: QuerySet with all COMMENTS in DataBase by specific Article.
-
-          Method called from Article Item.
-          All likes sorted by date descending order.
+        Метод выводит последние по дате 3 статьи автора исключая текущую статью
           """
         return Article.objects.filter(user=self.user).exclude(id=self.id).order_by('-created_timestamp')[:3]
 
