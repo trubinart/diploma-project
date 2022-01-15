@@ -794,13 +794,12 @@ body {
 
 .date {
     font-size: 16px;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 0 20px 0 10px;
 }
 
-.time_read {
+.count_like {
     font-size: 16px;
-    margin-left: 5px;
+    margin: 0 20px 0 10px;
 }
 
 .habr_share {
@@ -1007,10 +1006,14 @@ body {
 
 .share_author {
     margin-top: 22px;
+    display: flex;
+    align-items: flex-end;
+    height: 20px;
 }
 
 .share_author a {
     margin-right: 15px;
+    display: flex;
 }
 
 .share_author a:hover {
@@ -1036,6 +1039,17 @@ body {
     display: flex;
 }
 
+.trending_articles .img_and_info_habr .img_habr {
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.trending_articles .img_and_info_habr .img_habr img {
+    height: 100px;
+}
+
 .info_habr {
     margin-left: 20px;
     width: 222px;
@@ -1048,6 +1062,7 @@ body {
     font-size: 16px;
     line-height: 160%;
     color: #1E212C;
+    display: block;
 }
 
 .info_habr a:hover {
