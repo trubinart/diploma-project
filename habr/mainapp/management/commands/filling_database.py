@@ -8,13 +8,15 @@ from mimesis import Internet
 from django.core.management.base import BaseCommand
 from django.core.files import File
 
+from mainapp.models import ArticleCategories, Article, ArticleLike, ArticleComment
+from authapp.models import User
 
-from mainapp.models import Article, ArticleLike, ArticleComment
+# from mainapp.models import Article, ArticleLike, ArticleComment
 from authapp.models import UserProfile
 
 
 class Command(BaseCommand):
-    help = 'Create Articles, Likes and Comments'
+    help = 'Create Categories article, Articles, Likes and Comments'
 
     def handle(self, *args, **options):
         # GENERATE PROJECTS
@@ -51,13 +53,24 @@ class Command(BaseCommand):
             os.remove(file_name)
             user.save()
 
+        # CREATE ARTICLE CATEGORIES
+        ARTICLE_CATEGORIES = ['Дизайн', 'Веб-разработка', 'Мобильная разработка', 'Маркетинг']
+
+        print('Заполняю таблицу ARTICLE CATEGORIES')
+        for categories in ARTICLE_CATEGORIES:
+            new_categories = ArticleCategories(name=categories)
+            new_categories.save()
+
         # CREATE ARTICLES
         print('Заполняю таблицу ARTICLES')
         for i in range(30):
             # create article
-            new_article = Article(title=text.title(),
-                                  subtitle=text.sentence(),
-                                  text=text.text(quantity=15))
+            new_article = Article(
+                title=text.title(),
+                subtitle=text.sentence(),
+                text=text.text(quantity=15))
+            # set categories
+            new_article.categories = random.choice(ArticleCategories.objects.all())
             # set author
             new_article.user = random.choice(UserProfile.objects.all())
 
