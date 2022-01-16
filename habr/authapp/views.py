@@ -24,6 +24,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 
+
 class RegistrationViews(ListView):
     """Класс для вывода страницы статьи и подборок «Хабров» """
     template_name = 'authapp/registration.html'

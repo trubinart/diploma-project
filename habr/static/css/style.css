@@ -114,6 +114,16 @@ body {
     color: #FF3F3A;
 }
 
+/* временное сокрытие не работающих частей меню*/
+
+.menu .design,
+.menu .webDevelopment,
+.menu .mobileDevelopment,
+.menu .marketing {
+    opacity: .1;
+}
+/* конец временного сокрытия не работающих частей меню*/
+
 /* end .top-navbar */
 
 
@@ -260,6 +270,7 @@ body {
     align-items: flex-start;
     justify-content: flex-start;
     opacity: 0.6;
+    opacity: 0.1;
 }
 
 .main-footer .topFooter .wrapper .subscribe .title{
@@ -742,7 +753,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 207px;
+    width: 307px;
     height: 26px;
 }
 
@@ -770,6 +781,7 @@ body {
     font-weight: bold;
     color: #FF3F3A;
     size: 16px;
+    opacity: .5;
 }
 
 .content_topic:hover {
@@ -808,6 +820,7 @@ body {
     align-items: center;
     margin-right: 0;
     width: 142px;
+    opacity: .1;
 }
 
 .habr_info {
@@ -935,6 +948,7 @@ body {
 .sidebar form {
     position: relative;
     display: block;
+    opacity: .3;
 }
 
 .search {
@@ -1009,6 +1023,7 @@ body {
     display: flex;
     align-items: flex-end;
     height: 20px;
+    opacity: .1;
 }
 
 .share_author a {
@@ -1105,3 +1120,4 @@ body {
 }
 
 /* end .article_page */
+

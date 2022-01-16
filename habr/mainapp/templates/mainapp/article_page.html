@@ -9,7 +9,7 @@
                 <img src={% static "img/files.png" %} alt="">
                 <p class="content_type">Статья</p>
                 <img src={% static "img/divider.png" %} alt="">
-                <a class="content_topic" href="#">Маркетинг</a>
+                <a class="content_topic" href="#">{{ article.categories }}</a>
             </div>
             <h1 class="name_habr">
                 <!--                    HR statistics: job search, interviews,-->
@@ -62,7 +62,7 @@
                 <!--                    Aliquet non sed duis diam vehicula rhoncus. In dictum nullam tincidunt semper pellentesque purus-->
                 <!--                    morbi sed.-->
                 <!--                    Ut aliquet velit pharetra, nisi nunc, non.-->
-                {{ article.text}}
+                {{ article.text |safe}}
             </p>
             <!--                <p class="text_bold_quote">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Justo, amet lectus-->
             <!--                    quam-->
@@ -120,7 +120,7 @@
                     <!--                        <h3>Kristin Watson</h3>-->
                     <h3>{{article.user.first_name}} {{article.user.last_name}}</h3>
                     <p>
-                        Curator of Marketing Course
+                        {{article.user.username}}
                     </p>
                     <div class="share_author">
                         <a href="https://www.instagram.com/" target="_blank">
@@ -148,7 +148,7 @@
                         <img src={% static "img/Calendar.png" %} alt="">
                         <p class="date">{{ other_article.created_timestamp|date:"M d, Y" }}</p>
                     </div>
-                    <a href="#">{{ other_article.title }}</a>
+                    <a href="{% url 'article' other_article.pk %}">{{ other_article.title }}</a>
                 </div>
             </div>
             {% endfor %}

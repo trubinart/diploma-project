@@ -8,7 +8,7 @@ from authapp.views import RegistrationViews
 urlpatterns = [
     path('', mainapp.MainListView.as_view(), name='main'),
     path('article/<str:pk>/', mainapp.ArticleDetailView.as_view(), name='article'),
-    path('registration/',RegistrationViews.as_view()),
+    path('registration/', RegistrationViews.as_view()),
     path('admin/', admin.site.urls),
 ]
 
