@@ -30,3 +30,18 @@ class ArticleDetailView(DetailView):
         context['title'] = title
         print(context)
         return context
+
+
+class LkListView(ListView):
+    """Класс для вывода страницы ЛК """
+    template_name = 'mainapp/user_lk.html'
+
+    def get_queryset(self):
+        # Заглушка на время отсутствия модели...
+        return
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Личный кабинет'
+        context['title'] = title
+        return context
