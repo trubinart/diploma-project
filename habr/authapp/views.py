@@ -21,8 +21,10 @@
 #     return render(request, 'authapp/register.html', content)
 
 
-from django.shortcuts import render
 from django.views.generic import ListView
+
+from mainapp.models import ArticleCategories
+
 
 class RegistrationViews(ListView):
     """Класс для вывода страницы статьи и подборок «Хабров» """
@@ -34,6 +36,6 @@ class RegistrationViews(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Регистрация'
-        context['title'] = title
+        context['title'] = 'Регистрация'
+        context['categories_list'] = ArticleCategories.objects.all()
         return context

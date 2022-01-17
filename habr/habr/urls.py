@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from mainapp.views import MainListView, ArticleListView
@@ -8,7 +8,7 @@ from authapp.views import RegistrationViews
 urlpatterns = [
     path('', MainListView.as_view(), name='main'),
     path('article/', ArticleListView.as_view(), name='article'),
-    path('registration/',RegistrationViews.as_view()),
+    path('registration/', RegistrationViews.as_view(), name='registration'),
     path('admin/', admin.site.urls),
 ]
 

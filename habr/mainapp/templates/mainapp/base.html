@@ -34,14 +34,19 @@
                     <div class="profile">
                         <img src={% static 'img/Profile.png' %} alt="Profile">
                     </div>
-                    <div class="loginRegister">
-                        <a href="#">Login</a>
-                        /&nbsp;&nbsp;
-                        <a href="#"> Register</a>
-                    </div>
-                    <div class="personalAccount">
-                        <a href="#">My Account</a>
-                    </div>
+                    {% if user.is_authenticated %}
+                        <div class="personalAccount">
+                            <a href="#">My Account</a>
+                            /&nbsp;&nbsp;
+                            <a href="#">Exit</a>
+                        </div>
+                    {% else %}
+                        <div class="loginRegister">
+                            <a href="#">Login</a>
+                            /&nbsp;&nbsp;
+                            <a href="{% url 'registration' %}"> Register</a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endblock %}
@@ -66,12 +71,18 @@
                             закрепления и углубления знаний, полученных на предыдущих курсах.
                         </div>
                         <div class="socialNetworks">
-                            <a href="#"><img src={% static 'img/Facebook.png' %} alt="facebook"></a>
-                            <a href="#"><img src={% static 'img/Instagram.png' %} alt="instagram"></a>
-                            <a href="#"><img src={% static 'img/telegram.png' %} alt="telegram"></a>
-                            <a href="#"><img src={% static 'img/YouTube.png' %} alt="yuoTube"></a>
-                            <a href="#"><img src={% static 'img/Twitter.png' %} alt="twitter"></a>
-                            <a href="#"><img src={% static 'img/Linked-In.png' %} alt="liked-in"></a>
+                            <a target="_blank" href="https://www.facebook.com/"><img
+                                    src={% static 'img/Facebook.png' %} alt="facebook"></a>
+                            <a target="_blank" href="https://www.instagram.com/"><img
+                                    src={% static 'img/Instagram.png' %} alt="instagram"></a>
+                            <a target="_blank" href="https://telegram.org/"><img
+                                    src={% static 'img/telegram.png' %} alt="telegram"></a>
+                            <a target="_blank" href="https://www.youtube.com/"><img
+                                    src={% static 'img/YouTube.png' %} alt="yuoTube"></a>
+                            <a target="_blank" href="https://twitter.com/"><img
+                                    src={% static 'img/Twitter.png' %} alt="twitter"></a>
+                            <a target="_blank" href="https://www.linkedin.com/"><img
+                                    src={% static 'img/Linked-In.png' %} alt="liked-in"></a>
                         </div>
                     </div>
                     <div class="siteMap">
@@ -86,19 +97,19 @@
                         </div>
                         <div class="players">
                             <div class="player">
-                                Артем
+                                <a target="_blank" href="https://tlgg.ru/@trubinart">Артем</a>
                             </div>
                             <div class="player">
-                                Вася
+                                <a target="_blank" href="https://tlgg.ru/@Vaspupiy">Вася</a>
                             </div>
                             <div class="player">
-                                Вера
+                                <a target="_blank" href="https://tlgg.ru/@veyu0">Вера</a>
                             </div>
                             <div class="player">
-                                Евгений
+                                <a target="_blank" href="https://tlgg.ru/@xvector">Евгений</a>
                             </div>
                             <div class="player">
-                                Юрий
+                                <a target="_blank" href="https://tlgg.ru/@ithesand">Юрий</a>
                             </div>
                         </div>
                     </div>

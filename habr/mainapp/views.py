@@ -1,7 +1,7 @@
-from django.shortcuts import render
 from django.views.generic import ListView
 
-from mainapp.models import Article
+from mainapp.models import Article, ArticleCategories
+
 
 class MainListView(ListView):
     """Класс для вывода списка «Хабров» на главной """
@@ -9,12 +9,12 @@ class MainListView(ListView):
     paginate_by = 9
     model = Article
 
-    #Статьи передаются в шаблон автоматически в переменную page_obj
-    # По ней нужно пройтись циклом и вызвать атрибуты статьи
-
     def get_context_data(self, **kwargs):
+        # вызов базовой реализации для получения контекста
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
+        # добавляем в набор запросов все категории
+        context['categories_list'] = ArticleCategories.objects.all()
         return context
 
 
@@ -28,6 +28,6 @@ class ArticleListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Статья'
-        context['title'] = title
+        context['title'] = 'Статья'
+        context['categories_list'] = ArticleCategories.objects.all()
         return context

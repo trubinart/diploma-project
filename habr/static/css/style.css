@@ -89,9 +89,9 @@ body {
     align-items: center;
 }
 
-.main-wrapper .topNavbar .accaunt .loginRegister {
-    display: none;
-}
+/*.main-wrapper .topNavbar .accaunt .loginRegister {*/
+/*    display: none;*/
+/*}*/
 
 .main-wrapper .topNavbar .accaunt .loginRegister {
     width: 122px;
@@ -100,7 +100,7 @@ body {
 
 .main-wrapper .topNavbar .accaunt .personalAccount a,
 .main-wrapper .topNavbar .accaunt .loginRegister a {
-    width: 120px;
+    width: 90px;
     height: 26px;
     text-decoration: none;
     font-size: 16px;
@@ -245,11 +245,15 @@ body {
     justify-content: space-between;
 }
 
-.main-footer .topFooter .wrapper .team .players .player {
+.main-footer .topFooter .wrapper .team .players .player a {
     font-family: arial;
-    font-size: 16px;
-    line-height: 160%;
     color: #FFFFFF;
+    line-height: 160%;
+    text-decoration: none;
+}
+
+.main-footer .topFooter .wrapper .team .players .player :hover {
+    color: #FF3F3A;
 }
 
 .main-footer .topFooter .wrapper .subscribe {
@@ -553,7 +557,7 @@ body {
     justify-content: center;
     align-items: center;
     width: 1230px;
-    height: 1747px;
+    /*height: 1747px;*/
     margin: 60px 0;
 }
 
@@ -568,7 +572,7 @@ body {
 .content .main .publications .wrapper .publication {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /*justify-content: center;*/
     align-items: flex-start;
     width: 390px;
     height: 490px;
@@ -603,7 +607,7 @@ body {
     border: none;
     border-left: 1px solid #787A80;
     height: 12px;
-    margin: 0 10px;
+    margin: 0 5px;
 }
 
 .content .main .publications .wrapper .publication .publicationInfo .likeCount,
@@ -614,7 +618,7 @@ body {
 .content .main .publications .wrapper .publication .publicationInfo .likeCount .icon,
 .content .main .publications .wrapper .publication .publicationInfo .dateInfo .icon {
     width: 16px;
-    margin: 0 6px 0 0;
+    /*margin: 0 6px 0 0;*/
 }
 
 .content .main .publications .wrapper .publication .publicationInfo .likeCount .number,
@@ -623,6 +627,7 @@ body {
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
+    margin-left: 5px;
 }
 
 .content .main .publications .wrapper .publication .title {
