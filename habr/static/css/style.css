@@ -973,7 +973,7 @@ body {
     height: 148px;
 }
 
-.sidebar .sidebar .author_title {
+.sidebar .author_title {
     font-weight: bold;
     font-size: 16px;
     line-height: 150%;
@@ -981,11 +981,11 @@ body {
     text-transform: uppercase;
 }
 
-.sidebar .sidebar .avatar_and_info {
+.sidebar .avatar_and_info {
     display: flex;
 }
 
-.sidebar .sidebar .avatar {
+.sidebar .avatar {
     margin-top: 24px;
     /* flex-direction: column; */
     width: 100px;
@@ -994,31 +994,31 @@ body {
     overflow: hidden;
 }
 
-.sidebar .sidebar .avatar img {
+.sidebar .avatar img {
     height: 100px;
 }
 
-.sidebar .sidebar .sidebar .name_and_share {
+.sidebar .name_and_share {
     flex-direction: column;
     margin-top: 24px;
     padding-left: 20px;
 }
 
-.sidebar .sidebar .sidebar .name_and_share h3 {
+.sidebar .name_and_share h3 {
     font-weight: bold;
     font-size: 20px;
     line-height: 150%;
     color: #424551;
 }
 
-.sidebar .sidebar .sidebar .name_and_share p {
+.sidebar .name_and_share p {
     font-weight: normal;
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
 }
 
-.sidebar .sidebar .sidebar .sidebar .share_author {
+.sidebar .share_author {
     margin-top: 22px;
     display: flex;
     align-items: flex-end;
@@ -1026,22 +1026,22 @@ body {
     opacity: .1;
 }
 
-.sidebar .sidebar .sidebar .sidebar .share_author a {
+.sidebar .share_author a {
     margin-right: 15px;
     display: flex;
 }
 
-.sidebar .sidebar .sidebar .sidebar .share_author a:hover {
+.sidebar .share_author a:hover {
     outline: 2px dashed #787A80;
     outline-offset: -1px;
 }
 
-.sidebar .sidebar .sidebar .sidebar .trending_articles {
+.sidebar .trending_articles {
     margin-top: 60px;
     height: 396px;
 }
 
-.sidebar .sidebar .sidebar .sidebar .trending_articles_title {
+.sidebar .trending_articles_title {
     font-weight: bold;
     font-size: 16px;
     line-height: 150%;
@@ -1068,6 +1068,19 @@ body {
 .sidebar .info_habr {
     margin-left: 20px;
     width: 222px;
+}
+
+.sidebar .info_habr .habr_date_creat {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 0;
+    width: 252px;
+    color: #787A80;
+}
+
+.sidebar .info_habr .habr_date_creat img {
+    margin-right: 10px;
 }
 
 .sidebar .info_habr a {

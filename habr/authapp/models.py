@@ -26,6 +26,12 @@ class User(AbstractUser, BaseModel):
     def __str__(self):
         return self.username
 
+    def get_profile(self):
+        """
+        Метод выводит последние по дате 3 статьи автора исключая текущую статью
+          """
+        return UserProfile.objects.filter(user=self).first()
+
 
 class UserProfile(models.Model):
     """

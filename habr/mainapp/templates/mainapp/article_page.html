@@ -113,7 +113,7 @@
             <div class="avatar_and_info">
                 <!--                    <img class="avatar" src={% static "img/avatar.png" %} alt="">-->
                 <div class="avatar">
-                    <img src="/media/{{article.user.avatar}}" alt="">
+                    <img src="/media/{{article.user.get_profile.avatar}}" alt="">
                 </div>
 
                 <div class="name_and_share">
