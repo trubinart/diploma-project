@@ -1,26 +1,20 @@
-from django.shortcuts import render
-
-# Тестова ф-я для отдачи главной
-# def main(request):
-#     content = {
-#         'title': 'главная'
-#     }
-#     return render(request, 'mainapp/index.html', content)
 from django.views.generic import ListView
+
+from mainapp.models import Article, ArticleCategories
 
 
 class MainListView(ListView):
     """Класс для вывода списка «Хабров» на главной """
     template_name = 'mainapp/index.html'
-
-    def get_queryset(self):
-        # Заглушка на время отсутствия модели...
-        return
+    paginate_by = 9
+    model = Article
 
     def get_context_data(self, **kwargs):
+        # вызов базовой реализации для получения контекста
         context = super().get_context_data(**kwargs)
-        title = 'Главная'
-        context['title'] = title
+        context['title'] = 'Главная'
+        # добавляем в набор запросов все категории
+        context['categories_list'] = ArticleCategories.objects.all()
         return context
 
 
@@ -34,8 +28,8 @@ class ArticleListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Статья'
-        context['title'] = title
+        context['title'] = 'Статья'
+        context['categories_list'] = ArticleCategories.objects.all()
         return context
 
 
