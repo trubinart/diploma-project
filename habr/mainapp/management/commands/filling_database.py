@@ -35,11 +35,12 @@ class Command(BaseCommand):
                 first_name=person.first_name(gender=None),
                 last_name=person.last_name(gender=None),
                 username=username,
-                #email=person.email(domains=None, unique=True),
-                #password=person.password(length=8),
+                # email=person.email(domains=None, unique=True),
+                # password=person.password(length=8),
                 birthday=birthday.formatted_datetime(fmt="%Y-%m-%d"))
 
             img_url = Internet().stock_image(width=100, height=100, keywords=['люди'])
+
             img_file = requests.get(img_url)
 
             file_name = f'{username}.png'
