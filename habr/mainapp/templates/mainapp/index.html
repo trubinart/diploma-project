@@ -1,468 +1,518 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
+
 {% block content %}
     <div class="main">
         <div class="title">
             Все публикации
         </div>
+        {% for catagories in name %}
+            {{ catagories }}
+        {% endfor %}
         <div class="menu">
             <div class="side">
                 <div class="buttonAll">
-                    <a href="#">Все</a>
+                    <a href="{% url 'main' %}">Все</a>
                 </div>
-                <div class="sort">
-                    <div class="title">
-                        Сортировать
-                    </div>
-                    <div class="sortDate">
-                        <a class="text" href="#"><img src={% static 'img/Calendar.png' %} alt="date"></a>
-                    </div>
-                    <div class="sortlike">
-                        <a class="text" href="#"><img src={% static 'img/like.png' %} alt="like"></a>
-                    </div>
-                </div>
+                {#                <div class="sort">#}
+                {#                    <div class="title">#}
+                {#                        Сортировать#}
+                {#                    </div>#}
+                {#                    <div class="sortDate">#}
+                {#                        <a class="text" href="#"><img src={% static 'img/Calendar.png' %} alt="date"></a>#}
+                {#                    </div>#}
+                {#                    <div class="sortlike">#}
+                {#                        <a class="text" href="#"><img src={% static 'img/like.png' %} alt="like"></a>#}
+                {#                    </div>#}
+                {#                </div>#}
             </div>
-            <div class="side">
-                <div class="category">
-                    <div class="categoryTitle">
-                        Выбор категории
-                    </div>
-                    <select class="categoriItems">
-                        <option value="all">Все категории</option>
-                        <option value="design">Дизайн</option>
-                        <option value="web_development">Веб-разработка</option>
-                        <option value="mobile_development">Мобильная разработка</option>
-                        <option value="marketing">Маркетинг</option>
-                    </select>
-                </div>
-                <div class="search">
-                    <form>
-                        <input type="text" placeholder="Искать здесь...">
-                        <button type="submit"></button>
-                    </form>
-                </div>
-            </div>
+            {#            <div class="side">#}
+            {#                <div class="category">#}
+            {#                    <div class="categoryTitle">#}
+            {#                        Выбор категории#}
+            {#                    </div>#}
+            {#                    <select class="categoriItems">#}
+            {#                        <option value="all">Все категории</option>#}
+            {#                        <option value="design">Дизайн</option>#}
+            {#                        <option value="web_development">Веб-разработка</option>#}
+            {#                        <option value="mobile_development">Мобильная разработка</option>#}
+            {#                        <option value="marketing">Маркетинг</option>#}
+            {#                    </select>#}
+            {#                </div>#}
+            {#                <div class="search">#}
+            {#                    <form>#}
+            {#                        <input type="text" placeholder="Искать здесь...">#}
+            {#                        <button type="submit"></button>#}
+            {#                    </form>#}
+            {#                </div>#}
+            {#            </div>#}
         </div>
         <div class="publications">
             <div class="wrapper">
-                <div class="publication">
-                    <div class="image">
-                        <img src={% static 'img/image_1.jpg' %} alt="image_1">
-                    </div>
-                    <div class="publicationInfo">
-                        <div class="category">
-                            Дизайн
+                {% for instance_article in object_list %}
+                    <div class="publication">
+                        <div class="image">
+                            <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
                         </div>
-                        <div class="divider"></div>
-                        <div class="dateInfo">
+                        <div class="publicationInfo">
+                            <div class="category">
+                                {{ instance_article.categories }}
+                            </div>
+                            <div class="divider"></div>
+                            <div class="dateInfo">
+                                <div class="icon">
+                                    <img src={% static 'img/Calendar.png' %} alt="Calendar">
+                                </div>
+                                <div class="date">
+                                    {{ instance_article.created_timestamp }}
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="likeCount">
+                                <div class="icon">
+                                    <img src={% static 'img/like.png' %} alt="like">
+                                </div>
+                                <div class="number">
+                                    {{ instance_article.get_likes_by_article_id.count }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="title">
+                            {{ instance_article.title }}
+                        </div>
+                        <div class="descrition">
+                            {{ instance_article.subtitle }}
+                        </div>
+                        <div class="continue ">
+                            <div class="text">
+                                Читать далее
+                            </div>
                             <div class="icon">
-                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                            </div>
-                            <div class="date">
-                                September 4, 2022
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="likeCount">
-                            <div class="icon">
-                                <img src={% static 'img/like.png' %} alt="like">
-                            </div>
-                            <div class="number">
-                                36
+                                <a href="{% url 'article' instance_article.pk %}"><img src={% static 'img/Right.png' %} alt="right"></a>
                             </div>
                         </div>
                     </div>
-                    <div class="title">
-                        What is traffic arbitrage and does it really make money?
-                    </div>
-                    <div class="descrition">
-                        Pharetra, ullamcorper iaculis viverra parturient sed id sed. Convallis proin
-                        dignissim
-                        lacus, purus gravida...
-                    </div>
-                    <div class="continue ">
-                        <div class="text">
-                            Читать далее
-                        </div>
-                        <div class="icon">
-                            <a href="{% url 'article' '2e9279782bc14b9bb7cf18a4054a40dd' %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
 
-                <div class="publication">
-                    <div class="image">
-                        <img src={% static 'img/image_2.jpg' %} alt="image_2">
-                    </div>
-                    <div class="publicationInfo">
-                        <div class="category">
-                            Веб-разработка
-                        </div>
-                        <div class="divider"></div>
-                        <div class="dateInfo">
-                            <div class="icon">
-                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                            </div>
-                            <div class="date">
-                                September 1, 2022
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="likeCount">
-                            <div class="icon">
-                                <img src={% static 'img/like.png' %} alt="like">
+{#                <div class="publication">#}
+{#                    <div class="image">#}
+{#                        <img src={% static 'img/image_1.jpg' %} alt="image_1">#}
+{#                    </div>#}
+{#                    <div class="publicationInfo">#}
+{#                        <div class="category">#}
+{#                            Дизайн#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="dateInfo">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/Calendar.png' %} alt="Calendar">#}
+{#                            </div>#}
+{#                            <div class="date">#}
+{#                                September 4, 2022#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="likeCount">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/like.png' %} alt="like">#}
+{#                            </div>#}
+{#                            <div class="number">#}
+{#                                36#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="title">#}
+{#                        What is traffic arbitrage and does it really make money?#}
+{#                    </div>#}
+{#                    <div class="descrition">#}
+{#                        Pharetra, ullamcorper iaculis viverra parturient sed id sed. Convallis proin#}
+{#                        dignissim#}
+{#                        lacus, purus gravida...#}
+{#                    </div>#}
+{#                    <div class="continue ">#}
+{#                        <div class="text">#}
+{#                            Читать далее#}
+{#                        </div>#}
+{#                        <div class="icon">#}
+{#                            <a href="{% url 'article' %}"><img src={% static 'img/Right.png' %} alt="right"></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="publication">#}
+{#                    <div class="image">#}
+{#                        <img src={% static 'img/image_2.jpg' %} alt="image_2">#}
+{#                    </div>#}
+{#                    <div class="publicationInfo">#}
+{#                        <div class="category">#}
+{#                            Веб-разработка#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="dateInfo">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/Calendar.png' %} alt="Calendar">#}
+{#                            </div>#}
+{#                            <div class="date">#}
+{#                                September 1, 2022#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="likeCount">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/like.png' %} alt="like">#}
+{##}
+{#                            </div>#}
+{#                            <div class="number">#}
+{#                                25#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="title">#}
+{#                        How to choose the first programming language for a beginner#}
+{#                    </div>#}
+{#                    <div class="descrition">#}
+{#                        Turpis sed at magna laoreet gravida consequat tortor placerat. Gravida vitae aliquet#}
+{#                        enim egestas dui...#}
+{#                    </div>#}
+{#                    <div class="continue ">#}
+{#                        <div class="text">#}
+{#                            Читать далее#}
+{#                        </div>#}
+{#                        <div class="icon">#}
+{#                            <a href="{% url 'article' %}"><img src={% static 'img/Right.png' %} alt="right"></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="publication">#}
+{#                    <div class="image">#}
+{#                        <img src={% static 'img/image_3.jpg' %} alt="image_3">#}
+{#                    </div>#}
+{#                    <div class="publicationInfo">#}
+{#                        <div class="category">#}
+{#                            Мобильная разработка#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="dateInfo">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/Calendar.png' %} alt="Calendar">#}
+{#                            </div>#}
+{#                            <div class="date">#}
+{#                                August 8, 2022#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="likeCount">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/like.png' %} alt="like">#}
+{#                            </div>#}
+{#                            <div class="number">#}
+{#                                45#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="title">#}
+{#                        Should you choose a creative profession if you are attracted to creativity?#}
+{#                    </div>#}
+{#                    <div class="descrition">#}
+{#                        Curabitur nisl tincidunt eros venenatis vestibulum ac placerat. Tortor, viverra sed#}
+{#                        vulputate ultrices...#}
+{#                    </div>#}
+{#                    <div class="continue ">#}
+{#                        <div class="text">#}
+{#                            Читать далее#}
+{#                        </div>#}
+{#                        <div class="icon">#}
+{#                            <a href="{% url 'article' %}"><img src={% static 'img/Right.png' %} alt="right"></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="publication">#}
+{#                    <div class="image">#}
+{#                        <img src={% static 'img/image_4.jpg' %} alt="image_4">#}
+{#                    </div>#}
+{#                    <div class="publicationInfo">#}
+{#                        <div class="category">#}
+{#                            Маркетинг#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="dateInfo">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/Calendar.png' %} alt="Calendar">#}
+{#                            </div>#}
+{#                            <div class="date">#}
+{#                                August 3, 2022#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="likeCount">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/like.png' %} alt="like">#}
+{#                            </div>#}
+{#                            <div class="number">#}
+{#                                24#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="title">#}
+{#                        HR statistics: job search, interviews, hiring and recruiting#}
+{#                    </div>#}
+{#                    <div class="descrition">#}
+{#                        Massa, lectus nibh consectetur aliquet nunc risus aenean. Leo hac netus bibendum#}
+{#                        diam adipiscing...#}
+{#                    </div>#}
+{#                    <div class="continue ">#}
+{#                        <div class="text">#}
+{#                            Читать далее#}
+{#                        </div>#}
+{#                        <div class="icon">#}
+{#                            <a href="{% url 'article' %}"><img src={% static 'img/Right.png' %} alt="right"></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="publication">#}
+{#                    <div class="image">#}
+{#                        <img src={% static 'img/image_8.jpg' %} alt="image_8">#}
+{#                    </div>#}
+{#                    <div class="publicationInfo">#}
+{#                        <div class="category">#}
+{#                            Веб-разработка#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="dateInfo">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/Calendar.png' %} alt="Calendar">#}
+{#                            </div>#}
+{#                            <div class="date">#}
+{#                                August 2, 2022#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="likeCount">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/like.png' %} alt="like">#}
+{#                            </div>#}
+{#                            <div class="number">#}
+{#                                44#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="title">#}
+{#                        HoWhat to do and who to talk to if you want to get feedback#}
+{#                    </div>#}
+{#                    <div class="descrition">#}
+{#                        Neque a, senectus consectetur odio in aliquet nec eu. Ultricies ac nibh urna urna#}
+{#                        sagittis faucibus...#}
+{#                    </div>#}
+{#                    <div class="continue ">#}
+{#                        <div class="text">#}
+{#                            Читать далее#}
+{#                        </div>#}
+{#                        <div class="icon">#}
+{#                            <a href="{% url 'article' %}"><img src={% static 'img/Right.png' %} alt="right"></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="publication">#}
+{#                    <div class="image">#}
+{#                        <img src={% static 'img/image_6.jpg' %} alt="image_6">#}
+{#                    </div>#}
+{#                    <div class="publicationInfo">#}
+{#                        <div class="category">#}
+{#                            Маркетинг#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="dateInfo">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/Calendar.png' %} alt="Calendar">#}
+{#                            </div>#}
+{#                            <div class="date">#}
+{#                                July 30, 2022#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="likeCount">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/like.png' %} alt="like">#}
+{#                            </div>#}
+{#                            <div class="number">#}
+{#                                35#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="title">#}
+{#                        How to choose the first programming language for a beginner#}
+{#                    </div>#}
+{#                    <div class="descrition">#}
+{#                        Turpis sed at magna laoreet gravida consequat tortor placerat. Gravida vitae aliquet#}
+{#                        enim egestas dui...#}
+{#                    </div>#}
+{#                    <div class="continue ">#}
+{#                        <div class="text">#}
+{#                            Читать далее#}
+{#                        </div>#}
+{#                        <div class="icon">#}
+{#                            <a href="{% url 'article' %}"><img src={% static 'img/Right.png' %} alt="right"></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="publication">#}
+{#                    <div class="image">#}
+{#                        <img src={% static 'img/image_7.jpg' %} alt="image_7">#}
+{#                    </div>#}
+{#                    <div class="publicationInfo">#}
+{#                        <div class="category">#}
+{#                            Мобильная разработка#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="dateInfo">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/Calendar.png' %} alt="Calendar">#}
+{#                            </div>#}
+{#                            <div class="date">#}
+{#                                July 15, 2020#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="likeCount">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/like.png' %} alt="like">#}
+{#                            </div>#}
+{#                            <div class="number">#}
+{#                                41#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="title">#}
+{#                        What are color profiles and how they work in graphic design#}
+{#                    </div>#}
+{#                    <div class="descrition">#}
+{#                        Aliquam vulputate hendrerit quam sollicitudin urna enim viverra gravida...#}
+{#                    </div>#}
+{#                    <div class="continue ">#}
+{#                        <div class="text">#}
+{#                            Читать далее#}
+{#                        </div>#}
+{#                        <div class="icon">#}
+{#                            <a href="{% url 'article' %}"><img src={% static 'img/Right.png' %} alt="right"></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="publication">#}
+{#                    <div class="image">#}
+{#                        <img src={% static 'img/image_5.jpg' %} alt="image_5">#}
+{#                    </div>#}
+{#                    <div class="publicationInfo">#}
+{#                        <div class="category">#}
+{#                            Веб-разработка#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="dateInfo">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/Calendar.png' %} alt="Calendar">#}
+{#                            </div>#}
+{#                            <div class="date">#}
+{#                                July 12, 2021#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="likeCount">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/like.png' %} alt="like">#}
+{#                            </div>#}
+{#                            <div class="number">#}
+{#                                45#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="title">#}
+{#                        Startup: how to build a team that will live longer than a year#}
+{#                    </div>#}
+{#                    <div class="descrition">#}
+{#                        Nisi, massa ut sit faucibus et diam. Faucibus at malesuada at justo scelerisque...#}
+{#                    </div>#}
+{#                    <div class="continue ">#}
+{#                        <div class="text">#}
+{#                            Читать далее#}
+{#                        </div>#}
+{#                        <div class="icon">#}
+{#                            <a href="{% url 'article' %}"><img src={% static 'img/Right.png' %} alt="right"></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <div class="publication">#}
+{#                    <div class="image">#}
+{#                        <img src={% static 'img/image_9.jpg' %} alt="image_9">#}
+{#                    </div>#}
+{#                    <div class="publicationInfo">#}
+{#                        <div class="category">#}
+{#                            Дизайн#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="dateInfo">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/Calendar.png' %} alt="Calendar">#}
+{#                            </div>#}
+{#                            <div class="date">#}
+{#                                July 11, 2021#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="divider"></div>#}
+{#                        <div class="likeCount">#}
+{#                            <div class="icon">#}
+{#                                <img src={% static 'img/like.png' %} alt="like">#}
+{#                            </div>#}
+{#                            <div class="number">#}
+{#                                15#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="title">#}
+{#                        How to get customers to love your business from the start#}
+{#                    </div>#}
+{#                    <div class="descrition">#}
+{#                        Malesuada in augue mi feugiat morbi a aliquet enim. Elementum lacus, pellentesque#}
+{#                        ac...#}
+{#                    </div>#}
+{#                    <div class="continue ">#}
+{#                        <div class="text">#}
+{#                            Читать далее#}
+{#                        </div>#}
+{#                        <div class="icon">#}
+{#                            <a href="{% url 'article' %}"><img src={% static 'img/Right.png' %} alt="right"></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
 
-                            </div>
-                            <div class="number">
-                                25
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title">
-                        How to choose the first programming language for a beginner
-                    </div>
-                    <div class="descrition">
-                        Turpis sed at magna laoreet gravida consequat tortor placerat. Gravida vitae aliquet
-                        enim egestas dui...
-                    </div>
-                    <div class="continue ">
-                        <div class="text">
-                            Читать далее
-                        </div>
-                        <div class="icon">
-                            <a href="{% url 'article' '2e9279782bc14b9bb7cf18a4054a40dd' %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="publication">
-                    <div class="image">
-                        <img src={% static 'img/image_3.jpg' %} alt="image_3">
-                    </div>
-                    <div class="publicationInfo">
-                        <div class="category">
-                            Мобильная разработка
-                        </div>
-                        <div class="divider"></div>
-                        <div class="dateInfo">
-                            <div class="icon">
-                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                            </div>
-                            <div class="date">
-                                August 8, 2022
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="likeCount">
-                            <div class="icon">
-                                <img src={% static 'img/like.png' %} alt="like">
-                            </div>
-                            <div class="number">
-                                45
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title">
-                        Should you choose a creative profession if you are attracted to creativity?
-                    </div>
-                    <div class="descrition">
-                        Curabitur nisl tincidunt eros venenatis vestibulum ac placerat. Tortor, viverra sed
-                        vulputate ultrices...
-                    </div>
-                    <div class="continue ">
-                        <div class="text">
-                            Читать далее
-                        </div>
-                        <div class="icon">
-                            <a href="{% url 'article' '2e9279782bc14b9bb7cf18a4054a40dd' %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="publication">
-                    <div class="image">
-                        <img src={% static 'img/image_4.jpg' %} alt="image_4">
-                    </div>
-                    <div class="publicationInfo">
-                        <div class="category">
-                            Маркетинг
-                        </div>
-                        <div class="divider"></div>
-                        <div class="dateInfo">
-                            <div class="icon">
-                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                            </div>
-                            <div class="date">
-                                August 3, 2022
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="likeCount">
-                            <div class="icon">
-                                <img src={% static 'img/like.png' %} alt="like">
-                            </div>
-                            <div class="number">
-                                24
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title">
-                        HR statistics: job search, interviews, hiring and recruiting
-                    </div>
-                    <div class="descrition">
-                        Massa, lectus nibh consectetur aliquet nunc risus aenean. Leo hac netus bibendum
-                        diam adipiscing...
-                    </div>
-                    <div class="continue ">
-                        <div class="text">
-                            Читать далее
-                        </div>
-                        <div class="icon">
-                            <a href="{% url 'article' '2e9279782bc14b9bb7cf18a4054a40dd' %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="publication">
-                    <div class="image">
-                        <img src={% static 'img/image_8.jpg' %} alt="image_8">
-                    </div>
-                    <div class="publicationInfo">
-                        <div class="category">
-                            Веб-разработка
-                        </div>
-                        <div class="divider"></div>
-                        <div class="dateInfo">
-                            <div class="icon">
-                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                            </div>
-                            <div class="date">
-                                August 2, 2022
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="likeCount">
-                            <div class="icon">
-                                <img src={% static 'img/like.png' %} alt="like">
-                            </div>
-                            <div class="number">
-                                44
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title">
-                        HoWhat to do and who to talk to if you want to get feedback
-                    </div>
-                    <div class="descrition">
-                        Neque a, senectus consectetur odio in aliquet nec eu. Ultricies ac nibh urna urna
-                        sagittis faucibus...
-                    </div>
-                    <div class="continue ">
-                        <div class="text">
-                            Читать далее
-                        </div>
-                        <div class="icon">
-                            <a href="{% url 'article' '2e9279782bc14b9bb7cf18a4054a40dd' %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="publication">
-                    <div class="image">
-                        <img src={% static 'img/image_6.jpg' %} alt="image_6">
-                    </div>
-                    <div class="publicationInfo">
-                        <div class="category">
-                            Маркетинг
-                        </div>
-                        <div class="divider"></div>
-                        <div class="dateInfo">
-                            <div class="icon">
-                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                            </div>
-                            <div class="date">
-                                July 30, 2022
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="likeCount">
-                            <div class="icon">
-                                <img src={% static 'img/like.png' %} alt="like">
-                            </div>
-                            <div class="number">
-                                35
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title">
-                        How to choose the first programming language for a beginner
-                    </div>
-                    <div class="descrition">
-                        Turpis sed at magna laoreet gravida consequat tortor placerat. Gravida vitae aliquet
-                        enim egestas dui...
-                    </div>
-                    <div class="continue ">
-                        <div class="text">
-                            Читать далее
-                        </div>
-                        <div class="icon">
-                            <a href="{% url 'article' '2e9279782bc14b9bb7cf18a4054a40dd' %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="publication">
-                    <div class="image">
-                        <img src={% static 'img/image_7.jpg' %} alt="image_7">
-                    </div>
-                    <div class="publicationInfo">
-                        <div class="category">
-                            Мобильная разработка
-                        </div>
-                        <div class="divider"></div>
-                        <div class="dateInfo">
-                            <div class="icon">
-                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                            </div>
-                            <div class="date">
-                                July 15, 2020
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="likeCount">
-                            <div class="icon">
-                                <img src={% static 'img/like.png' %} alt="like">
-                            </div>
-                            <div class="number">
-                                41
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title">
-                        What are color profiles and how they work in graphic design
-                    </div>
-                    <div class="descrition">
-                        Aliquam vulputate hendrerit quam sollicitudin urna enim viverra gravida...
-                    </div>
-                    <div class="continue ">
-                        <div class="text">
-                            Читать далее
-                        </div>
-                        <div class="icon">
-                            <a href="{% url 'article' '2e9279782bc14b9bb7cf18a4054a40dd' %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="publication">
-                    <div class="image">
-                        <img src={% static 'img/image_5.jpg' %} alt="image_5">
-                    </div>
-                    <div class="publicationInfo">
-                        <div class="category">
-                            Веб-разработка
-                        </div>
-                        <div class="divider"></div>
-                        <div class="dateInfo">
-                            <div class="icon">
-                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                            </div>
-                            <div class="date">
-                                July 12, 2021
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="likeCount">
-                            <div class="icon">
-                                <img src={% static 'img/like.png' %} alt="like">
-                            </div>
-                            <div class="number">
-                                45
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title">
-                        Startup: how to build a team that will live longer than a year
-                    </div>
-                    <div class="descrition">
-                        Nisi, massa ut sit faucibus et diam. Faucibus at malesuada at justo scelerisque...
-                    </div>
-                    <div class="continue ">
-                        <div class="text">
-                            Читать далее
-                        </div>
-                        <div class="icon">
-                            <a href="{% url 'article' '2e9279782bc14b9bb7cf18a4054a40dd' %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="publication">
-                    <div class="image">
-                        <img src={% static 'img/image_9.jpg' %} alt="image_9">
-                    </div>
-                    <div class="publicationInfo">
-                        <div class="category">
-                            Дизайн
-                        </div>
-                        <div class="divider"></div>
-                        <div class="dateInfo">
-                            <div class="icon">
-                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                            </div>
-                            <div class="date">
-                                July 11, 2021
-                            </div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="likeCount">
-                            <div class="icon">
-                                <img src={% static 'img/like.png' %} alt="like">
-                            </div>
-                            <div class="number">
-                                15
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title">
-                        How to get customers to love your business from the start
-                    </div>
-                    <div class="descrition">
-                        Malesuada in augue mi feugiat morbi a aliquet enim. Elementum lacus, pellentesque
-                        ac...
-                    </div>
-                    <div class="continue ">
-                        <div class="text">
-                            Читать далее
-                        </div>
-                        <div class="icon">
-                            <a href="{% url 'article' '2e9279782bc14b9bb7cf18a4054a40dd' %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="paginator">
-                <div class="pagLeft">
-                    <a href="#"><img src={% static 'img/pagLeft.png' %} alt="left"></a>
-                </div>
-                <div class="pagNum">
-                    <a href="#">1</a>
-                </div>
-                <div class="pagNum">
-                    <a href="#">2</a>
-                </div>
-                <div class="pagNum">
-                    <a href="#">3</a>
-                </div>
-                <div class="pagNum">
-                    <a href="#">4</a>
-                </div>
-                <div class="pagRight">
-                    <a href="#"><img src={% static 'img/pagRight.png' %} alt="right"></a>
-                </div>
-            </div>
         </div>
+        <div class="paginator">
+            {% if page_obj.has_previous %}
+                <div class="pagLeft">
+                    <a href="?page={{ page_obj.previous_page_number }}"><img src={% static 'img/pagLeft.png' %} alt="left"></a>
+                </div>
+            {% endif %}
+
+            {% for num_page in page_obj.paginator.page_range %}
+                <div class="pagNum" {% if num_page == page_obj.number %} style="text-decoration: underline" {% endif %}>
+                    <a href="?page={{ num_page }}">{{ num_page }}</a>
+                </div>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <div class="pagRight">
+                    <a href="?page={{ page_obj.next_page_number }}"><img
+                            src={% static 'img/pagRight.png' %} alt="right"></a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
     </div>
 {% endblock %}
