@@ -89,10 +89,6 @@ body {
     align-items: center;
 }
 
-/*.main-wrapper .topNavbar .accaunt .loginRegister {*/
-/*    display: none;*/
-/*}*/
-
 .main-wrapper .topNavbar .accaunt .loginRegister {
     width: 122px;
     height: 26px;
@@ -863,6 +859,10 @@ body {
     margin-right: 5px;
 }
 
+.article .comment {
+    opacity: .1;
+}
+
 .article .image_habr_page {
     display: flex;
     margin-top: 40px;
@@ -893,7 +893,8 @@ body {
     flex-direction: row;
     align-items: center;
     margin-right: 0;
-    color: #1E212C
+    color: #1E212C;
+    opacity: .1;
 }
 
 .article .tags_habr a {
@@ -989,6 +990,7 @@ body {
 
 .sidebar .avatar_and_info {
     display: flex;
+    width: 340px;
 }
 
 .sidebar .avatar {
@@ -1022,6 +1024,7 @@ body {
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
+    width: 220px;
 }
 
 .sidebar .share_author {
@@ -1106,6 +1109,7 @@ body {
 .sidebar .tags_trending {
     margin-top: 60px;
     height: 126px;
+    opacity: .1;
 }
 
 .sidebar .tags {

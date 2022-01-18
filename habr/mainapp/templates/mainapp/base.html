@@ -38,11 +38,11 @@
                         <div class="personalAccount">
                             <a href="{% url 'lk' %}">My Account</a>
                             /&nbsp;&nbsp;
-                            <a href="#">Exit</a>
+                            <a href="/admin/logout/" target="_blank">Exit</a>
                         </div>
                     {% else %}
                         <div class="loginRegister">
-                            <a href="#">Login</a>
+                            <a href="/admin/login/" target="_blank">Login</a>
                             /&nbsp;&nbsp;
                             <a href="{% url 'registration' %}"> Register</a>
                         </div>
