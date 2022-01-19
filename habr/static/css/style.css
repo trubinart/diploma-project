@@ -89,10 +89,6 @@ body {
     align-items: center;
 }
 
-/*.main-wrapper .topNavbar .accaunt .loginRegister {*/
-/*    display: none;*/
-/*}*/
-
 .main-wrapper .topNavbar .accaunt .loginRegister {
     width: 122px;
     height: 26px;
@@ -113,6 +109,16 @@ body {
 .main-wrapper .topNavbar .accaunt .loginRegister a:hover {
     color: #FF3F3A;
 }
+
+/* временное сокрытие не работающих частей меню*/
+
+.menu .design,
+.menu .webDevelopment,
+.menu .mobileDevelopment,
+.menu .marketing {
+    opacity: .1;
+}
+/* конец временного сокрытия не работающих частей меню*/
 
 /* end .top-navbar */
 
@@ -264,6 +270,7 @@ body {
     align-items: flex-start;
     justify-content: flex-start;
     opacity: 0.6;
+    opacity: 0.1;
 }
 
 .main-footer .topFooter .wrapper .subscribe .title{
@@ -730,15 +737,17 @@ body {
 .main_content {
     display: flex;
     justify-content: space-between;
-    height: 1714px;
+    /* height: 1714px; */
+    margin-bottom: 60px;
 }
 
 .article {
     width: 810px;
-    height: 1594px;
+    margin-bottom: 60px;
+    /* height: 1594px; */
 }
 
-.post_header {
+.article .post_header {
     height: 210px;
 }
 
@@ -746,11 +755,11 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 207px;
+    width: 307px;
     height: 26px;
 }
 
-.name_habr {
+.article .name_habr {
     margin-top: 12px;
     margin-left: 0px;
     height: 120px;
@@ -760,7 +769,7 @@ body {
     display: flex;
 }
 
-.content_type {
+.article .content_type {
     margin-left: 10px;
     margin-right: 10px;
     font-weight: normal;
@@ -768,26 +777,27 @@ body {
     size: 16px;
 }
 
-.content_topic {
+.article .content_topic {
     text-decoration: none;
     margin-left: 10px;
     font-weight: bold;
     color: #FF3F3A;
     size: 16px;
+    opacity: .5;
 }
 
-.content_topic:hover {
+.article .content_topic:hover {
     color: black;
 }
 
-.habr_information {
+.article .habr_information {
     display: flex;
     justify-content: space-between;
     margin-top: 26px;
     height: 26px;
 }
 
-.habr_date_creat {
+.article .habr_date_creat {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -796,26 +806,26 @@ body {
     color: #787A80;
 }
 
-.date {
+.article .date {
     font-size: 16px;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 0 20px 0 10px;
 }
 
-.time_read {
+.article .count_like {
     font-size: 16px;
-    margin-left: 5px;
+    margin: 0 20px 0 10px;
 }
 
-.habr_share {
+.article .habr_share {
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-right: 0;
     width: 142px;
+    opacity: .1;
 }
 
-.habr_info {
+.article .habr_info {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -823,60 +833,71 @@ body {
     width: 180px;
 }
 
-.habr_share p {
+.article .habr_share p {
     font-weight: bold;
     font-size: 16px;
     color: #1E212C;
 }
 
-.tags_habr p {
+.article .tags_habr p {
     font-weight: bold;
     font-size: 16px;
     color: #1E212C;
 }
 
-.habr_share a {
+.article .habr_share a {
     margin-left: 15px;
 }
 
-.habr_share a:hover {
+.article .habr_share a:hover {
     outline: 2px dashed #787A80;
     outline-offset: -1px;
 }
 
-.info_img {
+.article .info_img {
     margin-left: 15px;
     margin-right: 5px;
 }
 
-.image_habr_page {
+.article .comment {
+    opacity: .1;
+}
+
+.article .image_habr_page {
+    display: flex;
     margin-top: 40px;
     height: 360px;
-    background: rosybrown;
+    max-width: 810px;
+    overflow: hidden;
 }
 
-.text_habr_page {
+.article .image_habr_page img{
+    height: 360px;
+}
+
+.article .text_habr_page {
     margin-top: 60px;
-    height: 832px;
+    /* height: 832px; */
 }
 
-.tags_and_share {
+.article .tags_and_share {
     display: flex;
     justify-content: space-between;
     margin-top: 60px;
     height: 32px;
 }
 
-.tags_habr {
+.article .tags_habr {
     width: 500px;
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-right: 0;
-    color: #1E212C
+    color: #1E212C;
+    opacity: .1;
 }
 
-.tags_habr a {
+.article .tags_habr a {
     text-decoration: none;
     margin-left: 20px;
     font-weight: bold;
@@ -888,7 +909,7 @@ body {
     padding: 5px;
 }
 
-.tags_habr a:hover {
+.article .tags_habr a:hover {
     background: #FF3F3A;
     text-decoration: none;
     margin-left: 20px;
@@ -901,14 +922,14 @@ body {
     padding: 5px;
 }
 
-.text_bold {
+.article .text_bold {
     font-weight: bold;
     font-size: 20px;
     line-height: 150%;
     color: #1E212C
 }
 
-.text_normal {
+.article .text_normal {
     margin-top: 24px;
     font-weight: normal;
     font-size: 16px;
@@ -916,7 +937,7 @@ body {
     color: #424551
 }
 
-.text_bold_quote {
+.article .text_bold_quote {
     margin-top: 48px;
     margin-bottom: 48px;
     font-weight: bold;
@@ -934,9 +955,10 @@ body {
 .sidebar form {
     position: relative;
     display: block;
+    opacity: .3;
 }
 
-.search {
+.sidebar .search {
     width: 95%;
     height: 44px;
     border-radius: 10px;
@@ -945,20 +967,20 @@ body {
     padding-left: 16px;
 }
 
-.search_button {
+.sidebar .search_button {
     display: block;
     position: absolute;
     top: 17px;
     left: 310px;
 }
 
-.author {
+.sidebar .author {
 
     margin-top: 60px;
     height: 148px;
 }
 
-.author_title {
+.sidebar .author_title {
     font-weight: bold;
     font-size: 16px;
     line-height: 150%;
@@ -966,54 +988,69 @@ body {
     text-transform: uppercase;
 }
 
-.avatar_and_info {
+.sidebar .avatar_and_info {
     display: flex;
+    width: 340px;
 }
 
-.avatar {
+.sidebar .avatar {
     margin-top: 24px;
-    flex-direction: column;
+    /* flex-direction: column; */
+    width: 100px;
+    height: 100px;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.name_and_share {
+.sidebar .avatar img {
+    height: 100px;
+}
+
+.sidebar .name_and_share {
     flex-direction: column;
     margin-top: 24px;
     padding-left: 20px;
 }
 
-.name_and_share h3 {
+.sidebar .name_and_share h3 {
     font-weight: bold;
     font-size: 20px;
     line-height: 150%;
     color: #424551;
 }
 
-.name_and_share p {
+.sidebar .name_and_share p {
     font-weight: normal;
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
+    width: 220px;
 }
 
-.share_author {
+.sidebar .share_author {
     margin-top: 22px;
+    display: flex;
+    align-items: flex-end;
+    height: 20px;
+    opacity: .1;
 }
 
-.share_author a {
+.sidebar .share_author a {
     margin-right: 15px;
+    display: flex;
 }
 
-.share_author a:hover {
+.sidebar .share_author a:hover {
     outline: 2px dashed #787A80;
     outline-offset: -1px;
 }
 
-.trending_articles {
+.sidebar .trending_articles {
     margin-top: 60px;
     height: 396px;
 }
 
-.trending_articles_title {
+.sidebar .trending_articles_title {
     font-weight: bold;
     font-size: 16px;
     line-height: 150%;
@@ -1021,39 +1058,65 @@ body {
     text-transform: uppercase;
 }
 
-.img_and_info_habr {
+.sidebar .img_and_info_habr {
     margin-top: 24px;
     display: flex;
 }
 
-.info_habr {
+.sidebar .trending_articles .img_and_info_habr .img_habr {
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.sidebar .trending_articles .img_and_info_habr .img_habr img {
+    height: 100px;
+}
+
+.sidebar .info_habr {
     margin-left: 20px;
     width: 222px;
 }
 
-.info_habr a {
+.sidebar .info_habr .habr_date_creat {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 0;
+    width: 252px;
+    color: #787A80;
+}
+
+.sidebar .info_habr .habr_date_creat img {
+    margin-right: 10px;
+}
+
+.sidebar .info_habr a {
     text-decoration: none;
     margin-top: 10px;
     font-weight: bold;
     font-size: 16px;
     line-height: 160%;
     color: #1E212C;
+    display: block;
 }
 
-.info_habr a:hover {
+.sidebar .info_habr a:hover {
     color: #FF3F3A;
 }
 
-.tags_trending {
+.sidebar .tags_trending {
     margin-top: 60px;
     height: 126px;
+    opacity: .1;
 }
 
-.tags {
+.sidebar .tags {
     display: inline;
 }
 
-.tags a {
+.sidebar .tags a {
     text-decoration: none;
     display: inline-block;
     margin-top: 15px;
@@ -1067,7 +1130,7 @@ body {
     padding: 5px;
 }
 
-.tags a:hover {
+.sidebar .tags a:hover {
     background: #FF3F3A;
     margin-right: 15px;
     font-weight: bold;
@@ -1080,6 +1143,7 @@ body {
 }
 
 /* end .article_page */
+
 
 /* start .subNavbarLK */
 
@@ -1463,3 +1527,4 @@ body {
 
 
 /* end .baseBlokLK */
+

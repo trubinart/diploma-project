@@ -95,6 +95,12 @@ class Article(BaseModel):
           """
         return ArticleLike.objects.select_related('article_like').filter(article_like=self.id)
 
+    def get_likes_count_by_article_id(self) -> int:
+        """
+        Подсчет количества лайков для статьи.
+        """
+        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id).count()
+
     def get_comments_by_article_id(self) -> QuerySet:
         """
         :param: None
@@ -104,6 +110,12 @@ class Article(BaseModel):
           All likes sorted by date descending order.
           """
         return ArticleComment.objects.select_related('article_comment').filter(article_like=self.id)
+
+    def get_other_articles_by_author(self) -> QuerySet:
+        """
+        Метод выводит последние по дате 3 статьи автора исключая текущую статью
+          """
+        return Article.objects.filter(user=self.user).exclude(id=self.id).order_by('-created_timestamp')[:3]
 
 
 class ArticleLike(BaseModel):
@@ -131,7 +143,7 @@ class ArticleComment(BaseModel):
     article_comment = models.ForeignKey(Article, on_delete=models.DO_NOTHING, verbose_name='Article for comment',
                                         related_name='article_comment')
     text = models.TextField(max_length=300, verbose_name='Comment text')
-    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, verbose_name='Comment Author',
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Comment Author',
                                 related_name='comment_author')
 
     def __str__(self):
