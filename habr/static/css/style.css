@@ -884,6 +884,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-top: 60px;
+    margin-bottom: 60px;
     height: 32px;
 }
 
@@ -1525,6 +1526,62 @@ body {
 
 }
 
-
 /* end .baseBlokLK */
 
+
+/* start .comment-views */
+
+.comment_views{
+    /*display: flex;*/
+    padding: 10px;
+    background: #FFFFFF;
+    border: 1px solid #E5E8ED;
+    /*box-sizing: border-box;*/
+    box-shadow: 0px 80px 80px -20px rgba(154, 156, 165, 0.08), 0px 30px 24px -10px rgba(154, 156, 165, 0.05), 0px 12px 10px -6px rgba(154, 156, 165, 0.04), 0px 4px 4px -4px rgba(30, 33, 44, 0.03);
+    border-radius: 4px;
+    line-height: 150%;
+    text-align: left;
+
+}
+
+.comment_attribute{
+    display: flex;
+}
+
+.comment_author{
+    width: 98px;
+    height: 26px;
+    right: 0px;
+    top: 46px;
+
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 160%;
+
+    color: #787A80;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 4px 0px;
+}
+
+.comment_text{
+    width: 342px;
+    height: 54px;
+    left: 0px;
+    top: 0px;
+
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 150%;
+
+    color: #1E212C;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 8px 0px;
+}
+
+/* end .comment-views */

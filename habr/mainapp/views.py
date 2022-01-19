@@ -26,7 +26,6 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         title = 'Статья'
         context['title'] = title
-        print(context)
         return context
 
 
