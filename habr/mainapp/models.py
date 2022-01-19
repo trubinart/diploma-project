@@ -143,7 +143,7 @@ class ArticleComment(BaseModel):
     article_comment = models.ForeignKey(Article, on_delete=models.DO_NOTHING, verbose_name='Article for comment',
                                         related_name='article_comment')
     text = models.TextField(max_length=300, verbose_name='Comment text')
-    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, verbose_name='Comment Author',
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Comment Author',
                                 related_name='comment_author')
 
     def __str__(self):
