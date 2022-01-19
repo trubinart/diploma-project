@@ -1,0 +1,118 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    <!--Вставка кода для кабинета-->
+    <div class="subNavbarLK">
+        {% include 'mainapp/includes/inc-submenu_lk.html' %}
+    </div>
+    <div class="contentLK">
+        <div class="mainLK">
+            <div class="titleLK">
+                Редактирование страницы на сайте
+            </div>
+            <div class="infoLK">
+                <div class="infoTextLeftLK">
+                    Информацию на этой странице будут видеть пользователи сайта — твои потенциальные
+                    клиенты. Отнесись к ее заполнению
+                    ответственно.
+                </div>
+                <div class="infoTextRightLK">
+                    <a href="#">Как выглядит моя страница?</a>
+                </div>
+            </div>
+            <div class="profileLK">
+                <div class="menuProfileLK">
+                    <ul class="menuPrLK">
+                        <li class="persInfoLK"><a href="#">Персональная информация</a></li>
+                        <!-- <li class="servicesLK"><a href="#">Услуги</a></li>
+                        <li class="scheduleLK"><a href="#">Расписание</a></li>
+                        <li class="feedbackLK"><a href="#">Отзывы</a></li> -->
+                    </ul>
+
+                </div>
+                <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
+                <div class="blokPersonInfoLK">
+                    <div class="baseInfoBlokLK">
+                        <div class="menuBaseInfoBlokLK">
+                            <ul class="menuPrLK">
+                                <!-- <li class="persInfoLK"><a href="#">Основная информация</a></li> -->
+                                <li class="baseInfoTitleLK">Основная информация</li>
+                            </ul>
+                        </div>
+                        <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
+                        <!-- <div class="baseBlokLK"> -->
+                        <form class="baseBlokLK">
+
+                            <div class="blokFirstName">
+                                <div class="FirstName">
+                                    Имя
+                                </div>
+                                <div class="fieldName">
+                                    <input class="inputFild" type="text" name="fieldFirstName" placeholder="Введите имя"
+                                        id="fieldFirstName">
+                                </div>
+                            </div>
+                            <div class="blokLastName">
+                                <div class="LastName">
+                                    Фамилия
+                                </div>
+                                <div class="fieldName">
+                                    <input class="inputFild" type="text" name="fieldLastName"
+                                        placeholder="Введите фамилию" id="fieldLastName">
+                                </div>
+                            </div>
+
+                            <div class="blokBirthdate">
+                                <div class="Birthdate">
+                                    Возраст
+                                </div>
+                                <div class="fieldName">
+                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="18"
+                                        id="fieldBirthdate">
+
+                                </div>
+                            </div>
+                            <div class="blokShortDescription">
+                                <div class="shortDescription">
+                                    Краткое описание
+                                </div>
+                                <div class="fieldName">
+                                    <!-- <input class="inputFild" type="text" name="fieldSecondName"
+                                                                    placeholder="Введите возраст" id="fieldSecondName"> -->
+                                    <textarea class="inputFild" name="fieldShortDescription"
+                                        placeholder="Краткое описание" id="fieldShortDescription"
+                                        type="textarea"></textarea>
+                                </div>
+                            </div>
+                            <div class="blokButton">
+
+                                <input class="form-control" type="submit" value="сохранить изменения" />
+                                <!-- <button type="submit" value="сохранить изменения"></button> -->
+
+                            </div>
+
+                            <!-- <div class="blokBirthdate">
+                                <div class="Birthdate">
+                                    Название студии
+                                </div>
+                                <div class="fieldName">
+                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="01.01.1990"
+                                        id="fieldBirthdate">
+                                </div>
+                            </div> -->
+                        </form>
+                        <!-- </div> -->
+                    </div>
+                    <!-- <div class="baseAvatarBlokLK">
+                        Картинка
+                    </div> -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--/Вставка кода для кабинета-->
+{% endblock %}

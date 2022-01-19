@@ -26,6 +26,12 @@ class User(AbstractUser, BaseModel):
     def __str__(self):
         return self.username
 
+    def get_profile(self):
+        """
+        Метод отдает профиль текущего пользователя
+        """
+        return UserProfile.objects.filter(user=self).select_related("user").first()
+
 
 class UserProfile(models.Model):
     """
