@@ -14,14 +14,9 @@
             Но даст тебе безграничные возможности на изучение статей.
         </div>
         {% if form.errors %}
-        <div class="error-text">
-            {% for dict in form.errors %}
-                {% if dict == 'password2' %}
-                    Введенные пароли не совпадают. <br> Попробуйте еще раз!
-                {% endif %}
-            {% endfor %}
-{#            Вы ввели не верный емайл. А еще вашы пароли не совпадают!!!#}
-{#            Срочно нужно что-то делать!#}
+        <div class="error-text">{{ form.errors.as_text }}
+
+
         </div>
         {% endif %}
 
