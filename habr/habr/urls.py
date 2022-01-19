@@ -9,7 +9,7 @@ urlpatterns = [
     path('', mainapp.MainListView.as_view(), name='main'),
     path('article/', mainapp.ArticleListView.as_view(), name='article'),
     path('admin/', admin.site.urls),
-    path('registration/', authapp.UserRegisterView.as_view()),
+    path('registration/', authapp.UserRegistrationView.as_view()),
 ]
 
 if settings.DEBUG:
