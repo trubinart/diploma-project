@@ -40,8 +40,6 @@
 }
 
 .error-text{
-    width: 390px;
-    height: 42px;
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
@@ -49,13 +47,13 @@
     line-height: 150%;
     text-align: center;
     color: #000000;
-    margin: 15px auto;
+    margin: 15px 10px;
     border: 1px solid;
     border-radius: 2px;
     border-color: #FF3F3A;
     background-color: rgb(243, 237, 237);
     padding: 3px;
-    display: true;
+    display: flex;
 }
 
 .input-label{

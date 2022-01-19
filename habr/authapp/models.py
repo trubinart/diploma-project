@@ -19,9 +19,9 @@ class User(AbstractUser, BaseModel):
     """
     Model for user`s registration
     """
-    username = models.CharField(verbose_name='user_name', unique=True, max_length=25, blank=True)
-    email = models.EmailField(verbose_name='email', unique=True, blank=True)
-    password = models.CharField(verbose_name='password', max_length=25, blank=True)
+    username = models.CharField(verbose_name='user_name', unique=True, max_length=25, blank=False)
+    email = models.EmailField(verbose_name='email', unique=True, blank=False)
+    password = models.CharField(verbose_name='password', max_length=25, blank=False)
 
     def __str__(self):
         return self.username
@@ -38,7 +38,7 @@ class UserProfile(models.Model):
     Model for users
     """
     user = models.OneToOneField(User, unique=True, null=False, db_index=True, on_delete=models.CASCADE)
-    name = models.CharField(verbose_name='first_last_name', max_length=100, blank=True)
+    name = models.CharField(verbose_name='first_last_name', max_length=100, blank=False)
     birthday = models.DateField(verbose_name='birthday', null=True, blank=True)
-    bio = models.TextField(verbose_name='description', max_length=250)
+    bio = models.TextField(verbose_name='description', max_length=250, blank=False)
     avatar = models.ImageField(upload_to='user_avatars')

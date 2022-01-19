@@ -3,51 +3,51 @@
 
 
 {% block content %}
-<body>
-<div class="main-form">
-    <div class="form-title">
-        Зарегистрироваться
+    <body>
+    <div class="main-form">
+        <div class="form-title">
+            Зарегистрироваться
+        </div>
+
+        <div class="form-subtitle">
+            Регистрация займет всего одну минуту.
+            Но даст тебе безграничные возможности на изучение статей.
+        </div>
+        {% if form.errors %}
+        <div class="error-text">{{ form.errors.as_text }}
+
+
+        </div>
+        {% endif %}
+
+        <form class="form-box" method="post" id="registration-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="input-label">
+                Логин
+            </div>
+            {{ form.username }}
+
+            <div class="input-label">
+                Ваш Email
+            </div>
+            {{ form.email }}
+
+            <div class="input-label">
+                Пароль
+            </div>
+            {{ form.password1 }}
+
+            <div class="input-label">
+                Подтверждение пароля
+            </div>
+            {{ form.password2 }}
+        </form>
+        <button type="submit" form="registration-form" class="form-button"> Зарегистрироваться</button>
+        <div class="text-under-button">
+{#            Уже имеете аккаунт? <a href="#" class="link">Войти</a>#}
+        </div>
+
     </div>
 
-    <div class="form-subtitle">
-        Регистрация займет всего одну минуту.
-        Но даст тебе безграничные возможности на изучение статей.
-    </div>
-
-    <div class="error-text">
-        Вы ввели не верный емайл. А еще вашы пароли не совпадают!!!
-        Срочно нужно что-то делать!
-    </div>
-
-    <form class="form-box" action=# id="registration-form">
-        <div class="input-label">
-            Логин
-        </div>
-        <input type="text" class="form-input" placeholder="ivanov2019">
-
-        <div class="input-label">
-            Ваш Email
-        </div>
-        <input type="email" class="form-input" placeholder="ivanov2019@gmail.com">
-
-        <div class="input-label">
-            Пароль
-        </div>
-        <input autocomplete="off" placeholder=" &bull; &bull; &bull; &bull; &bull; &bull; &bull; &bull;" type="password" class="form-input">
-
-        <div class="input-label">
-            Подтверждение пароля
-        </div>
-        <input autocomplete="off" placeholder=" &bull; &bull; &bull; &bull; &bull; &bull; &bull; &bull;" type="password" class="form-input">
-    </form>
-
-    <button type="submit" form="registration-form" class="form-button"> Зарегистрироваться</button>
-
-    <div class="text-under-button">
-        Уже имеете аккаунт? <a href="#" class="link" >Войти</a>
-    </div>
-
-</div>
-
-</body>
+    </body>
 {% endblock %}
