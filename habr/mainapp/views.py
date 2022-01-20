@@ -1,5 +1,9 @@
-from django.views.generic import ListView, DetailView
-from mainapp.models import Article, ArticleCategories
+from django.urls import reverse
+from django.views.generic import ListView, DetailView, View
+from django.shortcuts import HttpResponseRedirect
+
+from mainapp.models import Article, ArticleCategories, ArticleComment
+from mainapp.forms import CreationCommentFrom
 
 
 class MainListView(ListView):
@@ -26,6 +30,7 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         title = 'Статья'
         context['title'] = title
+        context['form'] = CreationCommentFrom()
         return context
 
 
@@ -42,3 +47,15 @@ class LkListView(ListView):
         title = 'Личный кабинет'
         context['title'] = title
         return context
+
+
+class CreateCommentView(View):
+    """Класс для создания комментария """
+    def post(self, request):
+        article_id = request.POST['article_comment']
+        form = CreationCommentFrom(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
+        else:
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))

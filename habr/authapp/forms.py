@@ -1,7 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from authapp.models import User
 
-
 class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
@@ -16,3 +15,4 @@ class UserRegisterForm(UserCreationForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['class'] = 'form-input'
+

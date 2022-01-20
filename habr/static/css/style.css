@@ -1606,9 +1606,15 @@ body {
     border: 1px solid #D7DADD;
     box-sizing: border-box;
     margin-bottom: 5px;
-    margin-top: 15px;
+    margin-top: 20px;
     margin-left: 10px;
+    resize: none;
 
+}
+
+.comment_input::placeholder{
+   padding-top: 13px;
+   padding-left: 13px;
 }
 
 .add_comment_button{
@@ -1628,7 +1634,7 @@ body {
     font-size: 12px;
     line-height: 44px;
     margin-left: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     margin-top: 15px;
 
 }
