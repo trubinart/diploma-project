@@ -860,7 +860,7 @@ body {
 }
 
 .article .comment {
-    opacity: .1;
+    /*opacity: .1;*/
 }
 
 .article .image_habr_page {
@@ -1531,6 +1531,11 @@ body {
 
 /* start .comment-views */
 
+.comment_box{
+    display: flex;
+    flex-direction: column;
+}
+
 .comment_views{
     /*display: flex;*/
     padding: 10px;
@@ -1541,6 +1546,7 @@ body {
     border-radius: 4px;
     line-height: 150%;
     text-align: left;
+    margin-bottom: 10px;
 
 }
 
@@ -1549,7 +1555,7 @@ body {
 }
 
 .comment_author{
-    width: 98px;
+    width: 130px;
     height: 26px;
     right: 0px;
     top: 46px;
@@ -1567,13 +1573,8 @@ body {
 }
 
 .comment_text{
-    width: 342px;
-    height: 54px;
-    left: 0px;
-    top: 0px;
-
     font-style: normal;
-    font-weight: bold;
+    font-weight: normal;
     font-size: 14px;
     line-height: 150%;
 
