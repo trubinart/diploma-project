@@ -110,16 +110,6 @@ body {
     color: #FF3F3A;
 }
 
-/* временное сокрытие не работающих частей меню*/
-
-.menu .design,
-.menu .webDevelopment,
-.menu .mobileDevelopment,
-.menu .marketing {
-    opacity: .1;
-}
-/* конец временного сокрытия не работающих частей меню*/
-
 /* end .top-navbar */
 
 
@@ -270,7 +260,6 @@ body {
     align-items: flex-start;
     justify-content: flex-start;
     opacity: 0.6;
-    opacity: 0.1;
 }
 
 .main-footer .topFooter .wrapper .subscribe .title{
@@ -783,7 +772,7 @@ body {
     font-weight: bold;
     color: #FF3F3A;
     size: 16px;
-    opacity: .5;
+    opacity: .8;
 }
 
 .article .content_topic:hover {
@@ -795,6 +784,7 @@ body {
     justify-content: space-between;
     margin-top: 26px;
     height: 26px;
+    opacity: .8;
 }
 
 .article .habr_date_creat {
@@ -822,7 +812,7 @@ body {
     align-items: center;
     margin-right: 0;
     width: 142px;
-    opacity: .1;
+    opacity: .8;
 }
 
 .article .habr_info {
@@ -859,10 +849,6 @@ body {
     margin-right: 5px;
 }
 
-.article .comment {
-    /*opacity: .1;*/
-}
-
 .article .image_habr_page {
     display: flex;
     margin-top: 40px;
@@ -895,7 +881,7 @@ body {
     align-items: center;
     margin-right: 0;
     color: #1E212C;
-    opacity: .1;
+    opacity: .8;
 }
 
 .article .tags_habr a {
@@ -956,7 +942,6 @@ body {
 .sidebar form {
     position: relative;
     display: block;
-    opacity: .3;
 }
 
 .sidebar .search {
@@ -971,8 +956,8 @@ body {
 .sidebar .search_button {
     display: block;
     position: absolute;
-    top: 17px;
-    left: 310px;
+    top: 15px;
+    left: 290px;
 }
 
 .sidebar .author {
@@ -1033,7 +1018,7 @@ body {
     display: flex;
     align-items: flex-end;
     height: 20px;
-    opacity: .1;
+    opacity: .8;
 }
 
 .sidebar .share_author a {
@@ -1110,7 +1095,7 @@ body {
 .sidebar .tags_trending {
     margin-top: 60px;
     height: 126px;
-    opacity: .1;
+    opacity: .8;
 }
 
 .sidebar .tags {
@@ -1525,6 +1510,7 @@ body {
     font-size: 12px;
 
 }
+
 
 /* end .baseBlokLK */
 
