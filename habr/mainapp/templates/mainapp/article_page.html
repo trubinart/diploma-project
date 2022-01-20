@@ -87,6 +87,16 @@
                 </div>
             </div>
 
+            {#            ----- ДОБАВЛЕНИЕ КОММЕНТАРИЯ ----  #}
+            {% if user.is_authenticated %}
+            <form class="form_add_comment" method="post" enctype="multipart/form-data">
+                <input type="text" class="comment_input" placeholder="Напишите свой комментарий">
+                <input hidden="true" value="{{ user }}" >
+                {% csrf_token %}
+                <button type="submit" form="registration-form" class="add_comment_button"> Оставить комментарий</button>
+            </form>
+            {% endif %}
+
             {#            ----- КОММЕНТАРИИ ----  #}
             <div class="comment_box">
                 {% for comment in article.get_comments_by_article_id %}
@@ -101,7 +111,6 @@
 
             </div>
         </div>
-        {#        ----- КОНЕЦ БЛОКА КОММЕНТАРИЕВ ----- #}
 
         <div class="sidebar">
             <form>
