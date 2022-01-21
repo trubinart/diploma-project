@@ -120,9 +120,9 @@
                 {% endif %}
 
                 {% for num_page in page_obj.paginator.page_range %}
-                <div class="pagNum" {% if num_page== page_obj.number %} style="text-decoration: underline" {% endif %}>
-                    <a href="?page={{ num_page }}">{{ num_page }}</a>
-                </div>
+                    <div class="pagNum" {% if num_page == page_obj.number %} style="text-decoration: underline" {% endif %}>
+                        <a href="?page={{ num_page }}">{{ num_page }}</a>
+                    </div>
                 {% endfor %}
 
                 {% if page_obj.has_next %}
