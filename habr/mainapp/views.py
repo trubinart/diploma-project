@@ -74,7 +74,7 @@ class LkListView(ListView):
 
 class UserArticleListView(ListView):
     """Класс для вывода списка статей автора"""
-    template_name = 'mainapp/categories.html'
+    template_name = 'mainapp/article_by_author.html'
     paginate_by = 9
     model = Article
 
@@ -91,4 +91,5 @@ class UserArticleListView(ListView):
         author = User.objects.get(id=user_id)
         context['title'] = f'Статьи автора {author.get_profile().name}'
         context['categories_list'] = category_list
+        context['author'] = author
         return context

@@ -45,73 +45,93 @@
             {#                </div>#}
             {#            </div>#}
         </div>
+
+        <div class="sidebar-author">
+            <div class="author-article">
+                <h6 class="author-article_title">автор</h6>
+                <div class="author-article_and_info">
+                    <div class="avatar">
+                        <img src="/media/{{author.get_profile.avatar}}" alt="">
+                    </div>
+
+                    <div class="name_and_share">
+                        <h3>{{author.get_profile.name}}</h3>
+                        <p>{{author.get_profile.bio}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="publications">
             <div class="wrapper">
                 {% for instance_article in object_list %}
-                    <div class="publication">
-                        <div class="image">
-                            <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
+                <div class="publication">
+                    <div class="image">
+                        <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
+                    </div>
+                    <div class="publicationInfo">
+                        <div class="category">
+                            {{ instance_article.categories }}
                         </div>
-                        <div class="publicationInfo">
-                            <div class="category">
-                                {{ instance_article.categories }}
-                            </div>
-                            <div class="divider"></div>
-                            <div class="dateInfo">
-                                <div class="icon">
-                                    <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                                </div>
-                                <div class="date">
-                                    {{ instance_article.created_timestamp }}
-                                </div>
-                            </div>
-                            <div class="divider"></div>
-                            <div class="likeCount">
-                                <div class="icon">
-                                    <img src={% static 'img/like.png' %} alt="like">
-                                </div>
-                                <div class="number">
-                                    {{ instance_article.get_likes_by_article_id.count }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="title">
-                            {{ instance_article.title }}
-                        </div>
-                        <div class="descrition">
-                            {{ instance_article.subtitle }}
-                        </div>
-                        <div class="continue ">
-                            <div class="text">
-                                Читать далее
-                            </div>
+                        <div class="divider"></div>
+                        <div class="dateInfo">
                             <div class="icon">
-                                <a href="{% url 'article' instance_article.pk %}"><img src={% static 'img/Right.png' %} alt="right"></a>
+                                <img src={% static 'img/Calendar.png' %} alt="Calendar">
+                            </div>
+                            <div class="date">
+                                {{ instance_article.created_timestamp }}
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="likeCount">
+                            <div class="icon">
+                                <img src={% static 'img/like.png' %} alt="like">
+                            </div>
+                            <div class="number">
+                                {{ instance_article.get_likes_by_article_id.count }}
                             </div>
                         </div>
                     </div>
-                {% endfor %}
-        </div>
-        <div class="paginator">
-            {% if page_obj.has_previous %}
-                <div class="pagLeft">
-                    <a href="?page={{ page_obj.previous_page_number }}"><img src={% static 'img/pagLeft.png' %} alt="left"></a>
+                    <div class="title">
+                        {{ instance_article.title }}
+                    </div>
+                    <div class="descrition">
+                        {{ instance_article.subtitle }}
+                    </div>
+                    <div class="continue ">
+                        <div class="text">
+                            Читать далее
+                        </div>
+                        <div class="icon">
+                            <a href="{% url 'article' instance_article.pk %}"><img src={% static 'img/Right.png' %}
+                                alt="right"></a>
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
+                {% endfor %}
+            </div>
+            <div class="paginator">
+                {% if page_obj.has_previous %}
+                <div class="pagLeft">
+                    <a href="?page={{ page_obj.previous_page_number }}"><img src={% static 'img/pagLeft.png' %}
+                        alt="left"></a>
+                </div>
+                {% endif %}
 
-            {% for num_page in page_obj.paginator.page_range %}
-                <div class="pagNum" {% if num_page == page_obj.number %} style="text-decoration: underline" {% endif %}>
+                {% for num_page in page_obj.paginator.page_range %}
+                <div class="pagNum" {% if num_page== page_obj.number %} style="text-decoration: underline" {% endif %}>
                     <a href="?page={{ num_page }}">{{ num_page }}</a>
                 </div>
-            {% endfor %}
+                {% endfor %}
 
-            {% if page_obj.has_next %}
+                {% if page_obj.has_next %}
                 <div class="pagRight">
                     <a href="?page={{ page_obj.next_page_number }}"><img
                             src={% static 'img/pagRight.png' %} alt="right"></a>
                 </div>
-            {% endif %}
+                {% endif %}
+            </div>
         </div>
-    </div>
     </div>
 {% endblock %}

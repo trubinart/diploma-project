@@ -976,6 +976,7 @@ body {
 .sidebar .avatar_and_info {
     display: flex;
     width: 340px;
+    flex-direction: row;
 }
 
 .sidebar .avatar {
@@ -1522,3 +1523,63 @@ body {
 
 /* end .baseBlokLK */
 
+.sidebar-author {
+    margin-right: 0;
+
+}
+
+
+.sidebar-author .author-article {
+
+    margin-top: 10px;
+    height: 148px;
+}
+
+.sidebar-author .author-article_title {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.sidebar-author .author-article_and_info {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar-author .avatar {
+    margin-top: 24px;
+    /* flex-direction: column; */
+    width: 100px;
+    height: 100px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.sidebar-author .avatar img {
+    height: 100px;
+}
+
+.sidebar-author .name_and_share {
+    flex-direction: column;
+    margin-top: 24px;
+    padding-left: 20px;
+}
+
+.sidebar-author .name_and_share h3 {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 150%;
+    color: #424551;
+}
+
+.sidebar-author .name_and_share p {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 150%;
+    color: #787A80;
+    width: 500px;
+}
+
+/*avtor-sidebar*/
