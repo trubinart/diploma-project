@@ -16,7 +16,7 @@
     </li>
     {% for categories in categories_list %}
         <li>
-            <a href="#">{{ categories.name }}</a>
+            <a href="{% url 'category' categories.id %}">{{ categories.name }}</a>
             {#{% url 'categories.pk' %}#}
         </li>
     {% endfor %}
