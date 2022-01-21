@@ -1455,8 +1455,8 @@ body {
 
 /* end .blokPersonInfoLK */
 
-/* start .baseBlokLK */
-.content .main .contentLK .mainLK .baseBlokLK {
+/* start .form-baseBlokLK */
+.content .main .contentLK .mainLK .form-baseBlokLK {
     /* width: 100%;
     /* height: 52px; */
     display: flex;
@@ -1468,23 +1468,23 @@ body {
 
 }
 
-.content .main .contentLK .mainLK .baseBlokLK .FirstName {
+.content .main .contentLK .mainLK .form-baseBlokLK .FirstName {
     padding: 5px 0 5px 0;
 }
 
-.content .main .contentLK .mainLK .baseBlokLK .LastName {
+.content .main .contentLK .mainLK .form-baseBlokLK .LastName {
     padding: 5px 0 5px 0;
 }
 
-.content .main .contentLK .mainLK .baseBlokLK .Birthdate {
+.content .main .contentLK .mainLK .form-baseBlokLK .Birthdate {
     padding: 5px 0 5px 0;
 }
 
-.content .main .contentLK .mainLK .baseBlokLK .shortDescription {
+.content .main .contentLK .mainLK .form-baseBlokLK .shortDescription {
     padding: 5px 0 5px 0;
 }
 
-.content .main .contentLK .mainLK .baseBlokLK .inputFild {
+.content .main .contentLK .mainLK .form-baseBlokLK .inputFild {
     padding: 10px 10px 10px 10px;
     width: 260px;
 }
@@ -1501,7 +1501,7 @@ body {
 
 } */
 
-.content .main .contentLK .mainLK .baseBlokLK .blokButton .form-control[type="submit"] {
+.content .main .contentLK .mainLK .form-baseBlokLK .blokButton .form-control[type="submit"] {
     background: #FFFFFF;
     height: 50px;
     width: 200px;
@@ -1513,7 +1513,7 @@ body {
 
 }
 
-.content .main .contentLK .mainLK .baseBlokLK .blokButton .form-control[type="submit"]:hover {
+.content .main .contentLK .mainLK .form-baseBlokLK .blokButton .form-control[type="submit"]:hover {
     background: #ED6B6A;
     height: 50px;
     width: 200px;
@@ -1525,6 +1525,22 @@ body {
 
 }
 
+.content .main .contentLK .mainLK .form-baseBlokLK .error-text-lk {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 150%;
+    text-align: center;
+    color: #000000;
+    margin: 15px 10px;
+    border: 1px solid;
+    border-radius: 2px;
+    border-color: #FF3F3A;
+    background-color: rgb(243, 237, 237);
+    padding: 3px;
+    display: flex;
+}
 
-/* end .baseBlokLK */
+/* end .form-baseBlokLK */
 

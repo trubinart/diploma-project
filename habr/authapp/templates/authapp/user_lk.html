@@ -5,7 +5,7 @@
 <div class="main">
     <!--Вставка кода для кабинета-->
     <div class="subNavbarLK">
-        {% include 'mainapp/includes/inc-submenu_lk.html' %}
+        {% include 'authapp/includes/inc-submenu_lk.html' %}
     </div>
     <div class="contentLK">
         <div class="mainLK">
@@ -41,37 +41,49 @@
                                 <li class="baseInfoTitleLK">Основная информация</li>
                             </ul>
                         </div>
+                        {% if form.errors %}
+                        <div class="error-text-lk">
+                            {{ form.errors.as_text }}
+                        </div>
+                        {% endif %}
                         <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
                         <!-- <div class="baseBlokLK"> -->
-                        <form class="baseBlokLK">
-
+                        <form class="form-baseBlokLK" method="post" id="lk-form" enctype="multipart/form-data">
+                            {% csrf_token %}
                             <div class="blokFirstName">
+                                <!--                                <div class="FirstName">-->
                                 <div class="FirstName">
-                                    Имя
+                                    Имя Фамилия
                                 </div>
                                 <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldFirstName" placeholder="Введите имя"
-                                        id="fieldFirstName">
+                                    <!--                                    <input class="inputFild" type="text" name="fieldFirstName" placeholder="Введите имя"-->
+                                    <!--                                        id="fieldFirstName">-->
+                                    <!--                                    <input class="inputFild" type="text" id="fieldFirstName">-->
+                                    <!--                                    <label>-->
+                                    <input class="inputFild" name="name" placeholder='{{ placeholder }}'>
+                                    <!--                                    </label>-->
+<!--                                    {{ forms.name }}-->
                                 </div>
                             </div>
-                            <div class="blokLastName">
-                                <div class="LastName">
-                                    Фамилия
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldLastName"
-                                        placeholder="Введите фамилию" id="fieldLastName">
-                                </div>
-                            </div>
+                            <!--                            <div class="blokLastName">-->
+                            <!--                                <div class="LastName">-->
+                            <!--                                    Фамилия-->
+                            <!--                                </div>-->
+                            <!--                                <div class="fieldName">-->
+                            <!--                                    <input class="inputFild" type="text" name="fieldLastName"-->
+                            <!--                                        placeholder="Введите фамилию" id="fieldLastName">-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
 
                             <div class="blokBirthdate">
                                 <div class="Birthdate">
                                     Возраст
                                 </div>
                                 <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="18"
-                                        id="fieldBirthdate">
-
+                                    <!--                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="18"-->
+                                    <!--                                        id="fieldBirthdate">-->
+                                    <input class="inputFild" type="date" name="birthday">
+                                    <!-- {{ form.birthday }} -->
                                 </div>
                             </div>
                             <div class="blokShortDescription">
@@ -81,9 +93,12 @@
                                 <div class="fieldName">
                                     <!-- <input class="inputFild" type="text" name="fieldSecondName"
                                                                     placeholder="Введите возраст" id="fieldSecondName"> -->
-                                    <textarea class="inputFild" name="fieldShortDescription"
-                                        placeholder="Краткое описание" id="fieldShortDescription"
+                                    <!--                                    <textarea class="inputFild" name="fieldShortDescription"-->
+                                    <!--                                        placeholder="Краткое описание" id="fieldShortDescription"-->
+                                    <!--                                        type="textarea"></textarea>-->
+                                    <textarea class="inputFild" name="bio"
                                         type="textarea"></textarea>
+<!--                                    {{ forms.bio }}-->
                                 </div>
                             </div>
                             <div class="blokButton">
