@@ -1,6 +1,8 @@
 from django.views.generic import ListView, DetailView
 from mainapp.models import Article, ArticleCategories
 
+"""обозначение списка категорий для вывода в меню во разных view"""
+category_list = ArticleCategories.objects.all()
 
 class MainListView(ListView):
     """Класс для вывода списка «Хабров» на главной """
@@ -13,7 +15,7 @@ class MainListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
         # добавляем в набор запросов все категории
-        context['categories_list'] = ArticleCategories.objects.all()
+        context['categories_list'] = category_list
         return context
 
 
@@ -26,7 +28,7 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         title = 'Статья'
         context['title'] = title
-        print(context)
+        context['categories_list'] = category_list
         return context
 
 
@@ -48,7 +50,7 @@ class CategoriesListView(ListView):
         category_id = self.kwargs['pk']
         category = ArticleCategories.objects.get(id=category_id)
         context['title'] = f'Статьи по категории {category.name}'
-        context['categories_list'] = ArticleCategories.objects.all()
+        context['categories_list'] = category_list
         return context
 
 

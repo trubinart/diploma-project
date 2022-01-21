@@ -1,15 +1,3 @@
-{#<!--<ul class="menu">-->#}
-{#<!--    <li>-->#}
-{#<!--        <a href="{% url 'main' %}">Главная</a>-->#}
-{#<!--    </li>-->#}
-{#<!--    {% for categories in categories_list %}-->#}
-{#<!--        <li>-->#}
-{#<!--            <a href="{% url 'categories.id' %}">{{ categories.name }}</a>-->#}
-{#<!--&lt;!&ndash;            <a href="{% url '#' %}">{{ categories.name }}</a>&ndash;&gt;-->#}
-{#<!--        </li>-->#}
-{#<!--    {% endfor %}-->#}
-{#<!--</ul>-->#}
-
 <ul class="menu">
     <li class="home">
         <a href="{% url 'main' %}">Главная</a>
@@ -20,18 +8,4 @@
             {#{% url 'categories.pk' %}#}
         </li>
     {% endfor %}
-
-
 </ul>
-<!--    <li class="design">-->
-<!--        <a href="#">Дизайн</a>-->
-<!--    </li>-->
-<!--    <li class="webDevelopment">-->
-<!--        <a href="#">Веб-разработка</a>-->
-<!--    </li>-->
-<!--    <li class="mobileDevelopment">-->
-<!--        <a href="#">Мобильная разработка</a>-->
-<!--    </li>-->
-<!--    <li class="marketing">-->
-<!--        <a href="#">Маркетинг</a>-->
-<!--    </li>-->
