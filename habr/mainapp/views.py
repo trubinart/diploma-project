@@ -38,22 +38,19 @@ class CategoriesListView(ListView):
 
     def get_queryset(self):
         # Объявляем переменную и записываем ссылку на id категории
-        # article_id = self.request.GET.get('filter', 'give-default-value')
-        categories_id = self.kwargs['pk']
-        order = self.request.GET.get(categories_id)
-        new_context = Article.objects.filter(name=categories_id).\
-            order_by(order)
+        categories = self.kwargs['pk']
+        new_context = Article.objects.filter(categories_id=categories)
         return new_context
 
-    def get_context_data(self, **kwargs):
-        # вызов базовой реализации для получения контекста
-        context = super().get_context_data(**kwargs)
-        category_id = self.kwargs['pk']
-        category = ArticleCategories.objects.get(category_id)
-        context['title'] = f'Статьи по категории {category.name}'
-        # добавляем в набор запросов все категории
-        context['categories_list'] = ArticleCategories.objects.all()
-        return context
+    # def get_context_data(self, **kwargs):
+    #     # вызов базовой реализации для получения контекста
+    #     context = super().get_context_data(**kwargs)
+    #     category_id = self.kwargs['pk']
+    #     category = ArticleCategories.objects.get(category_id)
+    #     context['title'] = f'Статьи по категории {category.name}'
+    #     # добавляем в набор запросов все категории
+    #     context['categories_list'] = ArticleCategories.objects.all()
+    #     return context
 
 
 class LkListView(ListView):
