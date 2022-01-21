@@ -1,8 +1,11 @@
 from django.views.generic import ListView, DetailView
+
+from authapp.models import User
 from mainapp.models import Article, ArticleCategories
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
+
 
 class MainListView(ListView):
     """Класс для вывода списка «Хабров» на главной """
@@ -66,4 +69,26 @@ class LkListView(ListView):
         context = super().get_context_data(**kwargs)
         title = 'Личный кабинет'
         context['title'] = title
+        return context
+
+
+class UserArticleListView(ListView):
+    """Класс для вывода списка статей автора"""
+    template_name = 'mainapp/categories.html'
+    paginate_by = 9
+    model = Article
+
+    def get_queryset(self):
+        # Объявляем переменную user и записываем ссылку на id автора
+        user_id = self.kwargs['pk']
+        new_context = Article.objects.filter(user=user_id)
+        return new_context
+
+    def get_context_data(self, **kwargs):
+        # вызов базовой реализации для получения контекста
+        context = super().get_context_data(**kwargs)
+        user_id = self.kwargs['pk']
+        author = User.objects.get(id=user_id)
+        context['title'] = f'Статьи автора {author.get_profile().name}'
+        context['categories_list'] = category_list
         return context

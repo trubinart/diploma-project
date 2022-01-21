@@ -1510,6 +1510,15 @@ body {
 
 }
 
+.article_by_author {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    color: #ED6B6A;
+    margin-top: 20px;
+
+}
 
 /* end .baseBlokLK */
 

@@ -125,8 +125,8 @@
         </div>
         <div class="trending_articles">
             {% if article.get_other_articles_by_author %}
-            <h6 class="trending_articles_title">статьи автора:</h6>
-            {% for other_article in article.get_other_articles_by_author%}
+                <h6 class="trending_articles_title">статьи автора:</h6>
+                {% for other_article in article.get_other_articles_by_author%}
             <div class="img_and_info_habr">
                 <div class="img_habr">
                     <img src="/media/{{other_article.main_img}}" alt="article_img">
@@ -140,8 +140,12 @@
                 </div>
             </div>
             {% endfor %}
-            {% endif %}
+<!--            вот здесь надо добавить ссылку-->
+            <div class="article_by_author">
+                 <a href="{% url 'user_article' article.user.id %}"> Все статьи автора</a>
+            </div>
 
+            {% endif %}
         </div>
                     <div class="tags_trending">
                         <h6 class="trending_articles_title">Tags:</h6>
