@@ -88,15 +88,26 @@
             </div>
 
             {#            ----- ДОБАВЛЕНИЕ КОММЕНТАРИЯ ----  #}
-            {% if user.is_authenticated %}
-            <form class="form_add_comment" method="post" enctype="multipart/form-data" action="{% url 'add-comment' %}">
+
+
+            <div class="form_add_comment">
+                {% if user.is_authenticated %}
+                    <form method="post" enctype="multipart/form-data" action="{% url 'add-comment' %}">
                         {% csrf_token %}
                         {{ form.text }}
                         <input hidden="true" name="user" value="{{ user.id }}">
                         <input hidden="true" name="article_comment" value="{{ article.id }}">
-                <button type="submit" class="add_comment_button"> Оставить комментарий</button>
-            </form>
-            {% endif %}
+                        <button type="submit" class="add_comment_button"> Оставить комментарий</button>
+                    </form>
+                {% else %}
+
+                    <div class="text-under-button">
+                        Авторизуйтесь, чтобы оставлять комментарии. <a href="#" class="link">Войти</a>
+                    </div>
+
+                {% endif %}
+
+            </div>
 
             {#            ----- КОММЕНТАРИИ ----  #}
             <div class="comment_box">

@@ -136,10 +136,8 @@ input:focus{
   }
 
   .text-under-button{
-    height: 21px;
-    width: 198px;
-    border-radius: nullpx;
-    font-family: Lato;
+    height: 30px;
+    width: 500px;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
