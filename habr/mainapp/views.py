@@ -1,4 +1,7 @@
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
+
+from mainapp.forms import ArticleEditForm
 from mainapp.models import Article, ArticleCategories
 
 
@@ -41,5 +44,19 @@ class LkListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Личный кабинет'
+        context['title'] = title
+        return context
+
+
+class CreateArticle(CreateView):
+    """Класс для создания статьи"""
+    model = Article
+    template_name = 'mainapp/createArticle.html'
+    form_class = ArticleEditForm
+    success_url = reverse_lazy('main')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Добавление статьи'
         context['title'] = title
         return context
