@@ -786,7 +786,7 @@ body {
     height: 26px;
     opacity: .8;
 }
-
+/*TODO закомментить - width: 252px;*/
 .article .habr_date_creat {
     display: flex;
     flex-direction: row;
@@ -1583,7 +1583,8 @@ body {
     margin-bottom: 25px;
     flex-direction: column;
 }
-
+/*TODO хорошо бы добавить в .comment_input {padding: 10px; font-family: arial; font-size:14px},
+   можно при желании еще с placeholder разобраться, чтобы местоположение текста из placeholder совпадало с полем ввода текста*/
 .comment_input{
     height: 128px;
     width: 705px;
