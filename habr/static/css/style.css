@@ -1541,6 +1541,7 @@ body {
 .contentArticleAdd .mainArticleAdd {
     width: 100%;
     background-color: rgba(179, 41, 28, 0.1);
+    background-color: #F7FAFF;
     padding: 40px 0 80px;
 }
 
@@ -1603,6 +1604,7 @@ body {
     border: 1px solid #D7DADD;
     box-sizing: border-box;
     border-radius: 4px;
+    padding: 0 5px;
 }
 
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal #cke_id_text {
