@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from authapp.models import User
-# TODO варнинг по code style, класс отделяется 2 пустыми строками
+
+
 class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
@@ -15,4 +16,3 @@ class UserRegisterForm(UserCreationForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['class'] = 'form-input'
-# TODO а тут варнинг из-за двух пустых строк в конце кода

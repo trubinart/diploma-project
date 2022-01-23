@@ -12,16 +12,12 @@
                     <a class="content_topic" href="#">{{ article.categories }}</a>
                 </div>
                 <h1 class="name_habr">
-                    {#                TODO удалить закомменченный кусок#}
-                    <!--                    HR statistics: job search, interviews,-->
-                    <!--                    hiring and recruiting-->
                     {{ article.title }}
                 </h1>
                 <div class="habr_information">
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %} alt="">
-                        {#                TODO убрать форматирование даты создания (- "date:"M d, Y")#}
-                        <p class="date">{{ article.created_timestamp|date:"M d, Y" }}</p>
+                        <p class="date">{{ article.created_timestamp}}</p>
                         <img src={% static 'img/like.png' %} alt="like">
                         <p class="count_like"> {{ article.get_likes_count_by_article_id }} </p>
                     </div>

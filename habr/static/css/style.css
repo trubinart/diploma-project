@@ -786,13 +786,13 @@ body {
     height: 26px;
     opacity: .8;
 }
-/*TODO закомментить - width: 252px;*/
+
 .article .habr_date_creat {
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-left: 0;
-    width: 252px;
+    width: 300px;
     color: #787A80;
 }
 

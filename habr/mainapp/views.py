@@ -1,8 +1,7 @@
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, View
 from django.shortcuts import HttpResponseRedirect
-# TODO удалить ненужный импорт ArticleComment
-from mainapp.models import Article, ArticleCategories, ArticleComment
+from mainapp.models import Article, ArticleCategories
 from mainapp.forms import CreationCommentFrom
 
 
@@ -51,8 +50,9 @@ class LkListView(ListView):
 
 class CreateCommentView(View):
     """Класс для создания комментария """
-    # TODO добавить к методу post @staticmethod
-    def post(self, request):
+
+    @staticmethod
+    def post(request):
         article_id = request.POST['article_comment']
         form = CreationCommentFrom(data=request.POST)
         if form.is_valid():
