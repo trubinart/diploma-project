@@ -1033,7 +1033,7 @@ body {
 
 .sidebar .trending_articles {
     margin-top: 60px;
-    height: 396px;
+    min-height: 396px;
 }
 
 .sidebar .trending_articles_title {
@@ -1519,6 +1519,33 @@ body {
     color: #ED6B6A;
     margin-top: 20px;
 
+}
+
+.article_by_author a {
+    text-decoration: none;
+    width: 200px;
+    height: 46px;
+    border: 1px solid #FF3F3A;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    color: #FF3F3A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 40px 0;
+}
+
+
+.article_by_author a:hover {
+    border: 1px solid #353030;
+    color: #221d1d;
+    background-color: #FF3F3A;
+    opacity: .7;
 }
 
 /* end .baseBlokLK */
