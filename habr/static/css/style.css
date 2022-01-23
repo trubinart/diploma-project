@@ -15,7 +15,7 @@ body {
     flex-direction: column;
 }
 
-.top-main{
+.top-main {
     flex: 1 0 auto;
     width: 1230px;
     margin: 0 auto;
@@ -33,18 +33,18 @@ body {
     display: flex;
     margin: 20px 0;
     justify-content: space-between;
-} 
+}
 
 .main-wrapper .topNavbar .logo {
     display: flex;
     height: 52px;
     width: 220px;
     align-items: center;
-} 
+}
 
 .main-wrapper .topNavbar .logo img {
     height: 44px;
-} 
+}
 
 .main-wrapper .topNavbar .menu {
     display: flex;
@@ -52,11 +52,11 @@ body {
     list-style: none;
     font-family: arial;
     margin: 5px 0;
-} 
+}
 
 .main-wrapper .topNavbar .menu li {
     margin: 0 5px;
-} 
+}
 
 .main-wrapper .topNavbar .menu a {
     text-decoration: none;
@@ -64,23 +64,23 @@ body {
     font-size: 16px;
     line-height: 160%;
     color: #424551;
-} 
+}
 
 .main-wrapper .topNavbar .menu a:hover {
     color: #FF3F3A;
-} 
+}
 
 .main-wrapper .topNavbar .accaunt .profile {
     margin: 0 10px;
-} 
+}
 
 .main-wrapper .topNavbar .accaunt {
     display: flex;
-    width: 180px;
+    /*width: 180px;*/
     height: 52px;
     font-family: arial;
     align-items: center;
-} 
+}
 
 .main-wrapper .topNavbar .accaunt .personalAccount,
 .main-wrapper .topNavbar .accaunt .loginRegister {
@@ -92,11 +92,11 @@ body {
 .main-wrapper .topNavbar .accaunt .loginRegister {
     width: 122px;
     height: 26px;
-} 
+}
 
 .main-wrapper .topNavbar .accaunt .personalAccount a,
 .main-wrapper .topNavbar .accaunt .loginRegister a {
-    width: 90px;
+    /*width: 90px;*/
     height: 26px;
     text-decoration: none;
     font-size: 16px;
@@ -104,7 +104,12 @@ body {
     display: flex;
     align-items: center;
     color: #424551;
-} 
+    padding-right: 5px;
+}
+
+.main-wrapper .topNavbar .accaunt .personalAccount a:hover {
+    color: #FF3F3A;
+}
 
 .main-wrapper .topNavbar .accaunt .loginRegister a:hover {
     color: #FF3F3A;
@@ -189,7 +194,7 @@ body {
     letter-spacing: 1px;
     text-transform: uppercase;
     color: #FFFFFF;
-    margin: 0 0 20px ;
+    margin: 0 0 20px;
 }
 
 .main-footer .topFooter .wrapper .siteMap .menu {
@@ -230,7 +235,7 @@ body {
     letter-spacing: 1px;
     text-transform: uppercase;
     color: #FFFFFF;
-    margin: 0 0 20px ;
+    margin: 0 0 20px;
 }
 
 .main-footer .topFooter .wrapper .team .players {
@@ -262,7 +267,7 @@ body {
     opacity: 0.6;
 }
 
-.main-footer .topFooter .wrapper .subscribe .title{
+.main-footer .topFooter .wrapper .subscribe .title {
     font-family: arial;
     font-weight: bold;
     font-size: 16px;
@@ -290,7 +295,7 @@ body {
     letter-spacing: 1px;
     text-transform: uppercase;
     color: #FFFFFF;
-    margin: 0 0 20px ;
+    margin: 0 0 20px;
 }
 
 .main-footer .topFooter .wrapper .contactUs .mail,
@@ -321,11 +326,13 @@ body {
     box-sizing: border-box;
     border-radius: 4px;
 }
+
 .main-footer .topFooter .wrapper .subscribe .subsForm form {
     position: relative;
     width: 100%;
     margin: 0 auto;
 }
+
 .main-footer .topFooter .wrapper .subscribe .subsForm input {
     width: 268px;
     height: 36px;
@@ -453,6 +460,7 @@ body {
     height: 44px;
     margin: 0 30px;
 }
+
 .content .main .menu .side .sort .title {
     font-family: arial;
     font-weight: bold;
@@ -516,12 +524,14 @@ body {
     box-sizing: border-box;
     border-radius: 4px;
 }
+
 .content .main .menu .side .search form {
     position: relative;
     width: 100%;
     margin: 0 auto;
 }
-.content .main .menu .side .search   input {
+
+.content .main .menu .side .search input {
     width: 268px;
     height: 43px;
     padding-left: 16px;
@@ -532,7 +542,7 @@ body {
 }
 
 .content .main .menu .side .search button {
-    position: absolute; 
+    position: absolute;
     top: 0;
     right: 0px;
     width: 44px;
@@ -705,6 +715,7 @@ body {
     left: -10px;
     /* display: none; */
 }
+
 /* end .content  */
 
 
@@ -857,7 +868,7 @@ body {
     overflow: hidden;
 }
 
-.article .image_habr_page img{
+.article .image_habr_page img {
     height: 360px;
 }
 
@@ -1268,7 +1279,7 @@ body {
     align-items: center;
 }
 
-.content .main .contentLK .mainLK .infoLK .infoTextLeftLK{
+.content .main .contentLK .mainLK .infoLK .infoTextLeftLK {
     font-weight: normal;
     font-size: 14px;
     line-height: 170%;
@@ -1327,6 +1338,7 @@ body {
     align-items: center;
     text-transform: uppercase;
 }
+
 /* .main-wrapper .topNavbar {
     width: 100%;
     height: 52px;
@@ -1364,6 +1376,7 @@ body {
     line-height: 160%;
     color: #424551;
 }
+
 .content .main .contentLK .mainLK .menuProfileLK .menuPrLK a:hover {
     color: #FF3F3A;
 }
@@ -1397,10 +1410,12 @@ body {
     /* margin: 5px 0; */
     align-items: center;
 }
+
 .content .main .contentLK .mainLK .menuBaseInfoBlokLK .menuPrLK .baseInfoTitleLK {
     color: #93A0B9;
     font-size: 10px;
 }
+
 /* .content .main .contentLK .mainLK .menuProfileLK .menuPrLK li {
     margin: 0 60px 0 0px;
 }
