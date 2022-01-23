@@ -102,7 +102,9 @@
 
                     <div class="name_and_share">
                         {% if article.user.first_name or article.user.last_name %}
-                            <h3>{{ article.user.first_name }} {{ article.user.last_name }}</h3>
+                        <h3>{{article.user.first_name}} {{article.user.last_name}}</h3>
+                        {% else %}
+                        <h3>{{article.user.get_profile.name}}</h3>
                         {% endif %}
                         <p>
                             {{ article.user.get_profile.bio }}
