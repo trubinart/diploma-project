@@ -60,3 +60,4 @@ class CreateArticle(CreateView):
         title = 'Добавление статьи'
         context['title'] = title
         return context
+
