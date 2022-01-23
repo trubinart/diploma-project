@@ -1,4 +1,5 @@
 from django.views.generic import ListView, DetailView
+from uuid import UUID
 
 from authapp.models import User
 from mainapp.models import Article, ArticleCategories
@@ -54,6 +55,7 @@ class CategoriesListView(ListView):
         category = ArticleCategories.objects.get(id=category_id)
         context['title'] = f'Статьи по категории {category.name}'
         context['categories_list'] = category_list
+        context['categories_pk'] = UUID(category_id)
         return context
 
 
