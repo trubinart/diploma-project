@@ -22,6 +22,7 @@ class User(AbstractUser, BaseModel):
     username = models.CharField(verbose_name='user_name', unique=True, max_length=25, blank=False)
     email = models.EmailField(verbose_name='email', unique=True, blank=False)
     password = models.CharField(verbose_name='password', max_length=25, blank=False)
+    #TODO сделай для last и first name = none , чтобы мы не путались
 
     def __str__(self):
         return self.username

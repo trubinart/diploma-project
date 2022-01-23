@@ -35,6 +35,7 @@
                         <img src={% static 'img/Profile.png' %} alt="Profile">
                     </div>
                     {% if user.is_authenticated %}
+                        {#                        #TODO убрать ссылку на личный кабинет, так как там пусто#}
                         <div class="personalAccount">
                             <a href="{% url 'lk' %}">{{ user.username }}</a>
                             /&nbsp;&nbsp;
