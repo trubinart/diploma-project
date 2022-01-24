@@ -5,7 +5,7 @@ from uuid import UUID
 
 from authapp.models import User
 from mainapp.models import Article, ArticleCategories
-from mainapp.forms import CreationCommentFrom
+from mainapp.forms import CreationCommentForm
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -35,7 +35,7 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         title = 'Статья'
         context['title'] = title
-        context['form'] = CreationCommentFrom()
+        context['form'] = CreationCommentForm()
         context['categories_list'] = category_list
         return context
 
@@ -84,7 +84,7 @@ class CreateCommentView(View):
     @staticmethod
     def post(request):
         article_id = request.POST['article_comment']
-        form = CreationCommentFrom(data=request.POST)
+        form = CreationCommentForm(data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
