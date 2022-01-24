@@ -1,6 +1,6 @@
 <ul class="menu">
     <li class="home">
-        <a href="{% url 'main' %}" {% if not categories_pk %}
+        <a href="{% url 'main' %}" {% if request.path  == "/" %}
            style="text-decoration: underline;" {% endif %}>Главная</a>
     </li>
     {% for categories in categories_list %}
