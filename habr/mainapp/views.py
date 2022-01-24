@@ -1,7 +1,6 @@
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, View
 from django.shortcuts import HttpResponseRedirect
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from uuid import UUID
 
 from authapp.models import User

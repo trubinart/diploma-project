@@ -43,7 +43,7 @@ class Command(BaseCommand):
                 user = item,
                 name = name,
                 birthday = birthday.formatted_datetime(fmt="%Y-%m-%d"),
-                bio = text.text(quantity=1))
+                bio = " ".join([text.word() for i in range(0, 5)]))
 
 
             img_url = Internet().stock_image(width=50, height=50, keywords=['лицо'])
