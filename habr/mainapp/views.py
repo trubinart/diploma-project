@@ -5,11 +5,13 @@ from uuid import UUID
 
 from authapp.models import User
 from mainapp.models import Article, ArticleCategories
-from mainapp.forms import CreationCommentForm
+from mainapp.forms import CreationCommentForm, SearchForm
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
 
+"""обозначение формы поиска для вывода в меню во разных view"""
+search_form = SearchForm()
 
 class MainListView(ListView):
     """Класс для вывода списка «Хабров» на главной """
@@ -23,6 +25,7 @@ class MainListView(ListView):
         context['title'] = 'Главная'
         # добавляем в набор запросов все категории
         context['categories_list'] = category_list
+        context['search_form'] = search_form
         return context
 
 
@@ -37,6 +40,7 @@ class ArticleDetailView(DetailView):
         context['title'] = title
         context['form'] = CreationCommentForm()
         context['categories_list'] = category_list
+        context['search_form'] = search_form
         return context
 
 
@@ -60,6 +64,7 @@ class CategoriesListView(ListView):
         context['title'] = f'Статьи по категории {category.name}'
         context['categories_list'] = category_list
         context['categories_pk'] = UUID(category_id)
+        context['search_form'] = search_form
         return context
 
 
@@ -112,4 +117,22 @@ class UserArticleListView(ListView):
         context['title'] = f'Статьи автора {author.get_profile().name}'
         context['categories_list'] = category_list
         context['author'] = author
+        context['search_form'] = search_form
+        return context
+
+class SearchView(ListView):
+    template_name = 'mainapp/search.html'
+    paginate_by = 9
+
+    def get_queryset(self):
+        form = SearchForm(self.request.GET)
+        if form.is_valid():
+            query_string = form.cleaned_data['query']
+            search_results = Article.objects.search(query=query_string)
+            return search_results
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_form'] = search_form
+        context['categories_list'] = category_list
         return context

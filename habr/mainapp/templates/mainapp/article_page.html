@@ -102,8 +102,8 @@
         </div>
 
         <div class="sidebar">
-            <form>
-                <input class="search" type="text" placeholder="Искать здесь...">
+            <form method="get" action="{% url 'search' %}">
+                {{ search_form.query }}
                 <a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
             </form>
             <div class="author">

@@ -543,7 +543,7 @@ body {
 .content .main .menu .side .search button {
     position: absolute;
     top: 0;
-    right: 0px;
+    right: 20px;
     width: 44px;
     height: 44px;
     border: none;

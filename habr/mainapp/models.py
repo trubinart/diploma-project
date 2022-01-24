@@ -7,6 +7,7 @@ from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 
 from authapp.models import User
+from mainapp.manager import ArticleManager
 
 
 class BaseModel(models.Model):
@@ -43,6 +44,9 @@ class Article(BaseModel):
     """
     Models for Articles
     """
+    #добавили менеджер для изменения логики поиска в модели
+    objects = ArticleManager()
+
     article_number = models.PositiveIntegerField(default=uniq_number_article, unique=True,
                                                  verbose_name='article number')
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE, verbose_name='categories')

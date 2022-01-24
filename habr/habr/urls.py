@@ -3,7 +3,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from mainapp.views import MainListView, LkListView, ArticleDetailView, \
-    CategoriesListView, UserArticleListView, CreateCommentView
+    CategoriesListView, UserArticleListView, CreateCommentView, SearchView
 from authapp.views import UserRegistrationView
 
 urlpatterns = [
@@ -15,6 +15,7 @@ urlpatterns = [
     path('add-comment/', CreateCommentView.as_view(), name='add-comment'),
     path('category/<str:pk>/', CategoriesListView.as_view(), name='category'),
     path('user-article/<str:pk>/', UserArticleListView.as_view(), name='user_article'),
+    path('search/', SearchView.as_view(), name='search'),
     path('admin/', admin.site.urls),
 ]
 
