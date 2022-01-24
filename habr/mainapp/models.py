@@ -101,6 +101,12 @@ class Article(BaseModel):
         """
         return ArticleLike.objects.select_related('article_like').filter(article_like=self.id).count()
 
+    def get_comment_count_by_article_id(self) -> int:
+        """
+        Подсчет количества комментариев для статьи.
+        """
+        return ArticleComment.objects.select_related('article_comment').filter(article_comment=self.id).count()
+
     def get_comments_by_article_id(self) -> QuerySet:
         """
         :param: None
@@ -109,7 +115,7 @@ class Article(BaseModel):
           Method called from Article Item.
           All likes sorted by date descending order.
           """
-        return ArticleComment.objects.select_related('article_comment').filter(article_like=self.id)
+        return ArticleComment.objects.select_related('article_comment').filter(article_comment=self.id)
 
     def get_other_articles_by_author(self) -> QuerySet:
         """

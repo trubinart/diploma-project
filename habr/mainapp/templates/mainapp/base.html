@@ -89,7 +89,18 @@
                         <div class="title">
                             SITE MAP
                         </div>
-                        {% include 'mainapp/includes/inc-menu.html' %}
+
+                        <ul class="menu">
+                            <li class="home">
+                                <a href="{% url 'main' %}">Главная</a>
+                            </li>
+                            {% for categories in categories_list %}
+                                <li>
+                                    <a href="{% url 'category' categories.id %}">{{ categories.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
                     </div>
                     <div class="team">
                         <div class="title">
