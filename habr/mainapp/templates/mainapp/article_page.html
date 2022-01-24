@@ -9,7 +9,7 @@
                     <img src={% static "img/files.png" %}>
                     <p class="content_type">Статья</p>
                     <img src={% static "img/divider.png" %}>
-                    <a class="content_topic" href="#">{{ article.categories }}</a>
+                    <a class="content_topic" href="{% url 'category' article.categories.id %}">{{ article.categories }}</a>
                 </div>
                 <h1 class="name_habr">
                     {{ article.title }}
@@ -78,8 +78,7 @@
                 {% else %}
 
                     <div class="text-under-button">
-                        {#                    TODO вставить в ссылку редирект на страницу реги#}
-                        Авторизуйтесь, чтобы оставлять комментарии. <a href="#" class="link">Войти</a>
+                        Авторизуйтесь, чтобы оставлять комментарии. <a href="{% url 'auth:login' %}" class="link">Войти</a>
                     </div>
 
                 {% endif %}
