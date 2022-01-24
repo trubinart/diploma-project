@@ -1,28 +1,12 @@
-<!--<ul class="menu">-->
-<!--    <li>-->
-<!--        <a href="{% url 'main' %}">Главная</a>-->
-<!--    </li>-->
-<!--    {% for categories in categories_list %}-->
-<!--        <li>-->
-<!--            <a href="#">{{ categories }}</a>-->
-<!--        </li>-->
-<!--    {% endfor %}-->
-<!--</ul>-->
-
 <ul class="menu">
     <li class="home">
-        <a href="{% url 'main' %}">Главная</a>
+        <a href="{% url 'main' %}" {% if request.path  == "/" %}
+           style="text-decoration: underline;" {% endif %}>Главная</a>
     </li>
-    <li class="design">
-        <a href="#">Дизайн</a>
-    </li>
-    <li class="webDevelopment">
-        <a href="#">Веб-разработка</a>
-    </li>
-    <li class="mobileDevelopment">
-        <a href="#">Мобильная разработка</a>
-    </li>
-    <li class="marketing">
-        <a href="#">Маркетинг</a>
-    </li>
+    {% for categories in categories_list %}
+        <li>
+            <a href="{% url 'category' categories.id %}" {% if categories_pk == categories.id %}
+               style="text-decoration: underline;" {% endif %}>{{ categories.name }}</a>
+        </li>
+    {% endfor %}
 </ul>

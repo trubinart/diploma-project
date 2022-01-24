@@ -1,8 +1,14 @@
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, View
 from django.shortcuts import HttpResponseRedirect
+from django.views.generic import ListView, DetailView, View
+from uuid import UUID
+
+from authapp.models import User
 from mainapp.models import Article, ArticleCategories
 from mainapp.forms import CreationCommentFrom
+
+"""обозначение списка категорий для вывода в меню во разных view"""
+category_list = ArticleCategories.objects.all()
 
 
 class MainListView(ListView):
@@ -16,7 +22,7 @@ class MainListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
         # добавляем в набор запросов все категории
-        context['categories_list'] = ArticleCategories.objects.all()
+        context['categories_list'] = category_list
         return context
 
 
@@ -30,6 +36,30 @@ class ArticleDetailView(DetailView):
         title = 'Статья'
         context['title'] = title
         context['form'] = CreationCommentFrom()
+        context['categories_list'] = category_list
+        return context
+
+
+class CategoriesListView(ListView):
+    """Класс для вывода списка категорий """
+    template_name = 'mainapp/categories.html'
+    paginate_by = 9
+    model = Article
+
+    def get_queryset(self):
+        # Объявляем переменную и записываем ссылку на id категории
+        categories = self.kwargs['pk']
+        new_context = Article.objects.filter(categories_id=categories)
+        return new_context
+
+    def get_context_data(self, **kwargs):
+        # вызов базовой реализации для получения контекста
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs['pk']
+        category = ArticleCategories.objects.get(id=category_id)
+        context['title'] = f'Статьи по категории {category.name}'
+        context['categories_list'] = category_list
+        context['categories_pk'] = UUID(category_id)
         return context
 
 
@@ -60,3 +90,26 @@ class CreateCommentView(View):
             return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
         else:
             return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
+
+
+class UserArticleListView(ListView):
+    """Класс для вывода списка статей автора"""
+    template_name = 'mainapp/article_by_author.html'
+    paginate_by = 9
+    model = Article
+
+    def get_queryset(self):
+        # Объявляем переменную user и записываем ссылку на id автора
+        user_id = self.kwargs['pk']
+        new_context = Article.objects.filter(user=user_id)
+        return new_context
+
+    def get_context_data(self, **kwargs):
+        # вызов базовой реализации для получения контекста
+        context = super().get_context_data(**kwargs)
+        user_id = self.kwargs['pk']
+        author = User.objects.get(id=user_id)
+        context['title'] = f'Статьи автора {author.get_profile().name}'
+        context['categories_list'] = category_list
+        context['author'] = author
+        return context
