@@ -76,7 +76,7 @@ body {
 
 .main-wrapper .topNavbar .accaunt {
     display: flex;
-    width: 180px;
+    /*width: 180px;*/
     height: 52px;
     font-family: arial;
     align-items: center;
@@ -96,7 +96,7 @@ body {
 
 .main-wrapper .topNavbar .accaunt .personalAccount a,
 .main-wrapper .topNavbar .accaunt .loginRegister a {
-    width: 90px;
+    /*width: 90px;*/
     height: 26px;
     text-decoration: none;
     font-size: 16px;
@@ -104,6 +104,11 @@ body {
     display: flex;
     align-items: center;
     color: #424551;
+    padding-right: 5px;
+}
+
+.main-wrapper .topNavbar .accaunt .personalAccount a:hover {
+    color: #FF3F3A;
 }
 
 .main-wrapper .topNavbar .accaunt .loginRegister a:hover {
@@ -322,13 +327,11 @@ body {
     border-radius: 4px;
 }
 
-
 .main-footer .topFooter .wrapper .subscribe .subsForm form {
     position: relative;
     width: 100%;
     margin: 0 auto;
 }
-
 
 .main-footer .topFooter .wrapper .subscribe .subsForm input {
     width: 268px;
@@ -458,7 +461,6 @@ body {
     margin: 0 30px;
 }
 
-
 .content .main .menu .side .sort .title {
     font-family: arial;
     font-weight: bold;
@@ -522,7 +524,6 @@ body {
     box-sizing: border-box;
     border-radius: 4px;
 }
-
 
 .content .main .menu .side .search form {
     position: relative;
@@ -714,7 +715,6 @@ body {
     left: -10px;
     /* display: none; */
 }
-
 
 /* end .content  */
 
@@ -1356,7 +1356,6 @@ body {
     color: #424551;
 }
 
-
 .content .main .contentLK .mainLK .menuProfileLK .menuPrLK a:hover {
     color: #FF3F3A;
 }
@@ -1390,7 +1389,6 @@ body {
     /* margin: 5px 0; */
     align-items: center;
 }
-
 
 .content .main .contentLK .mainLK .menuBaseInfoBlokLK .menuPrLK .baseInfoTitleLK {
     color: #93A0B9;

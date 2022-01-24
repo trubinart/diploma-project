@@ -36,6 +36,8 @@
     text-align: center;
     color: #787A80;
     margin: 1px auto;
+    display: true;
+    padding-bottom: 20px;
 }
 
 .error-text {
@@ -72,6 +74,13 @@
     width: 400px;
     margin: 5px auto;
 
+}
+
+.form-box-login {
+    height: auto;
+    width: 400px;
+    margin: 5px auto;
+    width: 390px;
 }
 
 .input-label {

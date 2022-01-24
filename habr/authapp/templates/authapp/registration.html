@@ -6,11 +6,11 @@
     <body>
     <div class="main-form">
         <div class="form-title">
-            Зарегистрироваться
+            Регистрация
         </div>
 
         <div class="form-subtitle">
-            Регистрация займет всего одну минуту.
+            Регистрация займет всего одну минуту. <br>
             Но даст тебе безграничные возможности на изучение статей.
         </div>
         {% if form.errors %}
@@ -41,9 +41,9 @@
             </div>
             {{ form.password2 }}
         </form>
-        <button type="submit" form="registration-form" class="form-button"> Зарегистрироваться</button>
+        <button type="submit" form="registration-form" class="form-button">Зарегистрироваться</button>
         <div class="text-under-button">
-{#            Уже имеете аккаунт? <a href="#" class="link">Войти</a>#}
+            Уже есть аккаунт? <a href="{% url 'auth:login' %}" class="link">Войти</a>
         </div>
 
     </div>
