@@ -1,8 +1,12 @@
+from django.urls import reverse
+from django.views.generic import ListView, DetailView, View
+from django.shortcuts import HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 from uuid import UUID
 
 from authapp.models import User
 from mainapp.models import Article, ArticleCategories
+from mainapp.forms import CreationCommentFrom
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -32,6 +36,7 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         title = 'Статья'
         context['title'] = title
+        context['form'] = CreationCommentFrom()
         context['categories_list'] = category_list
         return context
 
@@ -72,6 +77,20 @@ class LkListView(ListView):
         title = 'Личный кабинет'
         context['title'] = title
         return context
+
+
+class CreateCommentView(View):
+    """Класс для создания комментария """
+
+    @staticmethod
+    def post(request):
+        article_id = request.POST['article_comment']
+        form = CreationCommentFrom(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
+        else:
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
 
 
 class UserArticleListView(ListView):
