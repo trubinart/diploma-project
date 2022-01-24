@@ -2,7 +2,7 @@ from django import forms
 from mainapp.models import ArticleComment
 
 
-class CreationCommentFrom(forms.ModelForm):
+class CreationCommentForm(forms.ModelForm):
     class Meta:
         model = ArticleComment
         fields = ('article_comment', 'text', 'user')
