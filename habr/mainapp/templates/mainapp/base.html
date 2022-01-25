@@ -38,16 +38,15 @@
                 </div>
                 {% if user.is_authenticated %}
                 <div class="personalAccount">
-<!--                    <a href="{% url 'lk' %}">My Account</a>-->
-                    <a href="{% url 'article_create' %}">Create an article</a>
+                    <a href="{% url 'lk' %}">{{ user.username }}</a>
                     /&nbsp;&nbsp;
-                    <a href="/admin/logout/" target="_blank">Exit</a>
+                    <a href="{% url 'auth:logout' %}">Exit</a>
                 </div>
                 {% else %}
                 <div class="loginRegister">
-                    <a href="/admin/login/" target="_blank">Login</a>
+                    <a href="{% url 'auth:login' %}">Login</a>
                     /&nbsp;&nbsp;
-                    <a href="{% url 'registration' %}"> Register</a>
+                    <a href="{% url 'auth:registration' %}"> Register</a>
                 </div>
                 {% endif %}
             </div>
@@ -67,6 +66,7 @@
                     <div class="logo">
                         <img src={% static 'img/logo.png' %} alt="logo">
                     </div>
+
                     <div class="desc">
                         Мы собрались в рамках курса «Командная разработка по методологии Agile: SCRUM». <br>
                         Цель - получение необходимых знаний о командной работе

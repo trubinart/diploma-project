@@ -1,6 +1,4 @@
 import uuid
-import datetime
-from time import sleep
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
@@ -35,19 +33,11 @@ class ArticleCategories(BaseModel):
         return self.name
 
 
-# function for creating a unique article number
-def uniq_number_article():
-    gen_number = datetime.datetime.today().strftime("%d%m%H%M%S%f")[:-4]
-    sleep(0.1)
-    return gen_number
-
-
 class Article(BaseModel):
     """
     Models for Articles
     """
-    article_number = models.PositiveIntegerField(default=uniq_number_article, unique=True,
-                                                 verbose_name='article number')
+
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE, verbose_name='categories')
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
@@ -105,6 +95,12 @@ class Article(BaseModel):
         """
         return ArticleLike.objects.select_related('article_like').filter(article_like=self.id).count()
 
+    def get_comment_count_by_article_id(self) -> int:
+        """
+        Подсчет количества комментариев для статьи.
+        """
+        return ArticleComment.objects.select_related('article_comment').filter(article_comment=self.id).count()
+
     def get_comments_by_article_id(self) -> QuerySet:
         """
         :param: None
@@ -113,7 +109,7 @@ class Article(BaseModel):
           Method called from Article Item.
           All likes sorted by date descending order.
           """
-        return ArticleComment.objects.select_related('article_comment').filter(article_like=self.id)
+        return ArticleComment.objects.select_related('article_comment').filter(article_comment=self.id)
 
     def get_other_articles_by_author(self) -> QuerySet:
         """

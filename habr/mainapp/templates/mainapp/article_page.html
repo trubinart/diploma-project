@@ -2,132 +2,165 @@
 {% load static %}
 
 {% block content %}
-<div class="main_content container">
-    <div class="article">
-        <div class="post_header">
-            <div class="header_habr">
-                <img src={% static "img/files.png" %} alt="">
-                <p class="content_type">Статья</p>
-                <img src={% static "img/divider.png" %} alt="">
-                <a class="content_topic" href="#">{{ article.categories }}</a>
-            </div>
-            <h1 class="name_habr">
-                {{ article.title }}
-            </h1>
-            <div class="habr_information">
-                <div class="habr_date_creat">
-                    <img src={% static "img/Calendar.png" %} alt="">
-                    <p class="date">{{ article.created_timestamp|date:"M d, Y"}}</p>
-                    <img src={% static 'img/like.png' %} alt="like">
-                    <p class="count_like"> {{ article.get_likes_count_by_article_id }} </p>
+    <div class="main_content container">
+        <div class="article">
+            <div class="post_header">
+                <div class="header_habr">
+                    <img src={% static "img/files.png" %}>
+                    <p class="content_type">Статья</p>
+                    <img src={% static "img/divider.png" %}>
+                    <a class="content_topic" href="{% url 'category' article.categories.id %}">{{ article.categories }}</a>
                 </div>
-                <div class="habr_share">
-                    <p>Share:</p>
-                    <a href="https://www.instagram.com/" target="_blank">
-                        <img src={% static "img/instagram_article.png" %} alt="">
-                    </a>
-                    <a href="https://www.facebook.com/" target="_blank">
-                        <img src={% static "img/facebook_article.png" %} alt="">
-                    </a>
-                    <a href="https://twitter.com/" target="_blank">
-                        <img src={% static "img/twitter_article.png" %} alt="">
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="image_habr_page">
-            <img src="/media/{{ article.main_img }}" alt="">
-        </div>
-        <div class="text_habr_page">
-            <p class="text_bold">
-                {{ article.subtitle }}
-            </p>
-            <p class="text_normal">
-
-                {{ article.text |safe}}
-            </p>
-        </div>
-                    <div class="tags_and_share">
-                        <div class="tags_habr">
-                            <p>Tags:</p>
-                            <a href="#">#дизайн</a>
-                            <a href="#">#веб-разработка</a>
-                            <a href="#">#маркетинг</a>
-                        </div>
-                        <div class="habr_info">
-                            <p class="info">Likes :</p>
-                            <a class="info_img" href="#"><img src={% static "img/like.png" %} alt=""></a>
-                            <p class="info">{{ article.get_likes_count_by_article_id }}</p>
-                            <a class="info_img comment" href="#"><img src={% static "img/comment.png" %} alt=""></a>
-                            <p class="info comment">3</p>
-                        </div>
+                <h1 class="name_habr">
+                    {{ article.title }}
+                </h1>
+                <div class="habr_information">
+                    <div class="habr_date_creat">
+                        <img src={% static "img/Calendar.png" %}>
+                        <p class="date">{{ article.created_timestamp }}</p>
+                        <img src={% static 'img/like.png' %}>
+                        <p class="count_like"> {{ article.get_likes_count_by_article_id }} </p>
                     </div>
-    </div>
-
-    <div class="sidebar">
-        <form>
-            <input class="search" type="text" placeholder="Искать здесь...">
-            <a class="search_button" href="#"><img src={% static "img/search.png" %} alt=""></a>
-        </form>
-        <div class="author">
-            <h6 class="author_title">автор</h6>
-            <div class="avatar_and_info">
-                <div class="avatar">
-                    <img src="/media/{{article.user.get_profile.avatar}}" alt="">
-                </div>
-
-                <div class="name_and_share">
-                    {% if article.user.first_name or article.user.last_name %}
-                    <h3>{{article.user.first_name}} {{article.user.last_name}}</h3>
-                    {% else %}
-                    <h3>{{article.user.get_profile.name}}</h3>
-                    {% endif %}
-                    <p>
-                        {{article.user.get_profile.bio}}
-                    </p>
-                    <div class="share_author">
+                    <div class="habr_share">
+                        <p>Share:</p>
                         <a href="https://www.instagram.com/" target="_blank">
-                            <img src={% static "img/instagram_article.png" %} alt="">
+                            <img src={% static "img/instagram_article.png" %}>
                         </a>
                         <a href="https://www.facebook.com/" target="_blank">
-                            <img src={% static "img/facebook_article.png" %} alt=""
-                            ></a>
+                            <img src={% static "img/facebook_article.png" %}>
+                        </a>
                         <a href="https://twitter.com/" target="_blank">
-                            <img src={% static "img/twitter_article.png" %} alt="">
+                            <img src={% static "img/twitter_article.png" %}>
                         </a>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="trending_articles">
-            {% if article.get_other_articles_by_author %}
-            <h6 class="trending_articles_title">статьи автора:</h6>
-            {% for other_article in article.get_other_articles_by_author%}
-            <div class="img_and_info_habr">
-                <div class="img_habr">
-                    <img src="/media/{{other_article.main_img}}" alt="article_img">
+            <div class="image_habr_page">
+                <img src="/media/{{ article.main_img }}">
+            </div>
+            <div class="text_habr_page">
+                <p class="text_bold">
+                    {{ article.subtitle }}
+                </p>
+                <p class="text_normal">
+
+                    {{ article.text |safe }}
+                </p>
+            </div>
+            <div class="tags_and_share">
+                <div class="tags_habr">
+                    <p>Tags:</p>
+                    <a href="#">#дизайн</a>
+                    <a href="#">#веб-разработка</a>
+                    <a href="#">#маркетинг</a>
                 </div>
-                <div class="info_habr">
-                    <div class="habr_date_creat">
-                        <img src={% static "img/Calendar.png" %} alt="">
-                        <p class="date">{{ other_article.created_timestamp|date:"M d, Y" }}</p>
-                    </div>
-                    <a href="{% url 'article' other_article.pk %}">{{ other_article.title }}</a>
+                <div class="habr_info">
+                    <p class="info">Likes :</p>
+                    <div class="info_img"><img src={% static "img/like.png" %}></div>
+                    <p class="info">{{ article.get_likes_count_by_article_id }}</p>
+                    <div class="info_img comment"><img src={% static "img/comment.png" %}></div>
+                    <p class="info comment">{{ article.get_comment_count_by_article_id }}</p>
                 </div>
             </div>
-            {% endfor %}
-            {% endif %}
 
+            {#            ----- ДОБАВЛЕНИЕ КОММЕНТАРИЯ ----  #}
+
+
+            <div class="form_add_comment">
+                {% if user.is_authenticated %}
+                    <form method="post" enctype="multipart/form-data" action="{% url 'add-comment' %}">
+                        {% csrf_token %}
+                        {{ form.text }}
+                        <input hidden="true" name="user" value="{{ user.id }}">
+                        <input hidden="true" name="article_comment" value="{{ article.id }}">
+                        <button type="submit" class="add_comment_button"> Оставить комментарий</button>
+                    </form>
+                {% else %}
+
+                    <div class="text-under-button">
+                        Авторизуйтесь, чтобы оставлять комментарии. <a href="{% url 'auth:login' %}" class="link">Войти</a>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+            {#            ----- КОММЕНТАРИИ ----  #}
+            <div class="comment_box">
+                {% for comment in article.get_comments_by_article_id %}
+                    <div class="comment_views">
+                        <div class="comment_attribute">
+                            <div class="comment_author">{{ comment.user.username }}</div>
+                            <div class="comment_author">{{ comment.created_timestamp }}</div>
+                        </div>
+                        <div class="comment_text">{{ comment.text }}</div>
+                    </div>
+                {% endfor %}
+
+            </div>
         </div>
-                    <div class="tags_trending">
-                        <h6 class="trending_articles_title">Tags:</h6>
-                        <div class="tags">
-                            <a href="#">#дизайн</a>
-                            <a href="#">#веб-разработка</a>
-                            <a href="#">#маркетинг</a>
-                            <a href="#">#мобильная разработка</a>
+
+        <div class="sidebar">
+            <form>
+                <input class="search" type="text" placeholder="Искать здесь...">
+                <a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
+            </form>
+            <div class="author">
+                <h6 class="author_title">автор</h6>
+                <div class="avatar_and_info">
+                    <div class="avatar">
+                        <img src="/media/{{ article.user.get_profile.avatar }}">
+                    </div>
+
+                    <div class="name_and_share">
+                        <h3>{{ article.user.get_profile.name }}</h3>
+                        <p>{{ article.user.get_profile.bio }}</p>
+                        <div class="share_author">
+                            <a href="https://www.instagram.com/" target="_blank">
+                                <img src={% static "img/instagram_article.png" %}>
+                            </a>
+                            <a href="https://www.facebook.com/" target="_blank">
+                                <img src={% static "img/facebook_article.png" %}></a>
+                            <a href="https://twitter.com/" target="_blank">
+                                <img src={% static "img/twitter_article.png" %}>
+                            </a>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="trending_articles">
+                {% if article.get_other_articles_by_author %}
+                    <h6 class="trending_articles_title">статьи автора:</h6>
+                    {% for other_article in article.get_other_articles_by_author %}
+                        <div class="img_and_info_habr">
+                            <div class="img_habr">
+                                <img src="/media/{{ other_article.main_img }}" alt="article_img">
+                            </div>
+                            <div class="info_habr">
+                                <div class="habr_date_creat">
+                                    <img src={% static "img/Calendar.png" %}>
+                                    <p class="date">{{ other_article.created_timestamp|date:"M d, Y" }}</p>
+                                </div>
+                                <a href="{% url 'article' other_article.pk %}">{{ other_article.title }}</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <!--            вот здесь надо добавить ссылку-->
+                    <div class="article_by_author">
+                        <a href="{% url 'user_article' article.user.id %}"> Все статьи автора</a>
+                    </div>
+
+                {% endif %}
+            </div>
+            <div class="tags_trending">
+                <h6 class="trending_articles_title">Tags:</h6>
+                <div class="tags">
+                    <a href="#">#дизайн</a>
+                    <a href="#">#веб-разработка</a>
+                    <a href="#">#маркетинг</a>
+                    <a href="#">#мобильная разработка</a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 {% endblock %}
