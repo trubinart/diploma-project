@@ -5,16 +5,27 @@
 {% block content %}
     <div class="main">
         <div class="title">
-            Все публикации
         </div>
 
         {% include 'mainapp/includes/inc-search-menu.html' %}
 
+        {% if  object_list %}
+            <div class="search-title">
+                Результаты поиска по запросу «{{ query }}»
+            </div>
+        {% endif %}
+
         <div class="publications">
             <div class="search-wrapper">
+
+                {% if not object_list %}
+                    <div class="not-search-title">
+                        По запросу «{{ query }}» ничего не найдено.<br>
+                        Вернитесь на <a href="{% url 'main' %}" class="">главную</a> или продолжите поиск.
+                    </div>
+                {% else %}
+
                 {% for instance_article in object_list %}
-
-
                     <div class="article-search-box">
                         <div class="article-content-search-box">
                             <div class="author-and-date-box">
@@ -31,11 +42,14 @@
                     </div>
 
                 {% endfor %}
+            {% endif %}
             </div>
+
+        {% if object_list %}
             <div class="paginator">
                 {% if page_obj.has_previous %}
                     <div class="pagLeft">
-                        <a href="?page={{ page_obj.previous_page_number }}"><img
+                        <a href="?page={{ page_obj.previous_page_number }}&query={{ query }}"><img
                                 src={% static 'img/pagLeft.png' %} alt="left"></a>
                     </div>
                 {% endif %}
@@ -43,17 +57,18 @@
                 {% for num_page in page_obj.paginator.page_range %}
                     <div class="pagNum" {% if num_page == page_obj.number %}
                          style="text-decoration: underline" {% endif %}>
-                        <a href="?page={{ num_page }}">{{ num_page }}</a>
+                        <a href="?page={{ num_page }}&query={{ query }}">{{ num_page }}</a>
                     </div>
                 {% endfor %}
 
                 {% if page_obj.has_next %}
                     <div class="pagRight">
-                        <a href="?page={{ page_obj.next_page_number }}&query=><img
+                        <a href="?page={{ page_obj.next_page_number }}&query={{ query }}"><img
                                 src={% static 'img/pagRight.png' %} alt=" right"></a>
                     </div>
                 {% endif %}
             </div>
+        {% endif %}
         </div>
     </div>
 {% endblock %}

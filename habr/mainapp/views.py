@@ -137,5 +137,5 @@ class SearchView(ListView):
         context['search_form'] = search_form
         context['categories_list'] = category_list
         context['title'] = 'Поиск по сайту'
-        #TODO передать заголовок
+        context['query'] = self.request.GET['query']
         return context

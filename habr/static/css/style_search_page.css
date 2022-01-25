@@ -1,3 +1,22 @@
+.search-title{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 150%;
+    color: #1E212C;
+    margin-left: 115px;
+}
+
+.not-search-title{
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 150%;
+    color: #9A9CA5;
+}
+
 .search-wrapper {
     flex-direction: row;
 }
