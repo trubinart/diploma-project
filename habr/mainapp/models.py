@@ -44,7 +44,7 @@ class Article(BaseModel):
     """
     Models for Articles
     """
-    #добавили менеджер для изменения логики поиска в модели
+    # добавили менеджер для изменения логики поиска в модели
     objects = ArticleManager()
 
     article_number = models.PositiveIntegerField(default=uniq_number_article, unique=True,
@@ -126,6 +126,12 @@ class Article(BaseModel):
         Метод выводит последние по дате 3 статьи автора исключая текущую статью
           """
         return Article.objects.filter(user=self.user).exclude(id=self.id).order_by('-created_timestamp')[:3]
+
+    def get_article_text_preview(self):
+        """
+        Метод выводит первые 100 символов текста статьи
+        """
+        return f'{self.text[:250]}......'
 
 
 class ArticleLike(BaseModel):

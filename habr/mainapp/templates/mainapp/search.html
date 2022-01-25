@@ -11,51 +11,25 @@
         {% include 'mainapp/includes/inc-search-menu.html' %}
 
         <div class="publications">
-            <div class="wrapper">
+            <div class="search-wrapper">
                 {% for instance_article in object_list %}
-                    <div class="publication">
-                        <div class="image">
-                            <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
-                        </div>
-                        <div class="publicationInfo">
-                            <div class="category">
-                                {{ instance_article.categories }}
+
+
+                    <div class="article-search-box">
+                        <div class="article-content-search-box">
+                            <div class="author-and-date-box">
+                                <div class="author">{{ instance_article.user.get_profile.name }}</div>
+                                <div class="date">{{ instance_article.created_timestamp }}</div>
                             </div>
-                            <div class="divider"></div>
-                            <div class="dateInfo">
-                                <div class="icon">
-                                    <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                                </div>
-                                <div class="date">
-                                    {{ instance_article.created_timestamp }}
-                                </div>
+                            <div class="article-title-and-text">
+                                <div class="article-search-title">{{ instance_article.title }}</div>
+                                <div class="article-search-text">{{ instance_article.get_article_text_preview }}</div>
                             </div>
-                            <div class="divider"></div>
-                            <div class="likeCount">
-                                <div class="icon">
-                                    <img src={% static 'img/like.png' %} alt="like">
-                                </div>
-                                <div class="number">
-                                    {{ instance_article.get_likes_by_article_id.count }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="title">
-                            {{ instance_article.title }}
-                        </div>
-                        <div class="descrition">
-                            {{ instance_article.subtitle }}
-                        </div>
-                        <div class="continue ">
-                            <div class="text">
-                                Читать далее
-                            </div>
-                            <div class="icon">
-                                <a href="{% url 'article' instance_article.pk %}"><img
-                                        src={% static 'img/Right.png' %} alt="right"></a>
-                            </div>
+                            <a class="artcle-search-button" href="{% url 'article' instance_article.id %}">Подробнее</a>
+
                         </div>
                     </div>
+
                 {% endfor %}
             </div>
             <div class="paginator">
@@ -75,8 +49,8 @@
 
                 {% if page_obj.has_next %}
                     <div class="pagRight">
-                        <a href="?page={{ page_obj.next_page_number }}"><img
-                                src={% static 'img/pagRight.png' %} alt="right"></a>
+                        <a href="?page={{ page_obj.next_page_number }}&query=><img
+                                src={% static 'img/pagRight.png' %} alt=" right"></a>
                     </div>
                 {% endif %}
             </div>

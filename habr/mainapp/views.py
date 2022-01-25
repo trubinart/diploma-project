@@ -123,6 +123,7 @@ class UserArticleListView(ListView):
 class SearchView(ListView):
     template_name = 'mainapp/search.html'
     paginate_by = 9
+    model = Article
 
     def get_queryset(self):
         form = SearchForm(self.request.GET)
@@ -135,4 +136,6 @@ class SearchView(ListView):
         context = super().get_context_data(**kwargs)
         context['search_form'] = search_form
         context['categories_list'] = category_list
+        context['title'] = 'Поиск по сайту'
+        #TODO передать заголовок
         return context
