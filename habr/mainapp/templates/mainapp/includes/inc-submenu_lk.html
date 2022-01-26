@@ -1,15 +1,18 @@
 {% load static %}
-<div class="avatar">
-    <div class="fioLK">
-        <img src="{% static 'img/image20.png' %}" alt="avatar">
-        Имя Фамилия
+{% if user.is_authenticated %}
+    <div class="avatar">
+        <div class="fioLK">
+            <img src="{% static 'img/image20.png' %}" alt="avatar">
+<!--            Имя Фамилия-->
+            {{ user.userprofile.name }}
+        </div>
+        <div class="configLK"><a href="#">
+                <img src="{% static 'img/Config.png' %}" alt="Настройки">Настройки аккаунта</a>
+        </div>
     </div>
-    <div class="configLK"><a href="#">
-            <img src="{% static 'img/Config.png' %}" alt="Настройки">Настройки аккаунта</a>
+    <div class="menuLK">
+        <div class="exitLK"><a href="#">
+                <img src="{% static 'img/exit.png' %}" alt="выход">выйти из кабинета</a>
+        </div>
     </div>
-</div>
-<div class="menuLK">
-    <div class="exitLK"><a href="#">
-            <img src="{% static 'img/exit.png' %}" alt="выход">выйти из кабинета</a>
-    </div>
-</div>
+{% endif %}

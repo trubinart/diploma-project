@@ -1514,6 +1514,23 @@ body {
     opacity: .7;
 }
 
+.content .main .contentLK .mainLK .baseBlokLK .error-text-lk {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 150%;
+    text-align: center;
+    color: #000000;
+    margin: 15px 10px;
+    border: 1px solid;
+    border-radius: 2px;
+    border-color: #FF3F3A;
+    background-color: rgb(243, 237, 237);
+    padding: 3px;
+    display: flex;
+}
+
 /* end .baseBlokLK */
 
 .sidebar-author {
