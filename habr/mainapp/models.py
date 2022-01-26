@@ -1,10 +1,13 @@
 import uuid
 
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 
 from authapp.models import User
+
+from ckeditor.fields import RichTextField
 
 
 class BaseModel(models.Model):
@@ -39,7 +42,8 @@ class Article(BaseModel):
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
     main_img = models.ImageField(upload_to='article_images', verbose_name='img')
-    text = models.TextField(max_length=5000, verbose_name='Text Article')
+    # text = models.TextField(max_length=5000, verbose_name='Text Article')
+    text = RichTextUploadingField(config_name='awesome_ckeditor')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
 

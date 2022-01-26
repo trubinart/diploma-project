@@ -1,11 +1,12 @@
-from django.urls import reverse
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, DetailView, CreateView, View
 from django.shortcuts import HttpResponseRedirect
-from django.views.generic import ListView, DetailView, View
+
 from uuid import UUID
 
+from mainapp.forms import ArticleEditForm, CreationCommentForm
 from authapp.models import User
 from mainapp.models import Article, ArticleCategories
-from mainapp.forms import CreationCommentForm
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -75,6 +76,22 @@ class LkListView(ListView):
         context = super().get_context_data(**kwargs)
         title = 'Личный кабинет'
         context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class CreateArticle(CreateView):
+    """Класс для создания статьи"""
+    model = Article
+    template_name = 'mainapp/createArticle.html'
+    form_class = ArticleEditForm
+    success_url = reverse_lazy('main')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Добавление статьи'
+        context['title'] = title
+        context['categories_list'] = category_list
         return context
 
 
