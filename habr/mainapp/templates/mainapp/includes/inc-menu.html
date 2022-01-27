@@ -11,7 +11,7 @@
     {% endfor %}
     {% if request.path  != "/article-add/" %}
     <li>
-        <a href="{% url 'article_create' %}">Create an article</a>
+        <a class="content_topic" href="{% url 'article_create' %}">Create an article</a>
     </li>
     {% endif %}
 </ul>

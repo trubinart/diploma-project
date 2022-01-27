@@ -55,7 +55,11 @@
                     </div>
 
                     <div class="name_and_share">
+                        {% if author.get_profile.name %}
                         <h3>{{author.get_profile.name}}</h3>
+                        {% else %}
+                        <h3>{{author.username}}</h3>
+                        {% endif %}
                         <p>{{author.get_profile.bio}}</p>
                     </div>
                 </div>
