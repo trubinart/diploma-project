@@ -34,7 +34,7 @@
                             </div>
                             <div class="article-title-and-text">
                                 <div class="article-search-title">{{ instance_article.title }}</div>
-                                <div class="article-search-text">{{ instance_article.get_article_text_preview }}</div>
+                                <div class="article-search-text">{{ instance_article.get_article_text_preview | safe }}</div>
                             </div>
                             <a class="artcle-search-button" href="{% url 'article' instance_article.id %}">Подробнее</a>
 

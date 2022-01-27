@@ -41,9 +41,6 @@ class Article(BaseModel):
     # добавили менеджер для изменения логики поиска в модели
     objects = ArticleManager()
 
-    article_number = models.PositiveIntegerField(default=uniq_number_article, unique=True,
-                                                 verbose_name='article number')
-
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE, verbose_name='categories')
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
@@ -127,7 +124,14 @@ class Article(BaseModel):
         """
         Метод выводит первые 100 символов текста статьи
         """
-        return f'{self.text[:250]}......'
+        start_point = self.text.find('<p>')
+        end_point = 320
+
+        if start_point < 0:
+            start_point = 0
+            end_point = 250
+
+        return f'{self.text[start_point:end_point]}......'
 
 
 class ArticleLike(BaseModel):
