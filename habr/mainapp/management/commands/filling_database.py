@@ -43,7 +43,7 @@ class Command(BaseCommand):
                 user = item,
                 name = name,
                 birthday = birthday.formatted_datetime(fmt="%Y-%m-%d"),
-                bio = "Короткое описание автора статьи")
+                bio = "Этот автор - самый крутой. Статьи у него пушка-бомба!")
 
 
             img_url = Internet().stock_image(width=50, height=50, keywords=['лицо'])
@@ -73,14 +73,16 @@ class Command(BaseCommand):
         print('Заполняю таблицу ARTICLES')
         for i in range(10):
             # create article
-            new_article = Article(
-                title=text.title(),
-                subtitle=text.title(),
-                text=text.text(quantity=15))
+            new_article = Article()
             # set categories
             new_article.categories = random.choice(ArticleCategories.objects.all())
             # set author
             new_article.user = random.choice(User.objects.all())
+            new_article.title = f'Заголовок статьи #{i} автора {new_article.user.username}'
+            new_article.subtitle = f'Падзаголовок статьи #{i} автора {new_article.user.username}'
+            new_article.text = text.text(quantity=15)
+
+
 
             # create and set article images
             img_url = Internet().stock_image(width=390, height=300, keywords=['природа'])
