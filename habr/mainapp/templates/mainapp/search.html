@@ -13,6 +13,9 @@
             <div class="search-title">
                 Результаты поиска по запросу «{{ query }}»
             </div>
+            <div class="search-subtitle">
+                всего найдено статей: {{ object_list.count }}
+            </div>
         {% endif %}
 
         <div class="publications">
@@ -25,50 +28,51 @@
                     </div>
                 {% else %}
 
-                {% for instance_article in object_list %}
-                    <div class="article-search-box">
-                        <div class="article-content-search-box">
-                            <div class="author-and-date-box">
-                                <div class="author">{{ instance_article.user.get_profile.name }}</div>
-                                <div class="date">{{ instance_article.created_timestamp }}</div>
-                            </div>
-                            <div class="article-title-and-text">
-                                <div class="article-search-title">{{ instance_article.title }}</div>
-                                <div class="article-search-text">{{ instance_article.get_article_text_preview | safe }}</div>
-                            </div>
-                            <a class="artcle-search-button" href="{% url 'article' instance_article.id %}">Подробнее</a>
+                    {% for instance_article in object_list %}
+                        <div class="article-search-box">
+                            <div class="article-content-search-box">
+                                <div class="author-and-date-box">
+                                    <div class="author">{{ instance_article.user.get_profile.name }}</div>
+                                    <div class="date">{{ instance_article.created_timestamp }}</div>
+                                </div>
+                                <div class="article-title-and-text">
+                                    <a href="{% url 'article' instance_article.id %}" class="article-search-title">{{ instance_article.title }}</a>
+                                    <div class="article-search-text">{{ instance_article.get_article_text_preview | safe }}</div>
+                                </div>
+                                <a class="artcle-search-button"
+                                   href="{% url 'article' instance_article.id %}">Читать</a>
 
+                            </div>
                         </div>
-                    </div>
 
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {% if object_list %}
+                <div class="paginator">
+                    {% if page_obj.has_previous %}
+                        <div class="pagLeft">
+                            <a href="?page={{ page_obj.previous_page_number }}&query={{ query }}"><img
+                                    src={% static 'img/pagLeft.png' %} alt="left"></a>
+                        </div>
+                    {% endif %}
+
+                    {% for num_page in page_obj.paginator.page_range %}
+                        <div class="pagNum" {% if num_page == page_obj.number %}
+                             style="text-decoration: underline" {% endif %}>
+                            <a href="?page={{ num_page }}&query={{ query }}">{{ num_page }}</a>
+                        </div>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <div class="pagRight">
+                            <a href="?page={{ page_obj.next_page_number }}&query={{ query }}"><img
+                                    src={% static 'img/pagRight.png' %} alt=" right"></a>
+                        </div>
+                    {% endif %}
+                </div>
             {% endif %}
-            </div>
-
-        {% if object_list %}
-            <div class="paginator">
-                {% if page_obj.has_previous %}
-                    <div class="pagLeft">
-                        <a href="?page={{ page_obj.previous_page_number }}&query={{ query }}"><img
-                                src={% static 'img/pagLeft.png' %} alt="left"></a>
-                    </div>
-                {% endif %}
-
-                {% for num_page in page_obj.paginator.page_range %}
-                    <div class="pagNum" {% if num_page == page_obj.number %}
-                         style="text-decoration: underline" {% endif %}>
-                        <a href="?page={{ num_page }}&query={{ query }}">{{ num_page }}</a>
-                    </div>
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                    <div class="pagRight">
-                        <a href="?page={{ page_obj.next_page_number }}&query={{ query }}"><img
-                                src={% static 'img/pagRight.png' %} alt=" right"></a>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
         </div>
     </div>
 {% endblock %}

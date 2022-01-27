@@ -17,6 +17,20 @@
     color: #9A9CA5;
 }
 
+.search-subtitle{
+    styleName: h6;
+    font-family: Lato;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 24px;
+    letter-spacing: 1px;
+    text-align: left;
+    margin-left: 115px;
+    margin-top: 20px;
+    color: #787A80;
+}
+
 .search-wrapper {
     flex-direction: row;
 }
@@ -65,7 +79,7 @@
     color: #1E212C;
     align-self: center;
     margin-top: auto;
-
+    text-decoration: none;
 }
 
 .author-and-date-box {
