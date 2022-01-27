@@ -1,0 +1,39 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main">
+    <div class="subNavbarLK">
+        {% include 'mainapp/includes/inc-submenu_lk.html' %}
+    </div>
+    <div class="contentArticleAdd">
+        <div class="mainArticleAdd">
+            {% if user.is_authenticated %}
+            <div class="titleArticleAdd">
+                Добавление новой статьи
+            </div>
+            <div class="blokPersonInfoLK">
+                <div class="baseInfoBlokLK">
+                    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        {{ form.as_p }}
+                        <input class="form-control" type="submit" value="Сохранить статью">
+                    </form>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $('#id_user').val('{{ user.pk }}');
+                });
+
+            </script>
+            {% else %}
+            <div class="titleArticleAdd">
+                Для добавления статьи необходимо авторизоваться
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
