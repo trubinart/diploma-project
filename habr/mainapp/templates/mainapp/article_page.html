@@ -21,18 +21,18 @@
                         <img src={% static 'img/like.png' %}>
                         <p class="count_like"> {{ article.get_likes_count_by_article_id }} </p>
                     </div>
-                    <div class="habr_share">
-                        <p>Share:</p>
-                        <a href="https://www.instagram.com/" target="_blank">
-                            <img src={% static "img/instagram_article.png" %}>
-                        </a>
-                        <a href="https://www.facebook.com/" target="_blank">
-                            <img src={% static "img/facebook_article.png" %}>
-                        </a>
-                        <a href="https://twitter.com/" target="_blank">
-                            <img src={% static "img/twitter_article.png" %}>
-                        </a>
-                    </div>
+{#                    <div class="habr_share">#}
+{#                        <p>Share:</p>#}
+{#                        <a href="https://www.instagram.com/" target="_blank">#}
+{#                            <img src={% static "img/instagram_article.png" %}>#}
+{#                        </a>#}
+{#                        <a href="https://www.facebook.com/" target="_blank">#}
+{#                            <img src={% static "img/facebook_article.png" %}>#}
+{#                        </a>#}
+{#                        <a href="https://twitter.com/" target="_blank">#}
+{#                            <img src={% static "img/twitter_article.png" %}>#}
+{#                        </a>#}
+{#                    </div>#}
                 </div>
             </div>
             <div class="image_habr_page">
@@ -48,12 +48,12 @@
                 </p>
             </div>
             <div class="tags_and_share">
-                <div class="tags_habr">
-                    <p>Tags:</p>
-                    <a href="#">#дизайн</a>
-                    <a href="#">#веб-разработка</a>
-                    <a href="#">#маркетинг</a>
-                </div>
+{#                <div class="tags_habr">#}
+{#                    <p>Tags:</p>#}
+{#                    <a href="#">#дизайн</a>#}
+{#                    <a href="#">#веб-разработка</a>#}
+{#                    <a href="#">#маркетинг</a>#}
+{#                </div>#}
                 <div class="habr_info">
                     <p class="info">Likes :</p>
                     <div class="info_img"><img src={% static "img/like.png" %}></div>
@@ -101,10 +101,10 @@
         </div>
 
         <div class="sidebar">
-            <form>
-                <input class="search" type="text" placeholder="Искать здесь...">
-                <a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
-            </form>
+{#            <form>#}
+{#                <input class="search" type="text" placeholder="Искать здесь...">#}
+{#                <a class="search_button" href="#"><img src={% static "img/search.png" %}></a>#}
+{#            </form>#}
             <div class="author">
                 <h6 class="author_title">автор</h6>
                 <div class="avatar_and_info">
@@ -152,15 +152,15 @@
 
                 {% endif %}
             </div>
-            <div class="tags_trending">
-                <h6 class="trending_articles_title">Tags:</h6>
-                <div class="tags">
-                    <a href="#">#дизайн</a>
-                    <a href="#">#веб-разработка</a>
-                    <a href="#">#маркетинг</a>
-                    <a href="#">#мобильная разработка</a>
-                </div>
-            </div>
+{#            <div class="tags_trending">#}
+{#                <h6 class="trending_articles_title">Tags:</h6>#}
+{#                <div class="tags">#}
+{#                    <a href="#">#дизайн</a>#}
+{#                    <a href="#">#веб-разработка</a>#}
+{#                    <a href="#">#маркетинг</a>#}
+{#                    <a href="#">#мобильная разработка</a>#}
+{#                </div>#}
+{#            </div>#}
         </div>
     </div>
 {% endblock %}
