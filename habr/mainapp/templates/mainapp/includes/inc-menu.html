@@ -6,7 +6,7 @@
     {% for categories in categories_list %}
         <li>
             <a href="{% url 'category' categories.id %}" {% if categories_pk == categories.id %}
-               style="text-decoration: underline;" {% endif %}>{{ categories.name }}</a>
+               style="text-decoration: underline;" {% endif %}>| {{ categories.name }}</a>
         </li>
     {% endfor %}
     {% if request.path  != "/article-add/" %}
