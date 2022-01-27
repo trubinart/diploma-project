@@ -8,7 +8,7 @@ class ArticleManager(models.Manager):
     def search(self, query=None):
         qs = self.get_queryset()
         if query:
-            or_lookup = (Q(title__icontains=query) | Q(subtitle__icontains=query) | Q(text__icontains=query))
+            or_lookup = (Q(title__iregex=query) | Q(subtitle__iregex=query) | Q(text__iregex=query))
             qs = qs.filter(or_lookup)
 
         return qs
