@@ -1,13 +1,14 @@
 import uuid
-import datetime
-from time import sleep
 
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 
 from authapp.models import User
 from mainapp.manager import ArticleManager
+
+from ckeditor.fields import RichTextField
 
 
 class BaseModel(models.Model):
@@ -33,13 +34,6 @@ class ArticleCategories(BaseModel):
         return self.name
 
 
-# function for creating a unique article number
-def uniq_number_article():
-    gen_number = datetime.datetime.today().strftime("%d%m%H%M%S%f")[:-4]
-    sleep(0.1)
-    return gen_number
-
-
 class Article(BaseModel):
     """
     Models for Articles
@@ -49,11 +43,13 @@ class Article(BaseModel):
 
     article_number = models.PositiveIntegerField(default=uniq_number_article, unique=True,
                                                  verbose_name='article number')
+
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE, verbose_name='categories')
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
     main_img = models.ImageField(upload_to='article_images', verbose_name='img')
-    text = models.TextField(max_length=5000, verbose_name='Text Article')
+    # text = models.TextField(max_length=5000, verbose_name='Text Article')
+    text = RichTextUploadingField(config_name='awesome_ckeditor')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
 

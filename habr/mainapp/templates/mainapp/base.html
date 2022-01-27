@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
         {% if title %}
-            {{ title }}
+        {{ title }}
         {% else %}
-            diploma-project
+        diploma-project
         {% endif %}
     </title>
     {% block css %}
@@ -19,6 +20,7 @@
     {% endblock %}
 
     {% block js %}
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
     {% endblock %}
 </head>
 
@@ -26,30 +28,30 @@
 <div class="main-wrapper">
     <div class="top-main">
         {% block menu %}
-            <div class="topNavbar">
-                <div class="logo">
-                    <img src={% static 'img/logo.png' %} alt="logo">
-                </div>
-                {% include 'mainapp/includes/inc-menu.html' %}
-                <div class="accaunt">
-                    <div class="profile">
-                        <img src={% static 'img/Profile.png' %} alt="Profile">
-                    </div>
-                    {% if user.is_authenticated %}
-                        <div class="personalAccount">
-                            <a href="{% url 'lk' %}">My Account</a>
-                            /&nbsp;&nbsp;
-                            <a href="/admin/logout/" target="_blank">Exit</a>
-                        </div>
-                    {% else %}
-                        <div class="loginRegister">
-                            <a href="/admin/login/" target="_blank">Login</a>
-                            /&nbsp;&nbsp;
-                            <a href="{% url 'registration' %}"> Register</a>
-                        </div>
-                    {% endif %}
-                </div>
+        <div class="topNavbar">
+            <div class="logo">
+                <img src={% static 'img/logo.png' %} alt="logo">
             </div>
+            {% include 'mainapp/includes/inc-menu.html' %}
+            <div class="accaunt">
+                <div class="profile">
+                    <img src={% static 'img/Profile.png' %} alt="Profile">
+                </div>
+                {% if user.is_authenticated %}
+                <div class="personalAccount">
+                    <a href="#">{{ user.username }}</a>
+                    /&nbsp;&nbsp;
+                    <a href="{% url 'auth:logout' %}">Exit</a>
+                </div>
+                {% else %}
+                <div class="loginRegister">
+                    <a href="{% url 'auth:login' %}">Login</a>
+                   &nbsp;/&nbsp;
+                    <a href="{% url 'auth:registration' %}"> Register</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
         {% endblock %}
         <div class="content">
             {% block content %}
@@ -58,130 +60,114 @@
         </div>
     </div>
     {% block footer %}
-        <div class="main-footer">
-            <div class="topFooter">
-                <div class="wrapper">
-                    <div class="aboutUs">
-                        <div class="logo">
-                            <img src={% static 'img/logo.png' %} alt="logo">
-                        </div>
-                        <div class="desc">
-                            Мы собрались в рамках курса «Командная разработка по методологии Agile: SCRUM». <br>
-                            Цель - получение необходимых знаний о командной работе
-                            и проектной деятельности c использованием Agile подхода и фреймворка Scrum, а так же
-                            закрепления и углубления знаний, полученных на предыдущих курсах.
-                        </div>
-                        <div class="socialNetworks">
-                            <a target="_blank" href="https://www.facebook.com/"><img
-                                    src={% static 'img/Facebook.png' %} alt="facebook"></a>
-                            <a target="_blank" href="https://www.instagram.com/"><img
-                                    src={% static 'img/Instagram.png' %} alt="instagram"></a>
-                            <a target="_blank" href="https://telegram.org/"><img
-                                    src={% static 'img/telegram.png' %} alt="telegram"></a>
-                            <a target="_blank" href="https://www.youtube.com/"><img
-                                    src={% static 'img/YouTube.png' %} alt="yuoTube"></a>
-                            <a target="_blank" href="https://twitter.com/"><img
-                                    src={% static 'img/Twitter.png' %} alt="twitter"></a>
-                            <a target="_blank" href="https://www.linkedin.com/"><img
-                                    src={% static 'img/Linked-In.png' %} alt="liked-in"></a>
-                        </div>
+    <div class="main-footer">
+        <div class="topFooter">
+            <div class="wrapper">
+                <div class="aboutUs">
+                    <div class="logo">
+                        <img src={% static 'img/logo.png' %} alt="logo">
                     </div>
-                    <div class="siteMap">
-                        <div class="title">
-                            SITE MAP
-                        </div>
 
-                        <ul class="menu">
-                            <li class="home">
-                                <a href="{% url 'main' %}">Главная</a>
-                            </li>
-                            {% for categories in categories_list %}
-                                <li>
-                                    <a href="{% url 'category' categories.id %}">{{ categories.name }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-
+                    <div class="desc">
+                        Мы собрались в рамках курса «Командная разработка по методологии Agile: SCRUM». <br>
+                        Цель - получение необходимых знаний о командной работе
+                        и проектной деятельности c использованием Agile подхода и фреймворка Scrum, а так же
+                        закрепления и углубления знаний, полученных на предыдущих курсах.
                     </div>
-                    <div class="team">
-                        <div class="title">
-                            Team:
-                        </div>
-                        <div class="players">
-                            <div class="player">
-                                <a target="_blank" href="https://tlgg.ru/@trubinart">Артем</a>
-                            </div>
-                            <div class="player">
-                                <a target="_blank" href="https://tlgg.ru/@Vaspupiy">Вася</a>
-                            </div>
-                            <div class="player">
-                                <a target="_blank" href="https://tlgg.ru/@veyu0">Вера</a>
-                            </div>
-                            <div class="player">
-                                <a target="_blank" href="https://tlgg.ru/@xvector">Евгений</a>
-                            </div>
-                            <div class="player">
-                                <a target="_blank" href="https://tlgg.ru/@ithesand">Юрий</a>
-                            </div>
-                        </div>
+                    <div class="socialNetworks">
+                        <a target="_blank" href="https://www.facebook.com/"><img src={% static 'img/Facebook.png' %} alt="facebook"></a>
+                        <a target="_blank" href="https://www.instagram.com/"><img src={% static 'img/Instagram.png' %} alt="instagram"></a>
+                        <a target="_blank" href="https://telegram.org/"><img src={% static 'img/telegram.png' %} alt="telegram"></a>
+                        <a target="_blank" href="https://www.youtube.com/"><img src={% static 'img/YouTube.png' %} alt="yuoTube"></a>
+                        <a target="_blank" href="https://twitter.com/"><img src={% static 'img/Twitter.png' %} alt="twitter"></a>
+                        <a target="_blank" href="https://www.linkedin.com/"><img src={% static 'img/Linked-In.png' %} alt="liked-in"></a>
                     </div>
-                    <div class="contactUs">
-                        <div class="title">
-                            CONTACT US
-                        </div>
-                        <div class="phone">
-                            <div class="icon">
-                                <img src={% static 'img/iPhone.png' %} alt="iPhone">
-                            </div>
-                            <div class="text">
-                                (405) 555-0128
-                            </div>
-                        </div>
-                        <div class="mail">
-                            <div class="icon">
-                                <img src={% static 'img/Mail.png' %} alt="Mail">
-                            </div>
-                            <div class="text">
-                                <a href="mailto:test@test.com">test@test.com</a>
-                            </div>
-                        </div>
+                </div>
+                <div class="siteMap">
+                    <div class="title">
+                        SITE MAP
                     </div>
-                    <div class="subscribe">
-                        <div class="title">
-                            SIGN UP TO OUR NEWSLETTER
+                    {% include 'mainapp/includes/inc-menu.html' %}
+                </div>
+                <div class="team">
+                    <div class="title">
+                        Team:
+                    </div>
+                    <div class="players">
+                        <div class="player">
+                            <a target="_blank" href="https://tlgg.ru/@trubinart">Артем</a>
                         </div>
-                        <div class="subsForm">
-                            <form>
-                                <input type="text" placeholder="Email address">
-                                <button type="submit"></button>
-                            </form>
+                        <div class="player">
+                            <a target="_blank" href="https://tlgg.ru/@Vaspupiy">Вася</a>
                         </div>
-                        <div class="desc">
-                            *Subscribe to our newsletter to receive communications and early updates from Team Number
-                            Two SEO Agency.
+                        <div class="player">
+                            <a target="_blank" href="https://tlgg.ru/@veyu0">Вера</a>
+                        </div>
+                        <div class="player">
+                            <a target="_blank" href="https://tlgg.ru/@xvector">Евгений</a>
+                        </div>
+                        <div class="player">
+                            <a target="_blank" href="https://tlgg.ru/@ithesand">Юрий</a>
                         </div>
                     </div>
                 </div>
+                <div class="contactUs">
+                    <div class="title">
+                        CONTACT US
+                    </div>
+                    <div class="phone">
+                        <div class="icon">
+                            <img src={% static 'img/iPhone.png' %} alt="iPhone">
+                        </div>
+                        <div class="text">
+                            (405) 555-0128
+                        </div>
+                    </div>
+                    <div class="mail">
+                        <div class="icon">
+                            <img src={% static 'img/Mail.png' %} alt="Mail">
+                        </div>
+                        <div class="text">
+                            <a href="mailto:test@test.com">test@test.com</a>
+                        </div>
+                    </div>
+                </div>
+{#                <div class="subscribe">#}
+{#                    <div class="title">#}
+{#                        SIGN UP TO OUR NEWSLETTER#}
+{#                    </div>#}
+{#                    <div class="subsForm">#}
+{#                        <form>#}
+{#                            <input type="text" placeholder="Email address">#}
+{#                            <button type="submit"></button>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                    <div class="desc">#}
+{#                        *Subscribe to our newsletter to receive communications and early updates from Team Number#}
+{#                        Two SEO Agency.#}
+{#                    </div>#}
+{#                </div>#}
             </div>
-            <div class="bottomFooter">
-                <div class="wrapper">
-                    <div class="madeWith">
-                        <div class="text">
-                            © All rights reserved. Made with
-                        </div>
-                        <div class="image">
-                            <img src={% static 'img/heart.png' %} alt="Heart">
-                        </div>
-                        <div class="text">
-                            by Team Number Two
-                        </div>
+        </div>
+        <div class="bottomFooter">
+            <div class="wrapper">
+                <div class="madeWith">
+                    <div class="text">
+                        © All rights reserved. Made with
                     </div>
-                    <div class="goToTop">
-                        <a href="#" title="Вернуться к началу" class="topbutton">GO TO TOP</a>
+                    <div class="image">
+                        <img src={% static 'img/heart.png' %} alt="Heart">
                     </div>
+                    <div class="text">
+                        by Team Number Two
+                    </div>
+                </div>
+                <div class="goToTop">
+                    <a href="#" title="Вернуться к началу" class="topbutton">GO TO TOP</a>
                 </div>
             </div>
         </div>
+    </div>
     {% endblock %}
 </div>
 </body>
