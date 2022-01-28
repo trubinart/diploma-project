@@ -14,7 +14,7 @@
                 Результаты поиска по запросу «{{ query }}»
             </div>
             <div class="search-subtitle">
-                всего найдено статей: {{ object_list.count }}
+                всего найдено статей: {{ page_obj.paginator.count }}
             </div>
         {% endif %}
 

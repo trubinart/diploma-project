@@ -1,4 +1,6 @@
 import uuid
+import re
+from typing import Optional
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
@@ -122,16 +124,10 @@ class Article(BaseModel):
 
     def get_article_text_preview(self):
         """
-        Метод выводит первые 100 символов текста статьи
+        Метод выводит первые 250 символов текста статьи
         """
-        start_point = self.text.find('<p>')
-        end_point = 320
-
-        if start_point < 0:
-            start_point = 0
-            end_point = 250
-
-        return f'{self.text[start_point:end_point]}......'
+        preview = re.sub(r'\<[^>]*\>', '', self.text)
+        return f'{preview[:250]}.....'
 
 
 class ArticleLike(BaseModel):

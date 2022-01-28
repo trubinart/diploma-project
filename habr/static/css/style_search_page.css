@@ -1,5 +1,4 @@
 .search-title{
-    font-family: Lato;
     font-style: normal;
     font-weight: bold;
     font-size: 28px;
@@ -9,7 +8,6 @@
 }
 
 .not-search-title{
-    font-family: Lato;
     font-style: normal;
     font-weight: normal;
     font-size: 20px;
@@ -19,7 +17,6 @@
 
 .search-subtitle{
     styleName: h6;
-    font-family: Lato;
     font-size: 16px;
     font-style: normal;
     font-weight: normal;
@@ -71,7 +68,6 @@
 .article-search-title {
     height: 30px;
     width: 757px;
-    font-family: Lato;
     font-style: normal;
     font-weight: bold;
     font-size: 20px;
@@ -91,7 +87,6 @@
 .article-search-box .author {
     width: 150px;
     height: 30px;
-    font-family: Lato;
     font-style: normal;
     font-weight: bold;
     font-size: 20px;
@@ -102,7 +97,6 @@
 .article-search-box .date {
     width: 100px;
     height: 30px;
-    font-family: Lato;
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
@@ -115,7 +109,7 @@
     height: 26px;
 
     /* base/regular */
-    font-family: Lato;
+
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -130,10 +124,6 @@
 
 }
 
-/*TODO у нас в базовом шаблоне прописан шрифт для body - arial,
-   если нет задачи изменить шрифт в каком-то определенном теге/блоке,
-   можно смело удалять/комментить font-family: Lato, разные шрифты не очень смотрятся */
-
 /*TODO добавить отступ слева для кнопки .artcle-search-button*/
 .artcle-search-button{
     height: 44px;
@@ -147,7 +137,7 @@
     text-align: center;
     letter-spacing: 0.5px;
     margin-top: 42px;
-    font-family: Lato;
+    margin-left: 40px;
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
