@@ -141,6 +141,8 @@ class UserArticleListView(ListView):
         context['search_form'] = search_form
         return context
 
+
+# TODO убрать пагинацию на странице с результатами поиска
 class SearchView(ListView):
     template_name = 'mainapp/search.html'
     paginate_by = 9
