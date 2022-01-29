@@ -145,7 +145,10 @@ class UserArticleListView(ListView):
         context = super().get_context_data(**kwargs)
         user_id = self.kwargs['pk']
         author = User.objects.get(id=user_id)
-        context['title'] = f'Статьи автора {author.get_profile().name}'
+        try:
+            context['title'] = f'Статьи автора {author.get_profile().name}'
+        except:
+            context['title'] = f'Статьи автора {author.username}'
         context['categories_list'] = category_list
         context['author'] = author
         return context
