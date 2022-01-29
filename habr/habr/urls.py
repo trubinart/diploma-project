@@ -2,14 +2,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from mainapp.views import MainListView, LkListView, ArticleDetailView, \
-    CategoriesListView, UserArticleListView, CreateCommentView
+from mainapp.views import MainListView, ArticleDetailView, \
+    CategoriesListView, UserArticleListView, CreateCommentView, LkEditView, LkListView #UpdateView
 from authapp.views import UserRegistrationView
 
 urlpatterns = [
 
     path('', MainListView.as_view(), name='main'),
+    # path('lk/', LkListView.as_view(), name='lk'),
     path('lk/', LkListView.as_view(), name='lk'),
+    path('lk/edit/', LkEditView.as_view(), name='lk_edit'),
+    # path('lk/<str:pk>/update/', LkUpdateView.as_view(), name='lk_update'),
     path('article/<str:pk>/', ArticleDetailView.as_view(), name='article'),
     path('add-comment/', CreateCommentView.as_view(), name='add-comment'),
     path('category/<str:pk>/', CategoriesListView.as_view(), name='category'),

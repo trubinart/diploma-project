@@ -2,10 +2,11 @@
 {% if user.is_authenticated %}
     <div class="avatar">
         <div class="fioLK">
-            <img src="{% static 'img/image20.png' %}" alt="avatar">
+            <img src="/media/{{ user.userprofile.avatar }}" alt="avatar">
 <!--            Имя Фамилия-->
             {{ user.userprofile.name }}
         </div>
+{#<!--        <div class="configLK"><a href="{% url 'auth:lk_edit' %}">-->#}
         <div class="configLK"><a href="#">
                 <img src="{% static 'img/Config.png' %}" alt="Настройки">Настройки аккаунта</a>
         </div>
