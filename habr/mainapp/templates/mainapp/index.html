@@ -3,115 +3,116 @@
 
 
 {% block content %}
-    <div class="main">
-        <div class="title">
-            Все публикации
-        </div>
-        <div class="menu">
-            <div class="side">
-                <div class="buttonAll">
-                    <a href="{% url 'main' %}">Все</a>
+<div class="main">
+    <div class="title">
+        Все публикации
+    </div>
+{#    <div class="menu">#}
+{#        <div class="side">#}
+{#            <div class="buttonAll">#}
+{#                <a href="{% url 'main' %}">Все</a>#}
+{#            </div>#}
+{#            <div class="sort">#}
+{#                <div class="title">#}
+{#                    Сортировать#}
+{#                </div>#}
+{#                <div class="sortDate">#}
+{#                    <a class="text" href="#"><img src={% static 'img/Calendar.png' %} alt="date"></a>#}
+{#                </div>#}
+{#                <div class="sortlike">#}
+{#                    <a class="text" href="#"><img src={% static 'img/like.png' %} alt="like"></a>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="side">#}
+{#            <div class="category">#}
+{#                <div class="categoryTitle">#}
+{#                    Выбор категории#}
+{#                </div>#}
+{#                <select class="categoriItems">#}
+{#                    <option value="all">Все категории</option>#}
+{#                    <option value="design">Дизайн</option>#}
+{#                    <option value="web_development">Веб-разработка</option>#}
+{#                    <option value="mobile_development">Мобильная разработка</option>#}
+{#                    <option value="marketing">Маркетинг</option>#}
+{#                </select>#}
+{#            </div>#}
+{#            <div class="search">#}
+{#                <form>#}
+{#                    <input type="text" placeholder="Искать здесь...">#}
+{#                    <button type="submit"></button>#}
+{#                </form>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+    <div class="publications">
+        <div class="wrapper">
+            {% for instance_article in object_list %}
+            <div class="publication">
+                <div class="image">
+                    <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
                 </div>
-                {#                <div class="sort">#}
-                {#                    <div class="title">#}
-                {#                        Сортировать#}
-                {#                    </div>#}
-                {#                    <div class="sortDate">#}
-                {#                        <a class="text" href="#"><img src={% static 'img/Calendar.png' %} alt="date"></a>#}
-                {#                    </div>#}
-                {#                    <div class="sortlike">#}
-                {#                        <a class="text" href="#"><img src={% static 'img/like.png' %} alt="like"></a>#}
-                {#                    </div>#}
-                {#                </div>#}
-            </div>
-            {#            <div class="side">#}
-            {#                <div class="category">#}
-            {#                    <div class="categoryTitle">#}
-            {#                        Выбор категории#}
-            {#                    </div>#}
-            {#                    <select class="categoriItems">#}
-            {#                        <option value="all">Все категории</option>#}
-            {#                        <option value="design">Дизайн</option>#}
-            {#                        <option value="web_development">Веб-разработка</option>#}
-            {#                        <option value="mobile_development">Мобильная разработка</option>#}
-            {#                        <option value="marketing">Маркетинг</option>#}
-            {#                    </select>#}
-            {#                </div>#}
-            {#                <div class="search">#}
-            {#                    <form>#}
-            {#                        <input type="text" placeholder="Искать здесь...">#}
-            {#                        <button type="submit"></button>#}
-            {#                    </form>#}
-            {#                </div>#}
-            {#            </div>#}
-        </div>
-        <div class="publications">
-            <div class="wrapper">
-                {% for instance_article in object_list %}
-                    <div class="publication">
-                        <div class="image">
-                            <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
+                <div class="publicationInfo">
+                    <div class="category">
+                        {{ instance_article.categories }}
+                    </div>
+                    <div class="divider"></div>
+                    <div class="dateInfo">
+                        <div class="icon">
+                            <img src={% static 'img/Calendar.png' %} alt="Calendar">
                         </div>
-                        <div class="publicationInfo">
-                            <div class="category">
-                                {{ instance_article.categories }}
-                            </div>
-                            <div class="divider"></div>
-                            <div class="dateInfo">
-                                <div class="icon">
-                                    <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                                </div>
-                                <div class="date">
-                                    {{ instance_article.created_timestamp }}
-                                </div>
-                            </div>
-                            <div class="divider"></div>
-                            <div class="likeCount">
-                                <div class="icon">
-                                    <img src={% static 'img/like.png' %} alt="like">
-                                </div>
-                                <div class="number">
-                                    {{ instance_article.get_likes_by_article_id.count }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="title">
-                            {{ instance_article.title }}
-                        </div>
-                        <div class="descrition">
-                            {{ instance_article.subtitle }}
-                        </div>
-                        <div class="continue ">
-                            <div class="text">
-                                Читать далее
-                            </div>
-                            <div class="icon">
-                                <a href="{% url 'article' instance_article.pk %}"><img src={% static 'img/Right.png' %} alt="right"></a>
-                            </div>
+                        <div class="date">
+                            {{ instance_article.created_timestamp }}
                         </div>
                     </div>
-                {% endfor %}
+                    <div class="divider"></div>
+                    <div class="likeCount">
+                        <div class="icon">
+                            <img src={% static 'img/like.png' %} alt="like">
+                        </div>
+                        <div class="number">
+                            {{ instance_article.get_likes_by_article_id.count }}
+                        </div>
+                    </div>
+                </div>
+                <div class="title">
+                    {{ instance_article.title }}
+                </div>
+                <div class="descrition">
+                    {{ instance_article.subtitle }}
+                </div>
+                <div class="continue">
+                    <div class="text">
+                        Читать далее
+                    </div>
+                    <div class="icon">
+                        <a href="{% url 'article' instance_article.pk %}"><img src={% static 'img/Right.png' %}
+                            alt="right"></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         <div class="paginator">
             {% if page_obj.has_previous %}
-                <div class="pagLeft">
-                    <a href="?page={{ page_obj.previous_page_number }}"><img src={% static 'img/pagLeft.png' %} alt="left"></a>
-                </div>
+            <div class="pagLeft">
+                <a href="?page={{ page_obj.previous_page_number }}"><img src={% static 'img/pagLeft.png' %} alt="left"></a>
+            </div>
             {% endif %}
 
             {% for num_page in page_obj.paginator.page_range %}
-                <div class="pagNum" {% if num_page == page_obj.number %} style="text-decoration: underline" {% endif %}>
-                    <a href="?page={{ num_page }}">{{ num_page }}</a>
-                </div>
+            <div class="pagNum" {% if num_page == page_obj.number %} style="text-decoration: underline" {% endif %}>
+                <a href="?page={{ num_page }}">{{ num_page }}</a>
+            </div>
             {% endfor %}
 
             {% if page_obj.has_next %}
-                <div class="pagRight">
-                    <a href="?page={{ page_obj.next_page_number }}"><img
-                            src={% static 'img/pagRight.png' %} alt="right"></a>
-                </div>
+            <div class="pagRight">
+                <a href="?page={{ page_obj.next_page_number }}"><img
+                        src={% static 'img/pagRight.png' %} alt="right"></a>
+            </div>
             {% endif %}
         </div>
     </div>
-    </div>
+</div>
 {% endblock %}
