@@ -8,10 +8,10 @@ from mimesis import Internet
 from django.core.management.base import BaseCommand
 from django.core.files import File
 
-from mainapp.models import ArticleCategories, Article, ArticleLike, ArticleComment
+from mainapp.models import ArticleCategories
 from authapp.models import User
 
-from mainapp.models import Article, ArticleLike, ArticleComment
+from mainapp.models import Article, ArticleComment
 from authapp.models import UserProfile
 
 
@@ -101,13 +101,13 @@ class Command(BaseCommand):
             # save article
             new_article.save()
 
-        # CREATE LIKES
-        print('Заполняю таблицу LIKES')
-        for item in User.objects.all():
-            new_like = ArticleLike(like=True)
-            new_like.article_like = random.choice(Article.objects.all())
-            new_like.user = item
-            new_like.save()
+        # # CREATE LIKES
+        # print('Заполняю таблицу LIKES')
+        # for item in User.objects.all():
+        #     new_like = ArticleLike()
+        #     new_like.article_like = random.choice(Article.objects.all())
+        #     new_like.user = item
+        #     new_like.save()
 
         # CREATE COMMENTS
         print('Заполняю таблицу COMMENTS')

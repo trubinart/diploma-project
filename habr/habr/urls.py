@@ -6,9 +6,11 @@ from django.conf.urls.static import static
 from django.views.decorators.cache import never_cache
 
 from mainapp.views import MainListView, LkListView, ArticleDetailView, \
-    CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle
+    CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, \
+    ArticleLikeRedirectView, ArticleLikeRedirectAPIView
 
 from authapp.views import UserRegistrationView
+from mainapp.views import AuthorStarRedirectView
 from ckeditor_uploader import views
 
 urlpatterns = [
@@ -27,6 +29,11 @@ urlpatterns = [
     path('ckeditor/browse/', never_cache(login_required(views.browse)), name="ckeditor_browse"),
 
     path('admin/', admin.site.urls),
+
+    path('article/<str:pk>/like/', ArticleLikeRedirectView.as_view(), name='like-toggle'),
+    path('api/article/<str:pk>/like/', ArticleLikeRedirectAPIView.as_view(), name='like-api-toggle'),
+
+    path('article/<str:pk>/star/', AuthorStarRedirectView.as_view(), name='star-toggle'),
 ]
 
 if settings.DEBUG:

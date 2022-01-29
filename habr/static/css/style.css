@@ -821,6 +821,11 @@ body {
     margin: 0 20px 0 10px;
 }
 
+.count_star {
+    font-size: 15px;
+    margin-right: 15px;
+}
+
 .article .habr_share {
     display: flex;
     flex-direction: row;

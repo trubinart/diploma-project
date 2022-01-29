@@ -1,12 +1,16 @@
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, View
-from django.shortcuts import HttpResponseRedirect
+from django.views.generic import ListView, DetailView, CreateView, View, RedirectView
+from django.shortcuts import HttpResponseRedirect, get_object_or_404
 
 from uuid import UUID
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm
-from authapp.models import User
+from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -109,6 +113,48 @@ class CreateCommentView(View):
             return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
 
 
+class ArticleLikeRedirectView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        article_id = self.kwargs.get('pk')
+        obj = get_object_or_404(Article, id=article_id)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+
+        if user.is_authenticated:
+            if user in obj.likes.all():
+                obj.likes.remove(user)
+            else:
+                obj.likes.add(user)
+        else:
+            pass
+        return url_
+
+
+class ArticleLikeRedirectAPIView(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(Article, pk=pk)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        updated = False
+        liked = False
+        if user.is_authenticated:
+            if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+            else:
+                liked = True
+                obj.likes.add(user)
+            updated = True
+        data = {
+            "updated": updated,
+            "liked": liked
+        }
+        return Response(data)
+
+
 class UserArticleListView(ListView):
     """Класс для вывода списка статей автора"""
     template_name = 'mainapp/article_by_author.html'
@@ -133,3 +179,21 @@ class UserArticleListView(ListView):
         context['categories_list'] = category_list
         context['author'] = author
         return context
+
+
+class AuthorStarRedirectView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        url_ = get_object_or_404(Article, id=self.kwargs['pk']).get_absolute_url()
+        user = self.request.user
+
+        # print(obj.stars.all())
+        # print(obj.stars.count())
+        if user.is_authenticated:
+            obj = get_object_or_404(UserProfile, user_id=user.id)
+            if user in obj.stars.all():
+                obj.stars.remove(user)
+            else:
+                obj.stars.add(user)
+        else:
+            pass
+        return url_

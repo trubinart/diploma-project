@@ -1,6 +1,7 @@
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 class BaseModel(models.Model):
@@ -44,3 +45,9 @@ class UserProfile(models.Model):
     birthday = models.DateField(verbose_name='birthday', null=True, blank=True)
     bio = models.TextField(verbose_name='description', max_length=250, blank=False)
     avatar = models.ImageField(upload_to='user_avatars')
+    stars = models.ManyToManyField(User, blank=True, related_name='author_stars')
+
+    def __str__(self):
+        return f'Userprofile for "{self.user.username}"'
+
+

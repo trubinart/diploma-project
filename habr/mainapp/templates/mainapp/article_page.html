@@ -1,6 +1,11 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
+<script>
+    {% block jquery %}
+    {% endblock %}
+</script>
+
 {% block content %}
     <div class="main_content container">
         <div class="article">
@@ -18,8 +23,11 @@
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %}>
                         <p class="date">{{ article.created_timestamp }}</p>
-                        <img src={% static 'img/like.png' %}>
-                        <p class="count_like"> {{ article.get_likes_count_by_article_id }} </p>
+                        <a class="like-btn" data-href="{{ article.get_like_api_url }}"
+                           data-likes="{{ article.likes.count }}"
+                           href="{{ article.get_like_url }}">
+                            {{ article.likes.count }}
+                        </a>
                     </div>
 {#                    <div class="habr_share">#}
 {#                        <p>Share:</p>#}
@@ -56,8 +64,14 @@
 {#                </div>#}
                 <div class="habr_info">
                     <p class="info">Likes :</p>
-                    <div class="info_img"><img src={% static "img/like.png" %}></div>
-                    <p class="info">{{ article.get_likes_count_by_article_id }}</p>
+                    <div class="info_img">
+                        {% if request.user in article.likes.all %}
+                            <a href="{{ article.get_like_url }}"><img src={% static "img/black_like.png" %}></a>
+                        {% else %}
+                            <a href="{{ article.get_like_url }}"><img src={% static "img/like.png" %}></a>
+                        {% endif %}
+                    </div>
+                    <p class="info">{{ article.likes.count }}</p>
                     <div class="info_img comment"><img src={% static "img/comment.png" %}></div>
                     <p class="info comment">{{ article.get_comment_count_by_article_id }}</p>
                 </div>
@@ -78,7 +92,7 @@
                 {% else %}
 
                     <div class="text-under-button">
-                        Авторизуйтесь, чтобы оставлять комментарии. <a href="{% url 'auth:login' %}" class="link">Войти</a>
+                        Авторизуйтесь, чтобы оставлять лайки и комментарии. <a href="{% url 'auth:login' %}" class="link">Войти</a>
                     </div>
 
                 {% endif %}
@@ -111,11 +125,17 @@
                     <div class="avatar">
                         <img src="/media/{{ article.user.get_profile.avatar }}">
                     </div>
-
                     <div class="name_and_share">
                         <h3>{{ article.user.get_profile.name }}</h3>
                         <p>{{ article.user.get_profile.bio }}</p>
                         <div class="share_author">
+                            {% if request.user in article.user.userprofile.stars.all %}
+                                <a href="{{ article.get_star_url }}">
+                                    <img src={% static "img/yellow_star.png" %}></a>
+                            {% else %}
+                                <a href="{{ article.get_star_url }}"><img src={% static "img/star.png" %}></a>
+                            {% endif %}
+                            <div class="count_star">{{ article.user.userprofile.stars.count }}</div>
                             <a href="https://www.instagram.com/" target="_blank">
                                 <img src={% static "img/instagram_article.png" %}>
                             </a>

@@ -4,10 +4,9 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
+from django.urls import reverse
 
 from authapp.models import User
-
-from ckeditor.fields import RichTextField
 
 
 class BaseModel(models.Model):
@@ -46,6 +45,7 @@ class Article(BaseModel):
     text = RichTextUploadingField(config_name='awesome_ckeditor')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
+    likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
 
     def __str__(self):
         return self.title
@@ -79,21 +79,21 @@ class Article(BaseModel):
         pagination_articles: Paginator = Paginator(all_articles, pagination_page)
         return pagination_articles
 
-    def get_likes_by_article_id(self) -> QuerySet:
-        """
-        :param: None
-        :return: QuerySet with all LIKES in DataBase by specific Article.
-
-          Method called from Article Item.
-          All likes sorted by date descending order.
-          """
-        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id)
-
-    def get_likes_count_by_article_id(self) -> int:
-        """
-        Подсчет количества лайков для статьи.
-        """
-        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id).count()
+    # def get_likes_by_article_id(self) -> QuerySet:
+    #     """
+    #     :param: None
+    #     :return: QuerySet with all LIKES in DataBase by specific Article.
+    #
+    #       Method called from Article Item.
+    #       All likes sorted by date descending order.
+    #       """
+    #     return ArticleLike.objects.select_related('article_like').filter(article_like=self.id)
+    #
+    # def get_likes_count_by_article_id(self) -> int:
+    #     """
+    #     Подсчет количества лайков для статьи.
+    #     """
+    #     return ArticleLike.objects.select_related('article_like').filter(article_like=self.id).count()
 
     def get_comment_count_by_article_id(self) -> int:
         """
@@ -117,23 +117,35 @@ class Article(BaseModel):
           """
         return Article.objects.filter(user=self.user).exclude(id=self.id).order_by('-created_timestamp')[:3]
 
+    def get_absolute_url(self):
+        return reverse("article", kwargs={"pk": self.id})
 
-class ArticleLike(BaseModel):
-    """
-    Models for Articles Likes
-    """
-    like = models.BooleanField(verbose_name='Like')
-    article_like = models.ForeignKey(Article, on_delete=models.DO_NOTHING, verbose_name='Article for like',
-                                     related_name='article_like')
-    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, verbose_name='Like Author',
-                                related_name='like_author')
+    def get_like_url(self):
+        return reverse("like-toggle", kwargs={"pk": self.id})
 
-    def __str__(self):
-        return self.user.username
+    def get_star_url(self):
+        return reverse("star-toggle", kwargs={"pk": self.id})
 
-    class Meta:
-        db_table = 'article_likes'
-        ordering = ['-created_timestamp']
+    def get_like_api_url(self):
+        return reverse("like-api-toggle", kwargs={"pk": self.id})
+
+
+# class ArticleLike(BaseModel):
+#     """
+#     Models for Articles Likes
+#     """
+#     # like = models.BooleanField(verbose_name='Like')
+#     article_like = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='Article for like',
+#                                      related_name='article_like')
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Like Author',
+#                              related_name='like_author')
+#
+#     def __str__(self):
+#         return f'Лайк от "{self.user.username}" для "{self.article_like.title}"'
+#
+#     class Meta:
+#         db_table = 'article_likes'
+#         ordering = ['-created_timestamp']
 
 
 class ArticleComment(BaseModel):
