@@ -6,7 +6,7 @@ from mainapp.models import Article, ArticleComment
 class ArticleEditForm(forms.ModelForm):
     class Meta:
         model = Article
-        exclude = ('article_number',)
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

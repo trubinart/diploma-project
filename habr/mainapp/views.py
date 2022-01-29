@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, View
+from django.views.generic import ListView, DetailView, CreateView, View, UpdateView
 from django.shortcuts import HttpResponseRedirect
 
 from uuid import UUID
@@ -83,7 +83,7 @@ class LkListView(ListView):
 class CreateArticle(CreateView):
     """Класс для создания статьи"""
     model = Article
-    template_name = 'mainapp/createArticle.html'
+    template_name = 'mainapp/updateArticle.html'
     form_class = ArticleEditForm
     success_url = reverse_lazy('main')
 
@@ -93,6 +93,25 @@ class CreateArticle(CreateView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+
+class UpdateArticle(UpdateView):
+    """Класс для создания статьи"""
+    model = Article
+    template_name = 'mainapp/updateArticle.html'
+    form_class = ArticleEditForm
+    # success_url = reverse_lazy('article')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Редактирование статьи'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+    def get_success_url(self):
+        pk = self.object.pk
+        return reverse_lazy('article', args=[pk])
 
 
 class CreateCommentView(View):
