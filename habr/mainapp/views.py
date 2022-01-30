@@ -7,6 +7,7 @@ from django.shortcuts import HttpResponseRedirect, render
 from django.views.generic import ListView, DetailView, View, UpdateView
 from uuid import UUID
 
+from authapp.forms import UserRegisterForm
 from mainapp.forms import ArticleEditForm, CreationCommentForm
 from authapp.models import User
 from authapp.models import User, UserProfile
@@ -72,19 +73,20 @@ class CategoriesListView(ListView):
 class LkListView(ListView):
     # class LkEditView(UserChan):
     """Класс для вывода страницы ЛК """
-    model = UserProfileForm
+    # model = UserProfileForm
     # model = UserProfile
     template_name = 'mainapp/user_lk.html'
 
     def get_queryset(self):
         # Заглушка на время отсутствия модели...
-        return UserProfile.objects.filter(user=self.request.user)
+        # UserProfile.objects.filter(user=self.request.user)
+        return
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Личный кабинет'
         context['title'] = title
-        context['form'] = UserProfileForm()
+        # context['form'] = UserProfileForm()
         # context['form'] = UserProfileEditForm()
         # context['name'] = UserProfile.name
         context['categories_list'] = category_list
@@ -104,6 +106,41 @@ class CreateArticle(CreateView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+
+class ProfileCreateView(CreateView):
+    model = UserProfile
+    template_name = 'mainapp/updateProfile.html'
+    # form_class = UserProfileEditForm
+    form_class = UserProfileForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Заполнение профиля'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class ProfileEditView(UpdateView):
+    model = UserProfile
+    template_name = 'mainapp/updateProfile.html'
+    form_class = UserProfileEditForm
+    # form_class = UserProfileForm
+    # form_class2 = UserRegisterForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Редактирование профиля'
+        context['title'] = title
+        # context['user'] = User.objects.all()
+        context['categories_list'] = category_list
+        # edit_form = UserProfileForm(instance=request.user)
+        # profile_form = ShopUserProfileEditForm(instance=request.user.shopuserprofile)
+        return context
+
 
 # class LkListView(ListView):
 class LkEditView(UpdateView):
@@ -130,33 +167,38 @@ class LkEditView(UpdateView):
         title = 'Редактирование ЛК'
         if request.POST:
             # article_id = request.POST
-            edit_form = UserProfileEditForm(request.POST, request.FILES, instance=request.user)
-            if edit_form.is_valid():
-                edit_form.save()
+            # edit_user_form = UserProfileEditForm(request.POST, request.FILES, instance=request.user)
+            edit_user_form = UserRegisterForm(request.POST, request.FILES, instance=request.user)
+            profile_form = UserProfileEditForm(request.POST, instance=request.user.userprofile)
+            if edit_user_form.is_valid() and profile_form.is_valid():
+                edit_user_form.save()
+                profile_form.save()
+                # messages.success(request, _('Your profile was successfully updated!'))
                 return HttpResponseRedirect(reverse('lk'))
         else:
-            edit_form = UserProfileEditForm(instance=request.user)
+            edit_user_form = UserRegisterForm(instance=request.user)
+            profile_form = UserProfileEditForm(instance=request.user.userprofile)
             return HttpResponseRedirect(reverse('lk'))
 
-        content = {'title': title, 'edit_form': edit_form}
+        content = {'title': title, 'edit_user_form': edit_user_form, 'profile_form': profile_form}
         return render(request, LkEditView.template_name, content)
 
-# class LkUpdateView(UpdateView):
-#     # LkUpdateView
-#     template_name = 'mainapp/user_lk.html'
-#
-#     def get_queryset(self, ):
-#         # Заглушка на время отсутствия модели...
-#
-#         # return UserProfileForm.objects.filter(borrower=self.request.user.id)
-#         return User.get_profile(self.fields)
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         title = 'Личный кабинет'
-#         context['title'] = title
-#         context['form'] = UserProfileForm()
-#         return context
+    # class LkUpdateView(UpdateView):
+    #     # LkUpdateView
+    #     template_name = 'mainapp/user_lk.html'
+    #
+    #     def get_queryset(self, ):
+    #         # Заглушка на время отсутствия модели...
+    #
+    #         # return UserProfileForm.objects.filter(borrower=self.request.user.id)
+    #         return User.get_profile(self.fields)
+    #
+    #     def get_context_data(self, **kwargs):
+    #         context = super().get_context_data(**kwargs)
+    #         title = 'Личный кабинет'
+    #         context['title'] = title
+    #         context['form'] = UserProfileForm()
+    #         return context
 
     # @staticmethod
     # def post(request):

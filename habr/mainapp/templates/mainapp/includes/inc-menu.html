@@ -9,9 +9,9 @@
                style="text-decoration: underline;" {% endif %}>| {{ categories.name }}</a>
         </li>
     {% endfor %}
-    {% if request.path  != "/article-add/" %}
+    <!--{% if request.path  != "/article-add/" %}
     <li>
         <a class="content_topic" href="{% url 'article_create' %}">Create an article</a>
     </li>
-    {% endif %}
+    {% endif %}-->
 </ul>
