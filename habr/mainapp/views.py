@@ -152,3 +152,23 @@ class UserArticleListView(ListView):
         context['categories_list'] = category_list
         context['author'] = author
         return context
+
+
+class MyArticleListView(ListView):
+    """Класс для вывода списка статей автора"""
+    template_name = 'mainapp/myArticles.html'
+    paginate_by = 9
+    model = Article
+
+    # def get_queryset(self):
+    #     # Объявляем переменную user и записываем ссылку на id автора
+    #     user_id = self.kwargs['pk']
+    #     new_context = Article.objects.filter(user=user_id)
+    #     return new_context
+
+    def get_context_data(self, **kwargs):
+        # вызов базовой реализации для получения контекста
+        context = super().get_context_data(**kwargs)
+        context['categories_list'] = category_list
+        context['title'] = f'Мои статьи'
+        return context

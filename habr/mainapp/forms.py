@@ -20,6 +20,33 @@ class ArticleEditForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = f'form-control {field_name}'
 
+    def clean_title(self):
+        data = self.cleaned_data['title']
+        split_data = data.split()
+        for word in split_data:
+            if len(word) > 35:
+                print(split_data)
+                raise forms.ValidationError("Максимальная длинна слова в заголовке не должна превышать 35 символов")
+        return data
+
+    def clean_subtitle(self):
+        data = self.cleaned_data['subtitle']
+        split_data = data.split()
+        for word in split_data:
+            if len(word) > 48:
+                print(split_data)
+                raise forms.ValidationError("Максимальная длинна слова в описании не должна превышать 48 символов")
+        return data
+
+    def clean_text(self):
+        data = self.cleaned_data['text']
+        split_data = data.split()
+        for word in split_data:
+            if len(word) > 84:
+                print(split_data)
+                raise forms.ValidationError("Максимальная длинна слова в статье не должна превышать 84 символа")
+        return data
+
 
 class CreationCommentForm(forms.ModelForm):
     class Meta:

@@ -51,11 +51,12 @@ body {
     text-decoration: none;
     list-style: none;
     font-family: arial;
-    margin: 5px 0;
+    margin: 5px 1px;
 }
 
 .main-wrapper .topNavbar .menu li {
-    margin: 0 5px;
+    display: flex;
+    margin: 1px;
 }
 
 .main-wrapper .topNavbar .menu a {
@@ -64,10 +65,17 @@ body {
     font-size: 16px;
     line-height: 160%;
     color: #424551;
+    padding: 20px 12px;
+    background-color: #F7FAFF;
+    border: 1px solid #787A80;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    opacity: .8;
 }
 
 .main-wrapper .topNavbar .menu a:hover {
-    color: #FF3F3A;
+    color: red;
 }
 
 .main-wrapper .topNavbar .accaunt .profile {
@@ -585,8 +593,8 @@ body {
     /*justify-content: center;*/
     align-items: flex-start;
     width: 390px;
-    height: 490px;
-    margin: 30px 0;
+    height: 550px;
+    margin: 50px 10px;
 }
 
 .content .main .publications .wrapper .publication .image {
@@ -648,6 +656,8 @@ body {
     text-align: left;
     color: #1E212C;
     margin: 5px 0;
+    width: 100%;
+    height: 70px;
 }
 
 .content .main .publications .wrapper .publication .descrition {
@@ -656,6 +666,7 @@ body {
     line-height: 150%;
     color: #424551;
     margin: 5px 0;
+    height: 60px;
 }
 
 .content .main .publications .wrapper .publication .continue {
@@ -671,6 +682,34 @@ body {
     font-size: 16px;
     line-height: 160%;
     color: #1E212C;
+}
+
+.content .main .publications .wrapper .publication .update .text {
+    display: flex;
+    width: 390px;
+}
+
+.content .main .publications .wrapper .publication .update .text a {
+    text-decoration: none;
+    width: 380px;
+    height: 46px;
+    border: 1px solid #FF3F3A;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    color: #FF3F3A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+}
+.content .main .publications .wrapper .publication .update .text a:hover {
+    background: linear-gradient(55.95deg, #FF3F3A 0%, #F75E05 100%);
+    color: #FFFFFF;
+    opacity: .8;
 }
 
 .content .main .publications .wrapper .publication .continue .icon {
@@ -752,7 +791,7 @@ body {
 }
 
 .article .post_header {
-    height: 210px;
+    min-height: 210px;
 }
 
 .header_habr {
@@ -766,7 +805,7 @@ body {
 .article .name_habr {
     margin-top: 12px;
     margin-left: 0px;
-    height: 120px;
+    min-height: 120px;
     font-size: 46px;
     line-height: 130%;
     color: #1E212C;
@@ -1142,6 +1181,16 @@ body {
     border: 1px dotted;
     border-radius: 5px;
     padding: 5px;
+}
+
+/* ограничение для размера картинки внутри блока с текстом */
+.article .text_habr_page img {
+        max-width: 800px !important;
+        max-height: 800px !important;
+}
+
+.article .text_habr_page p {
+        max-width: 100%;
 }
 
 /* end .article_page */
@@ -1810,6 +1859,36 @@ body {
     padding: 8.5px;
 }
 
+
+.errorlist {
+    list-style-type: none;
+    color: purple;
+    font-weight: bold;
+    position: relative;
+    }
+
+.errorlist li{
+    top: 20px;
+    position: absolute;
+    z-index: 1;
+    background: yellow;
+    padding: 8px;
+    border-radius: 3px;
+    border: 1px solid purple;
+    opacity: .9;
+    }
+
 /* end article-add */
+
+/* start my-articles */
+.content .myArticles .main .title {
+    margin: 20px;
+}
+
+.content .myArticles .main .publications {
+    margin: 20px 0;
+}
+
+/* end my-articles */
 
 

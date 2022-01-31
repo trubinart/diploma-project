@@ -8,7 +8,7 @@ from django.views.decorators.cache import never_cache
 
 from mainapp.views import MainListView, LkListView, ArticleDetailView, \
     CategoriesListView, UserArticleListView, CreateCommentView, \
-    CreateArticle, UpdateArticle
+    CreateArticle, UpdateArticle, MyArticleListView
 
 from authapp.views import UserRegistrationView
 from ckeditor_uploader import views
@@ -25,6 +25,7 @@ urlpatterns = [
     path('add-comment/', CreateCommentView.as_view(), name='add-comment'),
     path('category/<str:pk>/', CategoriesListView.as_view(), name='category'),
     path('user-article/<str:pk>/', UserArticleListView.as_view(), name='user_article'),
+    path('my-articles/<str:pk>/', MyArticleListView.as_view(), name='my_articles'),
     path('auth/', include('authapp.urls', namespace='auth')),
 
     path('ckeditor/upload/', login_required(views.upload), name='ckeditor_upload'),
