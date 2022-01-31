@@ -23,11 +23,14 @@
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %}>
                         <p class="date">{{ article.created_timestamp }}</p>
-                        <a class="like-btn" data-href="{{ article.get_like_api_url }}"
-                           data-likes="{{ article.likes.count }}"
-                           href="{{ article.get_like_url }}">
-                            {{ article.likes.count }}
-                        </a>
+
+{#                        Изменение кол-ва лайков через api#}
+{#                        <a class="like-btn" data-href="{{ article.get_like_api_url }}"#}
+{#                           data-likes="{{ article.likes.count }}"#}
+{#                           href="{{ article.get_like_url }}">#}
+{#                            {{ article.likes.count }}#}
+{#                        </a>#}
+
                     </div>
 {#                    <div class="habr_share">#}
 {#                        <p>Share:</p>#}
@@ -63,17 +66,17 @@
 {#                    <a href="#">#маркетинг</a>#}
 {#                </div>#}
                 <div class="habr_info">
-                    <p class="info">Likes :</p>
+                    <p class="info">Likes and comments:</p>
                     <div class="info_img">
                         {% if request.user in article.likes.all %}
-                            <a href="{{ article.get_like_url }}"><img src={% static "img/black_like.png" %}></a>
+                            <a title="Убрать лайк со статьи" class="like" href="{{ article.get_like_url }}"><img src={% static "img/black_like.png" %}></a>
                         {% else %}
-                            <a href="{{ article.get_like_url }}"><img src={% static "img/like.png" %}></a>
+                            <a title="Поставить лайк статье" href="{{ article.get_like_url }}"><img src={% static "img/like.png" %}></a>
                         {% endif %}
                     </div>
                     <p class="info">{{ article.likes.count }}</p>
-                    <div class="info_img comment"><img src={% static "img/comment.png" %}></div>
-                    <p class="info comment">{{ article.get_comment_count_by_article_id }}</p>
+                    <div class="comment"><img src={% static "img/comment.png" %}></div>
+                    <p>{{ article.get_comment_count_by_article_id }}</p>
                 </div>
             </div>
 
@@ -108,6 +111,18 @@
                             <div class="comment_author">{{ comment.created_timestamp }}</div>
                         </div>
                         <div class="comment_text">{{ comment.text }}</div>
+                        <div class="habr_info">
+                            <p class="info">Likes :</p>
+                            <div class="info_img">
+                                {% if request.user in comment.likes.all %}
+                                    <a title="Убрать лайк с комментария" href="{% url 'like_comment_toggle' article.pk comment.id %}" ><img src={% static "img/black_like.png" %}></a>
+                                {% else %}
+                                    <a title="Поставить лайк комментарию" href="{% url 'like_comment_toggle' article.pk comment.id %}"><img src={% static "img/like.png" %}></a>
+                                {% endif %}
+                            </div>
+                            <p class="info">{{ comment.likes.count }}</p>
+
+                </div>
                     </div>
                 {% endfor %}
 
@@ -130,10 +145,10 @@
                         <p>{{ article.user.get_profile.bio }}</p>
                         <div class="share_author">
                             {% if request.user in article.user.userprofile.stars.all %}
-                                <a href="{{ article.get_star_url }}">
+                                <a title="Аннулировать награду автора" href="{% url 'star_toggle' article.pk %}">
                                     <img src={% static "img/yellow_star.png" %}></a>
                             {% else %}
-                                <a href="{{ article.get_star_url }}"><img src={% static "img/star.png" %}></a>
+                                <a title="Наградить автора" href="{% url 'star_toggle' article.pk %}"><img src={% static "img/star.png" %}></a>
                             {% endif %}
                             <div class="count_star">{{ article.user.userprofile.stars.count }}</div>
                             <a href="https://www.instagram.com/" target="_blank">

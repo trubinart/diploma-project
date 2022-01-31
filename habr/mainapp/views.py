@@ -6,7 +6,7 @@ from uuid import UUID
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm
 from authapp.models import User, UserProfile
-from mainapp.models import Article, ArticleCategories
+from mainapp.models import Article, ArticleCategories, ArticleComment
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -113,48 +113,6 @@ class CreateCommentView(View):
             return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
 
 
-class ArticleLikeRedirectView(RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        article_id = self.kwargs.get('pk')
-        obj = get_object_or_404(Article, id=article_id)
-        url_ = obj.get_absolute_url()
-        user = self.request.user
-
-        if user.is_authenticated:
-            if user in obj.likes.all():
-                obj.likes.remove(user)
-            else:
-                obj.likes.add(user)
-        else:
-            pass
-        return url_
-
-
-class ArticleLikeRedirectAPIView(APIView):
-    authentication_classes = (authentication.SessionAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request, pk=None):
-        obj = get_object_or_404(Article, pk=pk)
-        url_ = obj.get_absolute_url()
-        user = self.request.user
-        updated = False
-        liked = False
-        if user.is_authenticated:
-            if user in obj.likes.all():
-                liked = False
-                obj.likes.remove(user)
-            else:
-                liked = True
-                obj.likes.add(user)
-            updated = True
-        data = {
-            "updated": updated,
-            "liked": liked
-        }
-        return Response(data)
-
-
 class UserArticleListView(ListView):
     """Класс для вывода списка статей автора"""
     template_name = 'mainapp/article_by_author.html'
@@ -181,19 +139,87 @@ class UserArticleListView(ListView):
         return context
 
 
-class AuthorStarRedirectView(RedirectView):
+class ArticleLikeRedirectView(RedirectView):
+    """Класс для постановки лайка статье"""
+
     def get_redirect_url(self, *args, **kwargs):
-        url_ = get_object_or_404(Article, id=self.kwargs['pk']).get_absolute_url()
+        article_id = self.kwargs.get('pk')
+        obj_article = get_object_or_404(Article, id=article_id)
+        url_article = obj_article.get_absolute_url()
         user = self.request.user
 
-        # print(obj.stars.all())
-        # print(obj.stars.count())
         if user.is_authenticated:
-            obj = get_object_or_404(UserProfile, user_id=user.id)
-            if user in obj.stars.all():
-                obj.stars.remove(user)
+            if user in obj_article.likes.all():
+                obj_article.likes.remove(user)
             else:
-                obj.stars.add(user)
+                obj_article.likes.add(user)
         else:
-            pass
-        return url_
+            return reverse_lazy('auth:login')
+        return url_article
+
+
+class ArticleLikeRedirectAPIView(APIView):
+    """Класс для постановки лайка статье через API REST_framework"""
+
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(Article, pk=pk)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        updated = False
+        liked = False
+
+        if user.is_authenticated:
+            if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+            else:
+                liked = True
+                obj.likes.add(user)
+            updated = True
+
+        data = {
+            "updated": updated,
+            "liked": liked
+        }
+        return Response(data)
+
+
+class CommentLikeRedirectView(RedirectView):
+    """Класс для постановки лайка комменту"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
+        if user.is_authenticated:
+            if user in obj_comment.likes.all():
+                obj_comment.likes.remove(user)
+            else:
+                obj_comment.likes.add(user)
+        else:
+            return reverse_lazy('auth:login')
+        return url_article
+
+
+class AuthorStarRedirectView(RedirectView):
+    """Класс для постановки звезды(лайка) автору статьи"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+        obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
+
+        if user.is_authenticated:
+            if user in obj_userprofile.stars.all():
+                obj_userprofile.stars.remove(user)
+            else:
+                obj_userprofile.stars.add(user)
+        else:
+            return reverse_lazy('auth:login')
+        return url_article

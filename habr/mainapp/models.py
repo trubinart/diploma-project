@@ -118,15 +118,21 @@ class Article(BaseModel):
         return Article.objects.filter(user=self.user).exclude(id=self.id).order_by('-created_timestamp')[:3]
 
     def get_absolute_url(self):
+        """
+        Метод отдает абсолютную ссылку на страницу статьи
+        """
         return reverse("article", kwargs={"pk": self.id})
 
     def get_like_url(self):
+        """
+        Метод отдает ссылку по которой статья получает лайк
+        """
         return reverse("like-toggle", kwargs={"pk": self.id})
 
-    def get_star_url(self):
-        return reverse("star-toggle", kwargs={"pk": self.id})
-
     def get_like_api_url(self):
+        """
+        Метод отдает ссылку для перехода в api rest_framework
+        """
         return reverse("like-api-toggle", kwargs={"pk": self.id})
 
 
@@ -157,9 +163,10 @@ class ArticleComment(BaseModel):
     text = models.TextField(max_length=300, verbose_name='Comment text')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Comment Author',
                              related_name='comment_author')
+    likes = models.ManyToManyField(User, blank=True, related_name='comment_likes')
 
     def __str__(self):
-        return self.article_comment.user.username
+        return f'from "{self.user.username}" for "{self.article_comment.title}"'
 
     class Meta:
         db_table = 'article_comments'

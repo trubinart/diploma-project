@@ -840,7 +840,7 @@ body {
     flex-direction: row;
     align-items: center;
     margin-right: 0;
-    width: 180px;
+    /*width: 180px;*/
 }
 
 .article .habr_share p {
@@ -868,6 +868,17 @@ body {
     margin-left: 15px;
     margin-right: 5px;
 }
+
+.comment {
+    margin-left: 15px;
+    margin-right: 5px;
+}
+
+.info_img:hover {
+    background: burlywood;
+    border-radius: 30%;
+}
+
 
 .article .image_habr_page {
     display: flex;
@@ -1048,8 +1059,10 @@ body {
 }
 
 .sidebar .share_author a:hover {
-    outline: 2px dashed #787A80;
-    outline-offset: -1px;
+    background: burlywood;
+    border-radius: 30%;
+    /*outline: 2px dashed #787A80;*/
+    /*outline-offset: -1px;*/
 }
 
 .sidebar .trending_articles {
@@ -1217,6 +1230,7 @@ body {
 .content .main .subNavbarLK .avatar .fioLK .round_avatar img {
     height: 50px;
 }
+
 .content .main .subNavbarLK .menuLK {
     display: flex;
     text-decoration: none;
@@ -1711,6 +1725,7 @@ body {
     color: #787A80;
     width: 500px;
 }
+
 /*avtor-sidebar*/
 
 
@@ -1728,7 +1743,7 @@ body {
 }
 
 .contentArticleAdd .mainArticleAdd .titleArticleAdd {
-    
+
     width: 100%;
     font-weight: 550;
     font-size: 40px;
@@ -1758,12 +1773,12 @@ body {
 
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p {
     display: flex;
-    flex-direction: column;  
+    flex-direction: column;
     width: 100%;
     margin: 10px 0;
 }
 
-.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p label{
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p label {
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
@@ -1771,6 +1786,7 @@ body {
     color: #424551;
     margin: 10px 0;
 }
+
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p select,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal input,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p input {

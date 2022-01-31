@@ -20,52 +20,7 @@
 
     {% block js %}
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-                crossorigin="anonymous"></script>
-
-        <script>
-            $(document).ready(function () {
-                function updateText(btn, newCount, verb) {
-                    btn.text(newCount + " " + verb)
-                    btn.attr("data-likes", newCount)
-                }
-
-                $(".like-btn").click(function (e) {
-                    e.preventDefault()
-                    var this_ = $(this)
-                    var likeUrl = this_.attr("data-href")
-                    var likeCount = parseInt(this_.attr("data-likes")) | 0
-                    var addLike = likeCount + 1
-                    var removeLike = likeCount - 1
-                    if (likeUrl) {
-                        $.ajax({
-                            url: likeUrl,
-                            method: "GET",
-                            data: {},
-                            success: function (data) {
-                                console.log(data)
-                                var newLikes;
-                                if (data.liked) {
-                                    updateText(this_, addLike, "Unlike")
-                                } else {
-                                    updateText(this_, removeLike, "Like")
-                                    // remove one like
-                                }
-
-                            }, error: function (error) {
-                                console.log(error)
-                                console.log("error")
-                            }
-                        })
-                    }
-
-                })
-            })
-        </script>
-
+        <script src="{% static 'js/script_api_like.js' %}"></script>
     {% endblock %}
 </head>
 

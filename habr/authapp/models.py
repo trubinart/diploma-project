@@ -1,7 +1,6 @@
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.urls import reverse
 
 
 class BaseModel(models.Model):
@@ -49,5 +48,3 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'Userprofile for "{self.user.username}"'
-
-
