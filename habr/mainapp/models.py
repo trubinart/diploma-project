@@ -1,4 +1,6 @@
 import uuid
+import re
+from typing import Optional
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
@@ -6,6 +8,7 @@ from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 
 from authapp.models import User
+from mainapp.manager import ArticleManager
 
 from ckeditor.fields import RichTextField
 
@@ -37,6 +40,8 @@ class Article(BaseModel):
     """
     Models for Articles
     """
+    # добавили менеджер для изменения логики поиска в модели
+    objects = ArticleManager()
 
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE, verbose_name='categories')
     title = models.CharField(max_length=60, verbose_name='title')
@@ -116,6 +121,13 @@ class Article(BaseModel):
         Метод выводит последние по дате 3 статьи автора исключая текущую статью
           """
         return Article.objects.filter(user=self.user).exclude(id=self.id).order_by('-created_timestamp')[:3]
+
+    def get_article_text_preview(self):
+        """
+        Метод выводит первые 250 символов текста статьи
+        """
+        preview = re.sub(r'\<[^>]*\>', '', self.text)
+        return f'{preview[:250]}.....'
 
 
 class ArticleLike(BaseModel):

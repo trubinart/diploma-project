@@ -40,6 +40,16 @@ class CreationCommentForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
             self.fields['text'].widget.attrs['class'] = 'comment_input'
 
+
+class SearchForm(forms.Form):
+    query = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        self.fields['query'].widget.attrs['placeholder'] = 'Искать здесь...'
+        self.fields['query'].widget.attrs['class'] = 'search'
+
+# --_--
 class UserForm(forms.ModelForm):
     class Meta:
         model = User

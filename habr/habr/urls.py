@@ -9,7 +9,7 @@ from mainapp.views import MainListView, ArticleDetailView, \
 from django.views.decorators.cache import never_cache
 
 from mainapp.views import MainListView, LkListView, ArticleDetailView, \
-    CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle
+    CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, SearchView
 
 from authapp.views import UserRegistrationView, UserEditView
 from ckeditor_uploader import views
@@ -34,6 +34,7 @@ urlpatterns = [
     path('ckeditor/upload/', login_required(views.upload), name='ckeditor_upload'),
     path('ckeditor/browse/', never_cache(login_required(views.browse)), name="ckeditor_browse"),
 
+    path('search/', SearchView.as_view(), name='search'),
     path('admin/', admin.site.urls),
 ]
 

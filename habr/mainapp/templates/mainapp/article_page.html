@@ -48,12 +48,12 @@
                 </p>
             </div>
             <div class="tags_and_share">
-{#                <div class="tags_habr">#}
-{#                    <p>Tags:</p>#}
-{#                    <a href="#">#дизайн</a>#}
-{#                    <a href="#">#веб-разработка</a>#}
-{#                    <a href="#">#маркетинг</a>#}
-{#                </div>#}
+                <div class="tags_habr">
+                    <p>Tags:</p>
+                    <a href="#">#дизайн</a>
+                    <a href="#">#веб-разработка</a>
+                    <a href="#">#маркетинг</a>
+                </div>
                 <div class="habr_info">
                     <p class="info">Likes :</p>
                     <div class="info_img"><img src={% static "img/like.png" %}></div>
@@ -101,10 +101,10 @@
         </div>
 
         <div class="sidebar">
-{#            <form>#}
-{#                <input class="search" type="text" placeholder="Искать здесь...">#}
-{#                <a class="search_button" href="#"><img src={% static "img/search.png" %}></a>#}
-{#            </form>#}
+            <form method="get" action="{% url 'search' %}">
+                {{ search_form.query }}
+                <a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
+            </form>
             <div class="author">
                 <h6 class="author_title">автор</h6>
                 <div class="avatar_and_info">
@@ -152,15 +152,15 @@
 
                 {% endif %}
             </div>
-{#            <div class="tags_trending">#}
-{#                <h6 class="trending_articles_title">Tags:</h6>#}
-{#                <div class="tags">#}
-{#                    <a href="#">#дизайн</a>#}
-{#                    <a href="#">#веб-разработка</a>#}
-{#                    <a href="#">#маркетинг</a>#}
-{#                    <a href="#">#мобильная разработка</a>#}
-{#                </div>#}
-{#            </div>#}
+            <div class="tags_trending">
+                <h6 class="trending_articles_title">Tags:</h6>
+                <div class="tags">
+                    <a href="#">#дизайн</a>
+                    <a href="#">#веб-разработка</a>
+                    <a href="#">#маркетинг</a>
+                    <a href="#">#мобильная разработка</a>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
