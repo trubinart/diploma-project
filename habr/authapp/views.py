@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
 from authapp.forms import UserRegisterForm, UserLoginForm
 from authapp.models import User
@@ -19,6 +19,21 @@ class UserRegistrationView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Регистрация'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class UserEditView(UpdateView):
+    model = User
+    template_name = 'authapp/user_edit.html'
+    form_class = UserRegisterForm
+    # success_url = reverse_lazy('auth:lk')
+    success_url = reverse_lazy('auth:login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Изменение учётных данных'
         context['title'] = title
         context['categories_list'] = category_list
         return context

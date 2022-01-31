@@ -36,78 +36,59 @@
                 <div class="blokPersonInfoLK">
                     <div class="baseInfoBlokLK">
                         <div class="menuBaseInfoBlokLK">
-                            <ul class="menuPrLK">
-                                <!-- <li class="persInfoLK"><a href="#">Основная информация</a></li> -->
-                                <li class="baseInfoTitleLK">Основная информация</li>
+<!--                            <ul class="menuPrLK">-->
+<!--                                &lt;!&ndash; <li class="persInfoLK"><a href="#">Основная информация</a></li> &ndash;&gt;-->
+<!--                                <li class="baseInfoTitleLK">Основная информация</li>-->
+<!--                            </ul>-->
+                            <ul class="userInfo">
+                                <li>Логин: {{ user }}</li>
+{#                                <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">#}
+                                <li>Почта: {{ user.email }}</li>
+                                <li>
+                                    <div class="buttonInLk">
+                                        <a href="{% url 'user_edit' user.pk %}">Редактировать учётные данные</a>
+                                    </div>
+                                </li>
+                                {% if user.userprofile.name %}
+                                <li>Имя Фамилия: {{ user.userprofile.name }}</li>
+                                <li>Возраст: {{ user.userprofile.birthday|date:"M d, Y" }}</li>
+                                <li>Краткое описание: {{ user.userprofile.bio }}</li>
+                                <li>Аватар:
+                                    <div class="infoBlockAvatar">
+                                        <img src="/media/{{ user.userprofile.avatar }}" alt="avatar">
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="buttonInLk">
+                                        <a href="{% url 'profile_edit' user.userprofile.id %}">Редактировать информацию о себе</a>
+                                    </div>
+                                </li>
+                                {% else %}
+                                    <li>
+                                    <div class="buttonInLk">
+                                        <a href="{% url 'profile_edit' user.userprofile.id %}">Заполнить информацию о себе</a>
+                                    </div>
+                                </li>
+{#                                <li>#}
+{#                                    <div class="buttonInLk">#}
+{#                                        <a href="{% url 'profile_add' %}">Заполнить информацию о себе</a>#}
+{#                                    </div>#}
+{#                                </li>#}
+                                {% endif %}
                             </ul>
                         </div>
+{#                        {% if form.errors %}#}
+{#                        <div class="error-text-lk">#}
+{#                            {{ form.errors.as_text }}#}
+{#                        </div>#}
+{#                        {% endif %}#}
                         <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
-                        <!-- <div class="baseBlokLK"> -->
-                        <form class="baseBlokLK">
 
-                            <div class="blokFirstName">
-                                <div class="FirstName">
-                                    Имя
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldFirstName" placeholder="Введите имя"
-                                        id="fieldFirstName">
-                                </div>
-                            </div>
-                            <div class="blokLastName">
-                                <div class="LastName">
-                                    Фамилия
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldLastName"
-                                        placeholder="Введите фамилию" id="fieldLastName">
-                                </div>
-                            </div>
-
-                            <div class="blokBirthdate">
-                                <div class="Birthdate">
-                                    Возраст
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="18"
-                                        id="fieldBirthdate">
-
-                                </div>
-                            </div>
-                            <div class="blokShortDescription">
-                                <div class="shortDescription">
-                                    Краткое описание
-                                </div>
-                                <div class="fieldName">
-                                    <!-- <input class="inputFild" type="text" name="fieldSecondName"
-                                                                    placeholder="Введите возраст" id="fieldSecondName"> -->
-                                    <textarea class="inputFild" name="fieldShortDescription"
-                                        placeholder="Краткое описание" id="fieldShortDescription"
-                                        type="textarea"></textarea>
-                                </div>
-                            </div>
-                            <div class="blokButton">
-
-                                <input class="form-control" type="submit" value="сохранить изменения" />
-                                <!-- <button type="submit" value="сохранить изменения"></button> -->
-
-                            </div>
-
-                            <!-- <div class="blokBirthdate">
-                                <div class="Birthdate">
-                                    Название студии
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="01.01.1990"
-                                        id="fieldBirthdate">
-                                </div>
-                            </div> -->
-                        </form>
-                        <!-- </div> -->
                     </div>
                     <!-- <div class="baseAvatarBlokLK">
                         Картинка
                     </div> -->
+
                 </div>
 
             </div>
