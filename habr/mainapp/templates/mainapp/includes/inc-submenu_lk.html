@@ -33,14 +33,14 @@
             {{ user.userprofile.name }}
         </div>
         {#<!--        <div class="configLK"><a href="{% url 'auth:lk_edit' %}">--> #}
-        {% if user.userprofile %}
+        {% if user.userprofile.name %}
             <div class="configLK">
                 <a href="{% url 'article_create' %}">Создать статью</a>
                 <a href="#">Редактировать статью</a>
             </div>
         {% else %}
             <div class="configLK">
-                <a href="{% url 'profile_add' %}">Заполнить информацию о себе</a>
+                <a href="{% url 'profile_edit' user.userprofile.pk %}">Заполнить информацию о себе</a>
             </div>
         {% endif %}
     </div>
