@@ -1,4 +1,5 @@
 import uuid
+import re
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
@@ -7,6 +8,7 @@ from django.core.paginator import Paginator
 from django.urls import reverse
 
 from authapp.models import User
+from mainapp.manager import ArticleManager
 
 
 class BaseModel(models.Model):
@@ -36,6 +38,8 @@ class Article(BaseModel):
     """
     Models for Articles
     """
+    # добавили менеджер для изменения логики поиска в модели
+    objects = ArticleManager()
 
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE, verbose_name='categories')
     title = models.CharField(max_length=60, verbose_name='title')
@@ -122,6 +126,13 @@ class Article(BaseModel):
         Метод отдает абсолютную ссылку на страницу статьи
         """
         return reverse("article", kwargs={"pk": self.id})
+
+    def get_article_text_preview(self):
+        """
+        Метод выводит первые 250 символов текста статьи
+        """
+        preview = re.sub(r'\<[^>]*\>', '', self.text)
+        return f'{preview[:250]}.....'
 
     def get_like_url(self):
         """
