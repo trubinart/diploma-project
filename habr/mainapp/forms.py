@@ -75,7 +75,7 @@ class UserProfileForm(UserCreationForm):
     #             field.widget = forms.HiddenInput()
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.fields['user'].widget = forms.HiddenInput()
+        # self.fields['user'].widget = forms.HiddenInput()
         self.fields['name'].widget.attrs['placeholder'] = 'Имя Фамилия'
         self.fields['name'].widget.attrs['type'] = 'text'
         self.fields['name'].widget.attrs['name'] = 'name'
