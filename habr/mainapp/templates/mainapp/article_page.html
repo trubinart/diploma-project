@@ -132,7 +132,7 @@
         <div class="sidebar">
             <form method="get" action="{% url 'search' %}">
                 {{ search_form.query }}
-                <a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
+                <button type="submit"><a class="search_button" href="#"><img src={% static "img/search.png" %}></a></button>
             </form>
             <div class="author">
                 <h6 class="author_title">автор</h6>
