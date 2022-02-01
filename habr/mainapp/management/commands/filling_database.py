@@ -101,6 +101,9 @@ class Command(BaseCommand):
             # save article
             new_article.save()
 
+        # TODO если не нужно - удалить закомиченный код
+        # TODO доработай чтобы лайки к статьям, комментам и авторам генерились,
+        #  это не очень сложно
         # # CREATE LIKES
         # print('Заполняю таблицу LIKES')
         # for item in User.objects.all():

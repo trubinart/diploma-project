@@ -45,6 +45,7 @@ class Article(BaseModel):
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
     main_img = models.ImageField(upload_to='article_images', verbose_name='img')
+    # TODO если не нужно - удалить закомиченный код
     # text = models.TextField(max_length=5000, verbose_name='Text Article')
     text = RichTextUploadingField(config_name='awesome_ckeditor')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
@@ -82,6 +83,8 @@ class Article(BaseModel):
         all_articles: QuerySet = cls.get_all_articles()
         pagination_articles: Paginator = Paginator(all_articles, pagination_page)
         return pagination_articles
+
+    #TODO если не нужно - удалить закомиченный код
 
     # def get_likes_by_article_id(self) -> QuerySet:
     #     """

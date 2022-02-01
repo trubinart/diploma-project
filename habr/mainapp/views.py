@@ -62,6 +62,7 @@ class CategoriesListView(ListView):
         new_context = Article.objects.filter(categories_id=categories)
         return new_context
 
+    #TODO на страницах вывода статей по категориям лайки не отображаются
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
         context = super().get_context_data(**kwargs)
@@ -131,6 +132,7 @@ class UserArticleListView(ListView):
         new_context = Article.objects.filter(user=user_id)
         return new_context
 
+    # TODO на страницах вывода статей по автору лайки не отображаются
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
         context = super().get_context_data(**kwargs)
@@ -194,6 +196,7 @@ class ArticleLikeRedirectAPIView(APIView):
 
     def get(self, request, pk=None):
         obj = get_object_or_404(Article, pk=pk)
+        #TODO переменную нигде не используешь
         url_ = obj.get_absolute_url()
         user = self.request.user
         updated = False

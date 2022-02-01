@@ -14,7 +14,8 @@
                     <img src={% static "img/files.png" %}>
                     <p class="content_type">Статья</p>
                     <img src={% static "img/divider.png" %}>
-                    <a class="content_topic" href="{% url 'category' article.categories.id %}">{{ article.categories }}</a>
+                    <a class="content_topic"
+                       href="{% url 'category' article.categories.id %}">{{ article.categories }}</a>
                 </div>
                 <h1 class="name_habr">
                     {{ article.title }}
@@ -24,26 +25,26 @@
                         <img src={% static "img/Calendar.png" %}>
                         <p class="date">{{ article.created_timestamp }}</p>
 
-{#                        Изменение кол-ва лайков через api#}
-{#                        <a class="like-btn" data-href="{{ article.get_like_api_url }}"#}
-{#                           data-likes="{{ article.likes.count }}"#}
-{#                           href="{{ article.get_like_url }}">#}
-{#                            {{ article.likes.count }}#}
-{#                        </a>#}
+                        {#                        Изменение кол-ва лайков через api#}
+                        {#                        <a class="like-btn" data-href="{{ article.get_like_api_url }}"#}
+                        {#                           data-likes="{{ article.likes.count }}"#}
+                        {#                           href="{{ article.get_like_url }}">#}
+                        {#                            {{ article.likes.count }}#}
+                        {#                        </a>#}
 
                     </div>
-{#                    <div class="habr_share">#}
-{#                        <p>Share:</p>#}
-{#                        <a href="https://www.instagram.com/" target="_blank">#}
-{#                            <img src={% static "img/instagram_article.png" %}>#}
-{#                        </a>#}
-{#                        <a href="https://www.facebook.com/" target="_blank">#}
-{#                            <img src={% static "img/facebook_article.png" %}>#}
-{#                        </a>#}
-{#                        <a href="https://twitter.com/" target="_blank">#}
-{#                            <img src={% static "img/twitter_article.png" %}>#}
-{#                        </a>#}
-{#                    </div>#}
+                    {#                    <div class="habr_share">#}
+                    {#                        <p>Share:</p>#}
+                    {#                        <a href="https://www.instagram.com/" target="_blank">#}
+                    {#                            <img src={% static "img/instagram_article.png" %}>#}
+                    {#                        </a>#}
+                    {#                        <a href="https://www.facebook.com/" target="_blank">#}
+                    {#                            <img src={% static "img/facebook_article.png" %}>#}
+                    {#                        </a>#}
+                    {#                        <a href="https://twitter.com/" target="_blank">#}
+                    {#                            <img src={% static "img/twitter_article.png" %}>#}
+                    {#                        </a>#}
+                    {#                    </div>#}
                 </div>
             </div>
             <div class="image_habr_page">
@@ -69,9 +70,14 @@
                     <p class="info">Likes and comments:</p>
                     <div class="info_img">
                         {% if request.user in article.likes.all %}
-                            <a title="Убрать лайк со статьи" class="like" href="{{ article.get_like_url }}"><img src={% static "img/black_like.png" %}></a>
+                            <a title="Убрать лайк со статьи" class="like" href="{{ article.get_like_url }}"><img
+                                    src={% static "img/black_like.png" %}></a>
                         {% else %}
-                            <a title="Поставить лайк статье" href="{{ article.get_like_url }}"><img src={% static "img/like.png" %}></a>
+{#                        #TODO когда нет авторизации убери ссылку на страницу авторизации при клике на лайк#}
+{#                        #TODO сделай лайк просто не кликабельным, иначе поведение для юзера неожиданное#}
+{#                        #TODO там и так написано, что нужно авторизоватьсять для постановки лайков#}
+                            <a title="Поставить лайк статье" href="{{ article.get_like_url }}"><img
+                                    src={% static "img/like.png" %}></a>
                         {% endif %}
                     </div>
                     <p class="info">{{ article.likes.count }}</p>
@@ -81,8 +87,6 @@
             </div>
 
             {#            ----- ДОБАВЛЕНИЕ КОММЕНТАРИЯ ----  #}
-
-
             <div class="form_add_comment">
                 {% if user.is_authenticated %}
                     <form method="post" enctype="multipart/form-data" action="{% url 'add-comment' %}">
@@ -95,7 +99,8 @@
                 {% else %}
 
                     <div class="text-under-button">
-                        Авторизуйтесь, чтобы оставлять лайки и комментарии. <a href="{% url 'auth:login' %}" class="link">Войти</a>
+                        Авторизуйтесь, чтобы оставлять лайки и комментарии. <a href="{% url 'auth:login' %}"
+                                                                               class="link">Войти</a>
                     </div>
 
                 {% endif %}
@@ -115,14 +120,21 @@
                             <p class="info">Likes :</p>
                             <div class="info_img">
                                 {% if request.user in comment.likes.all %}
-                                    <a title="Убрать лайк с комментария" href="{% url 'like_comment_toggle' article.pk comment.id %}" ><img src={% static "img/black_like.png" %}></a>
+                                    <a title="Убрать лайк с комментария"
+                                       href="{% url 'like_comment_toggle' article.pk comment.id %}"><img
+                                            src={% static "img/black_like.png" %}></a>
                                 {% else %}
-                                    <a title="Поставить лайк комментарию" href="{% url 'like_comment_toggle' article.pk comment.id %}"><img src={% static "img/like.png" %}></a>
+                                    <a title="Поставить лайк комментарию"
+{#                        #TODO когда нет авторизации убери ссылку на страницу авторизации при клике на лайк#}
+{#                        #TODO сделай лайк просто не кликабельным, иначе поведение для юзера неожиданное#}
+{#                        #TODO там и так написано, что нужно авторизоватьсять для постановки лайков#}
+                                       href="{% url 'like_comment_toggle' article.pk comment.id %}"><img
+                                            src={% static "img/like.png" %}></a>
                                 {% endif %}
                             </div>
                             <p class="info">{{ comment.likes.count }}</p>
 
-                </div>
+                        </div>
                     </div>
                 {% endfor %}
 
@@ -132,7 +144,8 @@
         <div class="sidebar">
             <form method="get" action="{% url 'search' %}">
                 {{ search_form.query }}
-                <button type="submit"><a class="search_button" href="#"><img src={% static "img/search.png" %}></a></button>
+                <button type="submit"><a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
+                </button>
             </form>
             <div class="author">
                 <h6 class="author_title">автор</h6>
@@ -144,11 +157,14 @@
                         <h3>{{ article.user.get_profile.name }}</h3>
                         <p>{{ article.user.get_profile.bio }}</p>
                         <div class="share_author">
+{#                        #TODO замени иконку на иконку лайка, иконка паутинки не явно понятно о чем речь#}
+{#                        #TODO сделай разделение между лайками и соц сетями (например прямой вертикальной черной), а то сливается#}
                             {% if request.user in article.user.userprofile.stars.all %}
                                 <a title="Аннулировать награду автора" href="{% url 'star_toggle' article.pk %}">
                                     <img src={% static "img/yellow_star.png" %}></a>
                             {% else %}
-                                <a title="Наградить автора" href="{% url 'star_toggle' article.pk %}"><img src={% static "img/star.png" %}></a>
+                                <a title="Наградить автора" href="{% url 'star_toggle' article.pk %}"><img
+                                        src={% static "img/star.png" %}></a>
                             {% endif %}
                             <div class="count_star">{{ article.user.userprofile.stars.count }}</div>
                             <a href="https://www.instagram.com/" target="_blank">
