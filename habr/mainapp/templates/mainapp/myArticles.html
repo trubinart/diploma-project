@@ -9,7 +9,7 @@
     <div class="contentArticle">
         <div class="myArticles">
             {% if user.is_authenticated %}
-
+            {% if object_list and user  == object_list.0.user %}
             <div class="main">
                 <div class="title">
                     Мои публикации
@@ -94,6 +94,11 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+                <div class="titleArticleAdd">
+                    Для просмотра статей необходимо авторизоваться как автор этих статей
+                </div>
+            {% endif %}
             {% else %}
             <div class="titleArticleAdd">
                 Для просмотра статей необходимо авторизоваться

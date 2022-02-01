@@ -1214,7 +1214,6 @@ body {
 .content .main .subNavbarLK .avatar,
 .content .main .subNavbarLK .menuLK {
     background: #FFFFFF;
-    width: 50%;
     height: 80px;
     border: none;
     border-top: 1px solid #F7FAFF;
@@ -1315,7 +1314,7 @@ body {
     height: 100%;
     align-items: center;
     justify-content: space-around;
-    width: 330px;
+    width: 321px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #173343;
@@ -1398,7 +1397,7 @@ body {
 }
 
 .content .main .contentLK .mainLK .profileLK {
-    margin: 60px 0 0 0;
+    margin: 0;
 }
 
 .content .main .contentLK .mainLK .menuProfileLK .profileHrLK {
@@ -1411,6 +1410,22 @@ body {
 .content .main .contentLK .mainLK .menuProfileLK .menuPrLK,
 .content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo {
     margin-left: 40px;
+}
+
+.content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo .title_lk {
+    background: none;
+    font-size: 24px;
+    font-weight: 900px;
+    color: red;
+    opacity: .7;
+}
+
+.content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo .text {
+    background: none;
+    font-size: 14px;
+    color: #787A80;
+    opacity: .9;
+    margin-bottom: 0;
 }
 
 /* end .contentLK  */
@@ -1464,8 +1479,19 @@ body {
 .content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo {
     text-transform: none;
     list-style: none;
-
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 400px;
+    justify-content: flex-start;
+    min-height: 700px;
+    margin: 40px;
 }
+
+.content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo li{
+    width: 400px;
+}
+
 
 .content .main .contentLK .mainLK .menuBaseInfoBlokLK .menuPrLK {
     display: flex;
@@ -1490,7 +1516,7 @@ body {
     display: flex;
     justify-content: space-between;
     text-transform: uppercase;
-    margin: 40px 0 20px 0;
+    margin: 20px 0 ;
 }
 
 .content .main .contentLK .mainLK .blokPersonInfoLK .baseInfoBlokLK {
@@ -1557,6 +1583,7 @@ body {
     background: #FFFFFF;
     border-radius: 15px;
     margin: 5px 0;
+    font-weight: 600;
 }
 
 /* end .blokPersonInfoLK */
@@ -1878,6 +1905,11 @@ body {
     justify-content: center;
 }
 
+.contentArticle .myArticles .titleArticleAdd {
+    margin: 60px;
+    color: red;
+}
+
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK {
     width: 1100px;
     margin: 0 auto;
@@ -1922,6 +1954,7 @@ body {
 }
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p select,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal input,
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal textarea,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p input {
     height: 44px;
     width: 100%;
@@ -1936,6 +1969,10 @@ body {
     box-sizing: border-box;
     border-radius: 4px;
     padding: 0 5px;
+}
+
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal textarea {
+    padding: 5px 15px;
 }
 
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal #cke_id_text {
