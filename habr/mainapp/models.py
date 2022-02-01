@@ -45,8 +45,6 @@ class Article(BaseModel):
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
     main_img = models.ImageField(upload_to='article_images', verbose_name='img')
-    # TODO если не нужно - удалить закомиченный код
-    # text = models.TextField(max_length=5000, verbose_name='Text Article')
     text = RichTextUploadingField(config_name='awesome_ckeditor')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
@@ -83,24 +81,6 @@ class Article(BaseModel):
         all_articles: QuerySet = cls.get_all_articles()
         pagination_articles: Paginator = Paginator(all_articles, pagination_page)
         return pagination_articles
-
-    #TODO если не нужно - удалить закомиченный код
-
-    # def get_likes_by_article_id(self) -> QuerySet:
-    #     """
-    #     :param: None
-    #     :return: QuerySet with all LIKES in DataBase by specific Article.
-    #
-    #       Method called from Article Item.
-    #       All likes sorted by date descending order.
-    #       """
-    #     return ArticleLike.objects.select_related('article_like').filter(article_like=self.id)
-    #
-    # def get_likes_count_by_article_id(self) -> int:
-    #     """
-    #     Подсчет количества лайков для статьи.
-    #     """
-    #     return ArticleLike.objects.select_related('article_like').filter(article_like=self.id).count()
 
     def get_comment_count_by_article_id(self) -> int:
         """
@@ -148,24 +128,6 @@ class Article(BaseModel):
         Метод отдает ссылку для перехода в api rest_framework
         """
         return reverse("like-api-toggle", kwargs={"pk": self.id})
-
-
-# class ArticleLike(BaseModel):
-#     """
-#     Models for Articles Likes
-#     """
-#     # like = models.BooleanField(verbose_name='Like')
-#     article_like = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='Article for like',
-#                                      related_name='article_like')
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Like Author',
-#                              related_name='like_author')
-#
-#     def __str__(self):
-#         return f'Лайк от "{self.user.username}" для "{self.article_like.title}"'
-#
-#     class Meta:
-#         db_table = 'article_likes'
-#         ordering = ['-created_timestamp']
 
 
 class ArticleComment(BaseModel):

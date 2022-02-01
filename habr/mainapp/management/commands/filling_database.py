@@ -40,11 +40,10 @@ class Command(BaseCommand):
         for item in User.objects.all():
             name = person.name()
             user_profile = UserProfile(
-                user = item,
-                name = name,
-                birthday = birthday.formatted_datetime(fmt="%Y-%m-%d"),
-                bio = "Этот автор - самый крутой. Статьи у него пушка-бомба!")
-
+                user=item,
+                name=name,
+                birthday=birthday.formatted_datetime(fmt="%Y-%m-%d"),
+                bio="Этот автор - самый крутой. Статьи у него пушка-бомба!")
 
             img_url = Internet().stock_image(width=50, height=50, keywords=['лицо'])
             img_file = requests.get(img_url)
@@ -58,8 +57,15 @@ class Command(BaseCommand):
                 user_profile.avatar.save(file_name, data, True)
 
             os.remove(file_name)
-            user_profile.save()
 
+            for _ in range(random.randint(0, 10)):
+                user_liked = random.choice(User.objects.all())
+                if user_liked in user_profile.stars.all():
+                    user_profile.stars.remove(user_liked)
+                else:
+                    user_profile.stars.add(user_liked)
+
+            user_profile.save()
 
         # CREATE ARTICLE CATEGORIES
         ARTICLE_CATEGORIES = ['Дизайн', 'Веб-разработка', 'Мобильная разработка', 'Маркетинг']
@@ -82,8 +88,6 @@ class Command(BaseCommand):
             new_article.subtitle = f'Падзаголовок статьи #{i} автора {new_article.user.username}'
             new_article.text = text.text(quantity=15)
 
-
-
             # create and set article images
             img_url = Internet().stock_image(width=390, height=300, keywords=['природа'])
             img_file = requests.get(img_url)
@@ -98,26 +102,28 @@ class Command(BaseCommand):
 
             os.remove(file_name)
 
+            for _ in range(random.randint(0, 10)):
+                user_liked = random.choice(User.objects.all())
+                if user_liked in new_article.likes.all():
+                    new_article.likes.remove(user_liked)
+                else:
+                    new_article.likes.add(user_liked)
+
             # save article
             new_article.save()
-
-        # TODO если не нужно - удалить закомиченный код
-        # TODO доработай чтобы лайки к статьям, комментам и авторам генерились,
-        #  это не очень сложно
-        # # CREATE LIKES
-        # print('Заполняю таблицу LIKES')
-        # for item in User.objects.all():
-        #     new_like = ArticleLike()
-        #     new_like.article_like = random.choice(Article.objects.all())
-        #     new_like.user = item
-        #     new_like.save()
 
         # CREATE COMMENTS
         print('Заполняю таблицу COMMENTS')
         for item in User.objects.all():
-            count = random.choice([i for i in range(0,10)])
+            count = random.choice([i for i in range(0, 10)])
             for i in range(0, count):
                 new_comment = ArticleComment(text=text.text(quantity=2))
                 new_comment.article_comment = random.choice(Article.objects.all())
                 new_comment.user = item
                 new_comment.save()
+                for _ in range(random.randint(0, 10)):
+                    user_liked = random.choice(User.objects.all())
+                    if user_liked in new_comment.likes.all():
+                        new_comment.likes.remove(user_liked)
+                    else:
+                        new_comment.likes.add(user_liked)

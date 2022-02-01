@@ -822,8 +822,21 @@ body {
 }
 
 .count_star {
-    font-size: 15px;
+    font-size: 16px;
+    height: 16px;
+    border: none;
+    border-right: 2px solid #787A80;
     margin-right: 15px;
+    padding-right: 15px;
+}
+
+.img_chevron {
+    margin-right: 15px;
+}
+
+.img_chevron:hover {
+    background: burlywood;
+    border-radius: 30%;
 }
 
 .article .habr_share {
@@ -967,7 +980,7 @@ body {
 .sidebar {
     margin-right: 0;
     width: 342px;
-    height: 899px;
+    /*height: 899px;*/
 }
 
 .sidebar form {
@@ -1061,8 +1074,6 @@ body {
 .sidebar .share_author a:hover {
     background: burlywood;
     border-radius: 30%;
-    /*outline: 2px dashed #787A80;*/
-    /*outline-offset: -1px;*/
 }
 
 .sidebar .trending_articles {

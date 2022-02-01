@@ -1,6 +1,7 @@
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 class BaseModel(models.Model):
@@ -33,6 +34,12 @@ class User(AbstractUser, BaseModel):
         Метод отдает профиль текущего пользователя
         """
         return UserProfile.objects.filter(user=self).select_related("user").first()
+
+    def get_absolute_url(self):
+        """
+        Метод отдает абсолютную ссылку на страницу статей автора
+        """
+        return reverse("user_article", kwargs={"pk": self.id})
 
 
 class UserProfile(models.Model):

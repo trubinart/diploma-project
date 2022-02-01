@@ -62,7 +62,6 @@ class CategoriesListView(ListView):
         new_context = Article.objects.filter(categories_id=categories)
         return new_context
 
-    #TODO на страницах вывода статей по категориям лайки не отображаются
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
         context = super().get_context_data(**kwargs)
@@ -132,7 +131,6 @@ class UserArticleListView(ListView):
         new_context = Article.objects.filter(user=user_id)
         return new_context
 
-    # TODO на страницах вывода статей по автору лайки не отображаются
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
         context = super().get_context_data(**kwargs)
@@ -184,7 +182,7 @@ class ArticleLikeRedirectView(RedirectView):
             else:
                 obj_article.likes.add(user)
         else:
-            return reverse_lazy('auth:login')
+            pass
         return url_article
 
 
@@ -196,8 +194,6 @@ class ArticleLikeRedirectAPIView(APIView):
 
     def get(self, request, pk=None):
         obj = get_object_or_404(Article, pk=pk)
-        #TODO переменную нигде не используешь
-        url_ = obj.get_absolute_url()
         user = self.request.user
         updated = False
         liked = False
@@ -233,7 +229,7 @@ class CommentLikeRedirectView(RedirectView):
             else:
                 obj_comment.likes.add(user)
         else:
-            return reverse_lazy('auth:login')
+            pass
         return url_article
 
 
@@ -244,13 +240,33 @@ class AuthorStarRedirectView(RedirectView):
         obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
         url_article = obj_article.get_absolute_url()
         user = self.request.user
-        obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
 
+        obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
         if user.is_authenticated:
             if user in obj_userprofile.stars.all():
                 obj_userprofile.stars.remove(user)
             else:
                 obj_userprofile.stars.add(user)
         else:
-            return reverse_lazy('auth:login')
+            pass
         return url_article
+
+
+class AuthorArticleStarRedirectView(RedirectView):
+    """Класс для постановки звезды(лайка) автору статьи"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        user_id = self.kwargs['pk']
+        obj_author = get_object_or_404(User, id=user_id)
+        url_author_article = obj_author.get_absolute_url()
+        user = self.request.user
+
+        obj_userprofile = get_object_or_404(UserProfile, user_id=obj_author.id)
+        if user.is_authenticated:
+            if user in obj_userprofile.stars.all():
+                obj_userprofile.stars.remove(user)
+            else:
+                obj_userprofile.stars.add(user)
+        else:
+            pass
+        return url_author_article

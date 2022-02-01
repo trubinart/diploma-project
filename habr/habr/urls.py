@@ -7,7 +7,7 @@ from django.views.decorators.cache import never_cache
 
 from mainapp.views import MainListView, LkListView, ArticleDetailView, \
     CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, SearchView, \
-    ArticleLikeRedirectView, ArticleLikeRedirectAPIView, CommentLikeRedirectView
+    ArticleLikeRedirectView, ArticleLikeRedirectAPIView, CommentLikeRedirectView, AuthorArticleStarRedirectView
 
 from mainapp.views import AuthorStarRedirectView
 from ckeditor_uploader import views
@@ -34,6 +34,7 @@ urlpatterns = [
 
     path('article/<str:pk>/star/', AuthorStarRedirectView.as_view(), name='star_toggle'),
     path('article/<str:pk>/like/<str:id>', CommentLikeRedirectView.as_view(), name='like_comment_toggle'),
+    path('user-article/<str:pk>/star/', AuthorArticleStarRedirectView.as_view(), name='user_article_star_toggle'),
 ]
 
 if settings.DEBUG:
