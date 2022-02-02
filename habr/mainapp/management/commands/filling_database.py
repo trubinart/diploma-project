@@ -57,7 +57,7 @@ class Command(BaseCommand):
                 user_profile.avatar.save(file_name, data, True)
 
             os.remove(file_name)
-
+            # заполняется поле stars у таблицы USERS PROFILE
             for _ in range(random.randint(0, 10)):
                 user_liked = random.choice(User.objects.all())
                 if user_liked in user_profile.stars.all():
@@ -101,7 +101,7 @@ class Command(BaseCommand):
                 new_article.main_img.save(file_name, data, True)
 
             os.remove(file_name)
-
+            # заполняется поле likes у таблицы ARTICLES
             for _ in range(random.randint(0, 10)):
                 user_liked = random.choice(User.objects.all())
                 if user_liked in new_article.likes.all():
@@ -121,6 +121,7 @@ class Command(BaseCommand):
                 new_comment.article_comment = random.choice(Article.objects.all())
                 new_comment.user = item
                 new_comment.save()
+                # заполняется поле likes у таблицы COMMENTS
                 for _ in range(random.randint(0, 10)):
                     user_liked = random.choice(User.objects.all())
                     if user_liked in new_comment.likes.all():
