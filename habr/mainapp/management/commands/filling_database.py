@@ -26,14 +26,14 @@ class Command(BaseCommand):
         person = Person()
         birthday = Datetime()
 
-        print('Заполняю таблицу USERS')
-        for _ in range(10):
-            user = User(
-                username=person.username(mask='C'),
-                email=person.email(domains=None, unique=True),
-                password=person.password(length=8))
-
-            user.save()
+        # print('Заполняю таблицу USERS')
+        # for _ in range(10):
+        #     user = User(
+        #         username=person.username(mask='C'),
+        #         email=person.email(domains=None, unique=True),
+        #         password=person.password(length=8))
+        #
+        #     user.save()
 
         print('Заполняю таблицу USERS PROFILE')
         for item in UserProfile.objects.all():
