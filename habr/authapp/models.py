@@ -1,7 +1,7 @@
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse
 
@@ -44,6 +44,7 @@ class User(AbstractUser, BaseModel):
         return reverse("user_article", kwargs={"pk": self.id})
 
 
+
 class UserProfile(models.Model):
     """
     Model for users
@@ -59,10 +60,19 @@ class UserProfile(models.Model):
         return f'Userprofile for "{self.user.username}"'
 
     @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_user_profile(sender, instance, created, update_fields, **kwargs):
         if created:
+            print(instance.email)
             UserProfile.objects.create(user=instance)
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.userprofile.save()
+
+
+@receiver(m2m_changed, sender=UserProfile.stars.through)
+def create_user_profile(sender, instance, action,  **kwargs):
+    print(instance.stars.count())
+    print(action)
+
+
