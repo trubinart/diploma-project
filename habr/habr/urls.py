@@ -6,12 +6,14 @@ from django.conf.urls.static import static
 
 from django.views.decorators.cache import never_cache
 
-from mainapp.views import MainListView, LkListView, ArticleDetailView, \
-    CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, \
-    SearchView, UpdateArticle, MyArticleListView, ProfileCreateView, \
-    ProfileEditView
+from mainapp.views import MainListView, ArticleDetailView, \
+    CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, SearchView, \
+    ArticleLikeRedirectView, ArticleLikeRedirectAPIView, CommentLikeRedirectView, \
+    AuthorStarRedirectView, AuthorArticleStarRedirectView, UpdateArticle, ProfileCreateView, \
+    ProfileEditView, LkListView, MyArticleListView
 
-from authapp.views import UserRegistrationView, UserEditView
+
+from authapp.views import UserEditView
 from ckeditor_uploader import views
 
 urlpatterns = [
@@ -21,7 +23,6 @@ urlpatterns = [
     path('lk/add/', ProfileCreateView.as_view(), name='profile_add'),
     path('lk/edit/<str:pk>/', ProfileEditView.as_view(), name='profile_edit'),
     path('article/<str:pk>/', ArticleDetailView.as_view(), name='article'),
-    path('registration/', UserRegistrationView.as_view(), name='registration'),
     path('user-edit/<str:pk>/', UserEditView.as_view(), name='user_edit'),
     path('article-add/', CreateArticle.as_view(), name='article_create'),
     path('article-update/<str:pk>/', UpdateArticle.as_view(), name='article_update'),
@@ -29,13 +30,20 @@ urlpatterns = [
     path('category/<str:pk>/', CategoriesListView.as_view(), name='category'),
     path('user-article/<str:pk>/', UserArticleListView.as_view(), name='user_article'),
     path('my-articles/<str:pk>/', MyArticleListView.as_view(), name='my_articles'),
-    path('auth/', include('authapp.urls', namespace='auth')),
+    path('accounts/', include('authapp.urls', namespace='auth')),
 
     path('ckeditor/upload/', login_required(views.upload), name='ckeditor_upload'),
     path('ckeditor/browse/', never_cache(login_required(views.browse)), name="ckeditor_browse"),
 
     path('search/', SearchView.as_view(), name='search'),
     path('admin/', admin.site.urls),
+
+    path('article/<str:pk>/like/', ArticleLikeRedirectView.as_view(), name='like-toggle'),
+    path('api/article/<str:pk>/like/', ArticleLikeRedirectAPIView.as_view(), name='like-api-toggle'),
+
+    path('article/<str:pk>/star/', AuthorStarRedirectView.as_view(), name='star_toggle'),
+    path('article/<str:pk>/like/<str:id>', CommentLikeRedirectView.as_view(), name='like_comment_toggle'),
+    path('user-article/<str:pk>/star/', AuthorArticleStarRedirectView.as_view(), name='user_article_star_toggle'),
 ]
 
 if settings.DEBUG:

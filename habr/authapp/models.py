@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 
 
 class BaseModel(models.Model):
@@ -36,6 +37,12 @@ class User(AbstractUser, BaseModel):
         """
         return UserProfile.objects.filter(user=self).select_related("user").first()
 
+    def get_absolute_url(self):
+        """
+        Метод отдает абсолютную ссылку на страницу статей автора
+        """
+        return reverse("user_article", kwargs={"pk": self.id})
+
 
 class UserProfile(models.Model):
     """
@@ -46,6 +53,10 @@ class UserProfile(models.Model):
     birthday = models.DateField(verbose_name='День рождения', null=True, blank=True)
     bio = models.TextField(verbose_name='Краткое описание', max_length=250, blank=False)
     avatar = models.ImageField(verbose_name='Аватар', upload_to='user_avatars')
+    stars = models.ManyToManyField(User, blank=True, related_name='author_stars')
+
+    def __str__(self):
+        return f'Userprofile for "{self.user.username}"'
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):

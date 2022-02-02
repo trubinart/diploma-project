@@ -1,18 +1,22 @@
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, View, UpdateView
-from django.shortcuts import HttpResponseRedirect
-
+from django.contrib.auth.decorators import user_passes_test
 from django.urls import reverse
-from django.shortcuts import HttpResponseRedirect, render
-from django.views.generic import ListView, DetailView, View, UpdateView
+from django.utils.decorators import method_decorator
+
+from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, UpdateView
+from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
+
 from uuid import UUID
 
 from authapp.forms import UserRegisterForm
-from mainapp.forms import ArticleEditForm, CreationCommentForm
+from mainapp.forms import UserProfileEditForm, UserProfileForm
+from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
-from mainapp.models import Article, ArticleCategories
-from mainapp.forms import CreationCommentForm, SearchForm
-from mainapp.forms import CreationCommentForm, UserProfileEditForm, UserProfileForm
+from mainapp.models import Article, ArticleCategories, ArticleComment
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -80,6 +84,7 @@ class LkListView(ListView):
     # class LkEditView(UserChan):
     """Класс для вывода страницы ЛК """
     template_name = 'mainapp/user_lk.html'
+    LOGIN_URL = 'main'
 
     def get_queryset(self):
         # Заглушка на время отсутствия модели...
@@ -91,6 +96,10 @@ class LkListView(ListView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+    @method_decorator(user_passes_test(lambda u: u.is_active))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
 class CreateArticle(CreateView):
@@ -114,8 +123,6 @@ class UpdateArticle(UpdateView):
     template_name = 'mainapp/updateArticle.html'
     form_class = ArticleEditForm
 
-    # success_url = reverse_lazy('article')
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Редактирование статьи'
@@ -131,7 +138,6 @@ class UpdateArticle(UpdateView):
 class ProfileCreateView(CreateView):
     model = UserProfile
     template_name = 'mainapp/updateProfile.html'
-    # form_class = UserProfileEditForm
     form_class = UserProfileForm
     success_url = reverse_lazy('lk')
 
@@ -157,7 +163,6 @@ class ProfileEditView(UpdateView):
         return context
 
 
-# class LkListView(ListView):
 class LkEditView(UpdateView):
     """Класс для вывода страницы ЛК """
     model = UserProfileEditForm
@@ -243,7 +248,6 @@ class MyArticleListView(ListView):
         return context
 
 
-# TODO убрать пагинацию на странице с результатами поиска
 class SearchView(ListView):
     template_name = 'mainapp/search.html'
     paginate_by = 9
@@ -263,3 +267,108 @@ class SearchView(ListView):
         context['title'] = 'Поиск по сайту'
         context['query'] = self.request.GET['query']
         return context
+
+
+class ArticleLikeRedirectView(RedirectView):
+    """Класс для постановки лайка статье"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        article_id = self.kwargs.get('pk')
+        obj_article = get_object_or_404(Article, id=article_id)
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        if user.is_authenticated:
+            if user in obj_article.likes.all():
+                obj_article.likes.remove(user)
+            else:
+                obj_article.likes.add(user)
+        else:
+            pass
+        return url_article
+
+
+class ArticleLikeRedirectAPIView(APIView):
+    """Класс для постановки лайка статье через API REST_framework"""
+
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        obj = get_object_or_404(Article, pk=pk)
+        user = self.request.user
+        updated = False
+        liked = False
+
+        if user.is_authenticated:
+            if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+            else:
+                liked = True
+                obj.likes.add(user)
+            updated = True
+
+        data = {
+            "updated": updated,
+            "liked": liked
+        }
+        return Response(data)
+
+
+class CommentLikeRedirectView(RedirectView):
+    """Класс для постановки лайка комменту"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
+        if user.is_authenticated:
+            if user in obj_comment.likes.all():
+                obj_comment.likes.remove(user)
+            else:
+                obj_comment.likes.add(user)
+        else:
+            pass
+        return url_article
+
+
+class AuthorStarRedirectView(RedirectView):
+    """Класс для постановки звезды(лайка) автору статьи"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
+        if user.is_authenticated:
+            if user in obj_userprofile.stars.all():
+                obj_userprofile.stars.remove(user)
+            else:
+                obj_userprofile.stars.add(user)
+        else:
+            pass
+        return url_article
+
+
+class AuthorArticleStarRedirectView(RedirectView):
+    """Класс для постановки звезды(лайка) автору статьи"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        user_id = self.kwargs['pk']
+        obj_author = get_object_or_404(User, id=user_id)
+        url_author_article = obj_author.get_absolute_url()
+        user = self.request.user
+
+        obj_userprofile = get_object_or_404(UserProfile, user_id=obj_author.id)
+        if user.is_authenticated:
+            if user in obj_userprofile.stars.all():
+                obj_userprofile.stars.remove(user)
+            else:
+                obj_userprofile.stars.add(user)
+        else:
+            pass
+        return url_author_article
