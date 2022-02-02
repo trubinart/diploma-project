@@ -51,11 +51,12 @@ body {
     text-decoration: none;
     list-style: none;
     font-family: arial;
-    margin: 5px 0;
+    margin: 5px 1px;
 }
 
 .main-wrapper .topNavbar .menu li {
-    margin: 0 5px;
+    display: flex;
+    margin: 1px;
 }
 
 .main-wrapper .topNavbar .menu a {
@@ -64,10 +65,17 @@ body {
     font-size: 16px;
     line-height: 160%;
     color: #424551;
+    padding: 20px 12px;
+    background-color: #F7FAFF;
+    border: 1px solid #787A80;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    opacity: .8;
 }
 
 .main-wrapper .topNavbar .menu a:hover {
-    color: #FF3F3A;
+    color: red;
 }
 
 .main-wrapper .topNavbar .accaunt .profile {
@@ -567,8 +575,7 @@ body {
     justify-content: center;
     align-items: center;
     width: 1230px;
-    /*height: 1747px;*/
-    margin: 60px 0;
+    margin: 0;
 }
 
 .content .main .publications .wrapper {
@@ -585,8 +592,8 @@ body {
     /*justify-content: center;*/
     align-items: flex-start;
     width: 390px;
-    height: 490px;
-    margin: 30px 0;
+    height: 550px;
+    margin: 50px 10px;
 }
 
 .content .main .publications .wrapper .publication .image {
@@ -648,6 +655,8 @@ body {
     text-align: left;
     color: #1E212C;
     margin: 5px 0;
+    width: 100%;
+    height: 50px;
 }
 
 .content .main .publications .wrapper .publication .descrition {
@@ -656,6 +665,7 @@ body {
     line-height: 150%;
     color: #424551;
     margin: 5px 0;
+    height: 50px;
 }
 
 .content .main .publications .wrapper .publication .continue {
@@ -671,6 +681,34 @@ body {
     font-size: 16px;
     line-height: 160%;
     color: #1E212C;
+}
+
+.content .main .publications .wrapper .publication .update .text {
+    display: flex;
+    width: 390px;
+}
+
+.content .main .publications .wrapper .publication .update .text a {
+    text-decoration: none;
+    width: 380px;
+    height: 46px;
+    border: 1px solid #FF3F3A;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    color: #FF3F3A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+}
+.content .main .publications .wrapper .publication .update .text a:hover {
+    background: linear-gradient(55.95deg, #FF3F3A 0%, #F75E05 100%);
+    color: #FFFFFF;
+    opacity: .8;
 }
 
 .content .main .publications .wrapper .publication .continue .icon {
@@ -752,7 +790,7 @@ body {
 }
 
 .article .post_header {
-    height: 210px;
+    min-height: 210px;
 }
 
 .header_habr {
@@ -766,7 +804,7 @@ body {
 .article .name_habr {
     margin-top: 12px;
     margin-left: 0px;
-    height: 120px;
+    min-height: 120px;
     font-size: 46px;
     line-height: 130%;
     color: #1E212C;
@@ -1173,6 +1211,16 @@ body {
     padding: 5px;
 }
 
+/* ограничение для размера картинки внутри блока с текстом */
+.article .text_habr_page img {
+        max-width: 800px !important;
+        max-height: 800px !important;
+}
+
+.article .text_habr_page p {
+        max-width: 100%;
+}
+
 /* end .article_page */
 
 
@@ -1194,7 +1242,6 @@ body {
 .content .main .subNavbarLK .avatar,
 .content .main .subNavbarLK .menuLK {
     background: #FFFFFF;
-    width: 50%;
     height: 80px;
     border: none;
     border-top: 1px solid #F7FAFF;
@@ -1210,15 +1257,15 @@ body {
 }
 
 .content .main .subNavbarLK .avatar .avatarLk {
-    width: 68px;
-    height: 68px;
-    border-radius: 68px;
+    width: 60px;
+    height: 60px;
+    border-radius: 60px;
     overflow: hidden;
-
+    margin-right: 10px;
 }
 
 .content .main .subNavbarLK .avatar .avatarLk img {
-    height: 68px;
+    height: 60px;
     padding-right: 5px;
 }
 
@@ -1232,7 +1279,7 @@ body {
     align-items: center;
     justify-content: center;
     border-right: 1px solid #F7FAFF;
-    border-left: 1px solid #F7FAFF;
+    border: 2px solid #F7FAFF;
     font-weight: 600;
     width: 259px;
     height: 100%;
@@ -1285,6 +1332,7 @@ body {
 .content .main .subNavbarLK .avatar .configLK a:hover,
 .content .main .subNavbarLK .menuLK a:hover {
     color: #FF3F3A;
+    font-weight: bold;
 }
 
 .content .main .subNavbarLK .menuLK .exitLK,
@@ -1296,11 +1344,11 @@ body {
     height: 100%;
     align-items: center;
     justify-content: space-around;
-    width: 330px;
+    width: 318px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #173343;
-    border-right: 1px solid #F7FAFF;
+    border: 2px solid #F7FAFF;
     text-align: center;
 }
 
@@ -1336,7 +1384,7 @@ body {
     text-align: left;
     /*text-align: center;*/
     color: #1E212C;
-    margin: 20px 0 50px;
+    margin: 20px 0 40px;
 }
 
 .content .main .contentLK .mainLK .infoLK {
@@ -1379,13 +1427,35 @@ body {
 }
 
 .content .main .contentLK .mainLK .profileLK {
-    margin: 60px 0 0 0;
+    margin: 0;
 }
 
 .content .main .contentLK .mainLK .menuProfileLK .profileHrLK {
     height: 1px;
     background-color: #DBE7FF;
     color: #DBE7FF;
+}
+
+.content .main .contentLK .mainLK .titleLK,
+.content .main .contentLK .mainLK .menuProfileLK .menuPrLK,
+.content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo {
+    margin-left: 40px;
+}
+
+.content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo .title_lk {
+    background: none;
+    font-size: 24px;
+    font-weight: 900px;
+    color: red;
+    opacity: .7;
+}
+
+.content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo .text {
+    background: none;
+    font-size: 14px;
+    color: #787A80;
+    opacity: .9;
+    margin-bottom: 0;
 }
 
 /* end .contentLK  */
@@ -1439,8 +1509,19 @@ body {
 .content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo {
     text-transform: none;
     list-style: none;
-
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 400px;
+    justify-content: flex-start;
+    min-height: 700px;
+    margin: 40px;
 }
+
+.content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo li{
+    width: 400px;
+}
+
 
 .content .main .contentLK .mainLK .menuBaseInfoBlokLK .menuPrLK {
     display: flex;
@@ -1465,7 +1546,7 @@ body {
     display: flex;
     justify-content: space-between;
     text-transform: uppercase;
-    margin: 40px 0 20px 0;
+    margin: 20px 0 ;
 }
 
 .content .main .contentLK .mainLK .blokPersonInfoLK .baseInfoBlokLK {
@@ -1517,7 +1598,6 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 10px 20px;
-    margin: 40px 0;
 }
 
 
@@ -1529,7 +1609,11 @@ body {
 }
 
 .content .main .contentLK .mainLK .blokPersonInfoLK .baseInfoBlokLK li {
-    padding: 5px 0 5px 0;
+    padding: 15px;
+    background: #FFFFFF;
+    border-radius: 15px;
+    margin: 5px 0;
+    font-weight: 600;
 }
 
 /* end .blokPersonInfoLK */
@@ -1852,6 +1936,11 @@ body {
     justify-content: center;
 }
 
+.contentArticle .myArticles .titleArticleAdd {
+    margin: 60px;
+    color: red;
+}
+
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK {
     width: 1100px;
     margin: 0 auto;
@@ -1897,6 +1986,7 @@ body {
 
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p select,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal input,
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal textarea,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p input {
     height: 44px;
     width: 100%;
@@ -1911,6 +2001,10 @@ body {
     box-sizing: border-box;
     border-radius: 4px;
     padding: 0 5px;
+}
+
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal textarea {
+    padding: 5px 15px;
 }
 
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal #cke_id_text {
@@ -1939,6 +2033,36 @@ body {
     padding: 8.5px;
 }
 
+
+.errorlist {
+    list-style-type: none;
+    color: purple;
+    font-weight: bold;
+    position: relative;
+    }
+
+.errorlist li{
+    top: 20px;
+    position: absolute;
+    z-index: 1;
+    background: yellow;
+    padding: 8px;
+    border-radius: 3px;
+    border: 1px solid purple;
+    opacity: .9;
+    }
+
 /* end article-add */
+
+/* start my-articles */
+.content .myArticles .main .title {
+    margin: 20px;
+}
+
+.content .myArticles .main .publications {
+    margin: 20px 0;
+}
+
+/* end my-articles */
 
 

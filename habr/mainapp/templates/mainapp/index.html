@@ -3,29 +3,29 @@
 
 
 {% block content %}
-    <div class="main">
-        <div class="title">
-            Все публикации
-        </div>
+<div class="main">
+    <div class="title">
+        Все публикации
+    </div>
 
-        {% include 'mainapp/includes/inc-search-menu.html' %}
+    {% include 'mainapp/includes/inc-search-menu.html' %}
 
-        <div class="publications">
-            <div class="wrapper">
-                {% for instance_article in object_list %}
-                    <div class="publication">
-                        <div class="image">
-                            <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
+    <div class="publications">
+        <div class="wrapper">
+            {% for instance_article in object_list %}
+            <div class="publication">
+                <div class="image">
+                    <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
+                </div>
+                <div class="publicationInfo">
+                    <div class="category">
+                        {{ instance_article.categories }}
+                    </div>
+                    <div class="divider"></div>
+                    <div class="dateInfo">
+                        <div class="icon">
+                            <img src={% static 'img/Calendar.png' %} alt="Calendar">
                         </div>
-                        <div class="publicationInfo">
-                            <div class="category">
-                                {{ instance_article.categories }}
-                            </div>
-                            <div class="divider"></div>
-                            <div class="dateInfo">
-                                <div class="icon">
-                                    <img src={% static 'img/Calendar.png' %} alt="Calendar">
-                                </div>
                                 <div class="date">
                                     {{ instance_article.created_timestamp }}
                                 </div>
@@ -74,8 +74,7 @@
 
             {% if page_obj.has_next %}
             <div class="pagRight">
-                <a href="?page={{ page_obj.next_page_number }}"><img
-                        src={% static 'img/pagRight.png' %} alt="right"></a>
+                <a href="?page={{ page_obj.next_page_number }}"><img src={% static 'img/pagRight.png' %} alt="right"></a>
             </div>
             {% endif %}
         </div>
