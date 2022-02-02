@@ -10,10 +10,10 @@
 
         {% include 'mainapp/includes/inc-search-menu.html' %}
 
-        <div class="sidebar-author">
+        <div class="sidebar">
             <div class="author-article">
-                <h6 class="author-article_title">автор</h6>
-                <div class="author-article_and_info">
+                <h6 class="author_title">автор</h6>
+                <div class="avatar_and_info">
                     <div class="avatar">
                         <img src="/media/{{ author.get_profile.avatar }}" alt="">
                     </div>
@@ -21,6 +21,36 @@
                     <div class="name_and_share">
                         <h3>{{ author.get_profile.name }}</h3>
                         <p>{{ author.get_profile.bio }}</p>
+                        <div class="share_author">
+                            {% if user.is_authenticated %}
+                                {% if request.user in author.get_profile.stars.all %}
+                                    <a title="Понизить ранг автора"
+                                       href="{% url 'user_article_star_toggle' author.pk %}">
+                                        <img src={% static "img/chevron_blue.png" %}>
+                                    </a>
+                                {% else %}
+                                    <a title="Повысить ранг автора"
+                                       href="{% url 'user_article_star_toggle' author.pk %}">
+                                        <img src={% static "img/chevron_red.png" %}>
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <img class="img_chevron" title="Авторизуйтесь, чтобы наградить автора"
+                                     src={% static "img/chevron_red.png" %}>
+                            {% endif %}
+                            <div class="count_star">
+                                {{ author.get_profile.stars.count }} ранг
+                            </div>
+                            <a href="https://telegram.org/" target="_blank">
+                                <img src={% static "img/telegram_red.png" %}>
+                            </a>
+                            <a href="https://www.instagram.com/" target="_blank">
+                                <img src={% static "img/instagram_red.png" %}>
+                            </a>
+                            <a href="https://www.facebook.com/" target="_blank">
+                                <img src={% static "img/facebook_red.png" %}>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,7 +83,7 @@
                                     <img src={% static 'img/like.png' %} alt="like">
                                 </div>
                                 <div class="number">
-                                    {{ instance_article.get_likes_by_article_id.count }}
+                                    {{ instance_article.likes.count }}
                                 </div>
                             </div>
                         </div>

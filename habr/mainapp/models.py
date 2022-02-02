@@ -1,16 +1,14 @@
 import uuid
 import re
-from typing import Optional
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
+from django.urls import reverse
 
 from authapp.models import User
 from mainapp.manager import ArticleManager
-
-from ckeditor.fields import RichTextField
 
 
 class BaseModel(models.Model):
@@ -47,10 +45,10 @@ class Article(BaseModel):
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
     main_img = models.ImageField(upload_to='article_images', verbose_name='img')
-    # text = models.TextField(max_length=5000, verbose_name='Text Article')
     text = RichTextUploadingField(config_name='awesome_ckeditor')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
+    likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
 
     def __str__(self):
         return self.title
@@ -84,22 +82,6 @@ class Article(BaseModel):
         pagination_articles: Paginator = Paginator(all_articles, pagination_page)
         return pagination_articles
 
-    def get_likes_by_article_id(self) -> QuerySet:
-        """
-        :param: None
-        :return: QuerySet with all LIKES in DataBase by specific Article.
-
-          Method called from Article Item.
-          All likes sorted by date descending order.
-          """
-        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id)
-
-    def get_likes_count_by_article_id(self) -> int:
-        """
-        Подсчет количества лайков для статьи.
-        """
-        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id).count()
-
     def get_comment_count_by_article_id(self) -> int:
         """
         Подсчет количества комментариев для статьи.
@@ -122,6 +104,12 @@ class Article(BaseModel):
           """
         return Article.objects.filter(user=self.user).exclude(id=self.id).order_by('-created_timestamp')[:3]
 
+    def get_absolute_url(self):
+        """
+        Метод отдает абсолютную ссылку на страницу статьи
+        """
+        return reverse("article", kwargs={"pk": self.id})
+
     def get_article_text_preview(self):
         """
         Метод выводит первые 250 символов текста статьи
@@ -129,23 +117,17 @@ class Article(BaseModel):
         preview = re.sub(r'\<[^>]*\>', '', self.text)
         return f'{preview[:250]}.....'
 
+    def get_like_url(self):
+        """
+        Метод отдает ссылку по которой статья получает лайк
+        """
+        return reverse("like-toggle", kwargs={"pk": self.id})
 
-class ArticleLike(BaseModel):
-    """
-    Models for Articles Likes
-    """
-    like = models.BooleanField(verbose_name='Like')
-    article_like = models.ForeignKey(Article, on_delete=models.DO_NOTHING, verbose_name='Article for like',
-                                     related_name='article_like')
-    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, verbose_name='Like Author',
-                                related_name='like_author')
-
-    def __str__(self):
-        return self.user.username
-
-    class Meta:
-        db_table = 'article_likes'
-        ordering = ['-created_timestamp']
+    def get_like_api_url(self):
+        """
+        Метод отдает ссылку для перехода в api rest_framework
+        """
+        return reverse("like-api-toggle", kwargs={"pk": self.id})
 
 
 class ArticleComment(BaseModel):
@@ -157,9 +139,10 @@ class ArticleComment(BaseModel):
     text = models.TextField(max_length=300, verbose_name='Comment text')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Comment Author',
                              related_name='comment_author')
+    likes = models.ManyToManyField(User, blank=True, related_name='comment_likes')
 
     def __str__(self):
-        return self.article_comment.user.username
+        return f'from "{self.user.username}" for "{self.article_comment.title}"'
 
     class Meta:
         db_table = 'article_comments'
