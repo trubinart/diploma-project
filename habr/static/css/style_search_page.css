@@ -25,6 +25,7 @@
     text-align: left;
     margin-left: 115px;
     margin-top: 20px;
+    margin-bottom: 40px;
     color: #787A80;
 }
 
@@ -85,13 +86,14 @@
 }
 
 .article-search-box .author {
-    width: 150px;
+    width: 300px;
     height: 30px;
     font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
+    font-weight: normal;
+    font-size: 16px;
     line-height: 150%;
     color: #1E212C;
+    margin-top: 3px;
 }
 
 .article-search-box .date {
