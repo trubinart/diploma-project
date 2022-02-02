@@ -153,6 +153,6 @@ class UserProfileEditForm(forms.ModelForm):
         # return_date = datetime.date.today() + datetime.timedelta(days=5)
         # 2555 - 7 лет
         dates = date.today() - timedelta(days=2555)
-        if data < dates:
+        if data > dates:
             raise forms.ValidationError("Вы слишком молоды!")
         return data
