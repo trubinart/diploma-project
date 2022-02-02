@@ -1207,7 +1207,24 @@ body {
     justify-content: flex-start;
     border-left: 1px solid #F7FAFF;
     margin: 0;
+}
 
+.content .main .subNavbarLK .avatar .avatarLk {
+    width: 68px;
+    height: 68px;
+    border-radius: 68px;
+    overflow: hidden;
+
+}
+
+.content .main .subNavbarLK .avatar .avatarLk img {
+    height: 68px;
+    padding-right: 5px;
+}
+
+.content .main .subNavbarLK .avatar .avatarLk a {
+    color: #424551;
+    text-decoration: none;
 }
 
 .content .main .subNavbarLK .avatar .fioLK {
@@ -1278,8 +1295,8 @@ body {
     display: flex;
     height: 100%;
     align-items: center;
-    justify-content: center;
-    width: 283px;
+    justify-content: space-around;
+    width: 330px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #173343;
@@ -1317,6 +1334,7 @@ body {
     font-size: 34px;
     line-height: 130%;
     text-align: left;
+    /*text-align: center;*/
     color: #1E212C;
     margin: 20px 0 50px;
 }
@@ -1411,20 +1429,17 @@ body {
 
 /* start .menuBaseInfoBlokLK */
 .content .main .contentLK .mainLK .menuBaseInfoBlokLK {
-    /* width: 100%;
-    height: 52px;
-    display: flex;
-    margin: 20px 0;
-    justify-content: space-between;
-    justify-content: center; */
     width: 100%;
-    height: 52px;
+    min-height: 52px;
     display: flex;
-    /* margin: 20px 0; */
-    /* justify-content: space-between; */
-    /* justify-content: end; */
     align-items: center;
     text-transform: uppercase;
+}
+
+.content .main .contentLK .mainLK .menuBaseInfoBlokLK .userInfo {
+    text-transform: none;
+    list-style: none;
+
 }
 
 .content .main .contentLK .mainLK .menuBaseInfoBlokLK .menuPrLK {
@@ -1462,6 +1477,59 @@ body {
 .content .main .contentLK .mainLK .blokPersonInfoLK .baseAvatarBlokLK {
     /* width: 20%; */
 
+}
+
+.content .main .contentLK .mainLK .blokPersonInfoLK .baseInfoBlokLK .infoBlockAvatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.content .main .contentLK .mainLK .blokPersonInfoLK .baseInfoBlokLK .infoBlockAvatar img {
+    height: 100px;
+
+}
+
+.content .main .contentLK .mainLK .blokPersonInfoLK .baseInfoBlokLK .buttonInLk {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    color: #ED6B6A;
+    margin-top: 20px;
+
+}
+
+.content .main .contentLK .mainLK .blokPersonInfoLK .baseInfoBlokLK .buttonInLk a {
+    text-decoration: none;
+    /*width: 228px;*/
+    height: 46px;
+    border: 1px solid #FF3F3A;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    color: #FF3F3A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 40px 0;
+}
+
+
+.content .main .contentLK .mainLK .blokPersonInfoLK .baseInfoBlokLK .buttonInLk a:hover {
+    border: 1px solid #353030;
+    color: #221d1d;
+    background-color: #FF3F3A;
+    opacity: .7;
+}
+
+.content .main .contentLK .mainLK .blokPersonInfoLK .baseInfoBlokLK li {
+    padding: 5px 0 5px 0;
 }
 
 /* end .blokPersonInfoLK */
@@ -1559,6 +1627,23 @@ body {
     color: #221d1d;
     background-color: #FF3F3A;
     opacity: .7;
+}
+
+.content .main .contentLK .mainLK .baseBlokLK .error-text-lk {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 150%;
+    text-align: center;
+    color: #000000;
+    margin: 15px 10px;
+    border: 1px solid;
+    border-radius: 2px;
+    border-color: #FF3F3A;
+    background-color: rgb(243, 237, 237);
+    padding: 3px;
+    display: flex;
 }
 
 /* end .baseBlokLK */
@@ -1780,6 +1865,18 @@ body {
     flex-direction: column;
     margin: 40px auto;
     width: 840px;
+}
+
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal .form-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal .form-avatar img {
+    height: 100px;
+
 }
 
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal p {

@@ -1,6 +1,8 @@
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
 
 
@@ -47,11 +49,20 @@ class UserProfile(models.Model):
     Model for users
     """
     user = models.OneToOneField(User, unique=True, null=False, db_index=True, on_delete=models.CASCADE)
-    name = models.CharField(verbose_name='first_last_name', max_length=100, blank=False)
-    birthday = models.DateField(verbose_name='birthday', null=True, blank=True)
-    bio = models.TextField(verbose_name='description', max_length=250, blank=False)
-    avatar = models.ImageField(upload_to='user_avatars')
+    name = models.CharField(verbose_name='Имя Фамилия', max_length=100, blank=False)
+    birthday = models.DateField(verbose_name='День рождения', null=True, blank=True)
+    bio = models.TextField(verbose_name='Краткое описание', max_length=250, blank=False)
+    avatar = models.ImageField(verbose_name='Аватар', upload_to='user_avatars')
     stars = models.ManyToManyField(User, blank=True, related_name='author_stars')
 
     def __str__(self):
         return f'Userprofile for "{self.user.username}"'
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            UserProfile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.userprofile.save()

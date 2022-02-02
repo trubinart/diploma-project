@@ -40,7 +40,7 @@
                     </div>
                     {% if user.is_authenticated %}
                         <div class="personalAccount">
-                            <a href="#">{{ user.username }}</a>
+                            <a href="/lk/">{{ user.username }}</a>
                             /&nbsp;&nbsp;
                             <a href="{% url 'auth:logout' %}">Exit</a>
                         </div>
