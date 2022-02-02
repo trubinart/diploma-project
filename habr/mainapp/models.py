@@ -147,3 +147,19 @@ class ArticleComment(BaseModel):
     class Meta:
         db_table = 'article_comments'
         ordering = ['-created_timestamp']
+
+
+class ArticleRating(BaseModel):
+    """
+    Models for Articles Rating
+    """
+    article_rating = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='Article for rating',
+                                       related_name='article_rating')
+    rating = models.PositiveSmallIntegerField(default=0, verbose_name='rating')
+
+    def __str__(self):
+        return f'from article "{self.article_rating.title}" rating = "{self.rating}"'
+
+    class Meta:
+        db_table = 'article_rating'
+        ordering = ['-created_timestamp']
