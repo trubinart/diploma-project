@@ -43,14 +43,15 @@ class ArticleEditForm(forms.ModelForm):
                 raise forms.ValidationError("Максимальная длинна слова в описании не должна превышать 48 символов")
         return data
 
-    def clean_text(self):
-        data = self.cleaned_data['text']
-        split_data = data.split()
-        for word in split_data:
-            if len(word) > 84:
-                print(split_data)
-                raise forms.ValidationError("Максимальная длинна слова в статье не должна превышать 84 символа")
-        return data
+    """ временно спрятал, не удаляйте пжлст"""
+    # def clean_text(self):
+    #     data = self.cleaned_data['text']
+    #     split_data = data.split()
+    #     for word in split_data:
+    #         if len(word) > 84:
+    #             print(split_data)
+    #             raise forms.ValidationError("Максимальная длинна слова в статье не должна превышать 84 символа")
+    #     return data
 
 
 class CreationCommentForm(forms.ModelForm):
