@@ -27,7 +27,7 @@
                             <img src={% static 'img/Calendar.png' %} alt="Calendar">
                         </div>
                                 <div class="date">
-                                    {{ instance_article.created_timestamp }}
+                                    {{ instance_article.created_timestamp | date:"d.m.Y"}}
                                 </div>
                             </div>
                             <div class="divider"></div>

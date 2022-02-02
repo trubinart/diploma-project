@@ -33,7 +33,7 @@
                             <div class="article-content-search-box">
                                 <div class="author-and-date-box">
                                     <div class="author">{{ instance_article.user.get_profile.name }}</div>
-                                    <div class="date">{{ instance_article.created_timestamp }}</div>
+                                    <div class="date">{{ instance_article.created_timestamp | date:"d.m.Y" }}</div>
                                 </div>
                                 <div class="article-title-and-text">
                                     <a href="{% url 'article' instance_article.id %}" class="article-search-title">{{ instance_article.title }}</a>

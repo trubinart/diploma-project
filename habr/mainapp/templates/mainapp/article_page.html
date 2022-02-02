@@ -23,7 +23,7 @@
                 <div class="habr_information">
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %}>
-                        <p class="date">{{ article.created_timestamp }}</p>
+                        <p class="date">{{ article.created_timestamp | date:"d.m.Y"}}</p>
 
                         {#                        Изменение кол-ва лайков через api#}
                         {#                        <a class="like-btn" data-href="{{ article.get_like_api_url }}"#}
@@ -116,7 +116,7 @@
                     <div class="comment_views">
                         <div class="comment_attribute">
                             <div class="comment_author">{{ comment.user.username }}</div>
-                            <div class="comment_author">{{ comment.created_timestamp }}</div>
+                            <div class="comment_author">{{ comment.created_timestamp | date:"d.m.Y" }}</div>
                         </div>
                         <div class="comment_text">{{ comment.text }}</div>
                         <div class="habr_info">
@@ -204,7 +204,7 @@
                             <div class="info_habr">
                                 <div class="habr_date_creat">
                                     <img src={% static "img/Calendar.png" %}>
-                                    <p class="date">{{ other_article.created_timestamp|date:"M d, Y" }}</p>
+                                    <p class="date">{{ other_article.created_timestamp | date:"d.m.Y" }}</p>
                                 </div>
                                 <a href="{% url 'article' other_article.pk %}">{{ other_article.title }}</a>
                             </div>
