@@ -24,6 +24,12 @@
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %}>
                         <p class="date">{{ article.created_timestamp }}</p>
+                        <div style="margin-right: 10px">
+                            <img src={% static 'img/rating.png' %} alt="like">
+                        </div>
+                        <div>
+                            {{ article.get_rating_by_article_id }} рейтинг статьи
+                        </div>
 
                         {#                        Изменение кол-ва лайков через api#}
                         {#                        <a class="like-btn" data-href="{{ article.get_like_api_url }}"#}

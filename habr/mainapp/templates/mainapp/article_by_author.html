@@ -26,7 +26,7 @@
                 <div class="rating_and_share">
                     <div class="author_rating_box">
                         <div class="author_rating"> {{ author.get_profile.rating }}</div>
-                        <div class="rating_text"> рейтинг</div>
+                        <div class="rating_text">рейтинг</div>
                     </div>
                     <div class="share_author">
                         {% if user.is_authenticated %}
@@ -78,16 +78,16 @@
                                     <img src={% static 'img/Calendar.png' %} alt="Calendar">
                                 </div>
                                 <div class="date">
-                                    {{ instance_article.created_timestamp }}
+                                    {{ instance_article.created_timestamp|date:"d.m.Y г. H:m" }}
                                 </div>
                             </div>
                             <div class="divider"></div>
                             <div class="likeCount">
                                 <div class="icon">
-                                    <img src={% static 'img/like.png' %} alt="like">
+                                    <img src={% static 'img/rating.png' %} alt="like">
                                 </div>
-                                <div class="number">
-                                    {{ instance_article.likes.count }}
+                                <div class="number_rating">
+                                    {{ instance_article.get_rating_by_article_id }}
                                 </div>
                             </div>
                         </div>

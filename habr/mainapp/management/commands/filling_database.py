@@ -8,7 +8,7 @@ from mimesis import Internet
 from django.core.management.base import BaseCommand
 from django.core.files import File
 
-from mainapp.models import Article, ArticleComment, ArticleCategories, ArticleRating
+from mainapp.models import Article, ArticleComment, ArticleCategories
 from authapp.models import User, UserProfile
 
 
@@ -110,14 +110,6 @@ class Command(BaseCommand):
             # save article
             new_article.save()
 
-        #TODO удалить, когда сделашь сигналы для заполнения ARTICLE RATING
-        #CREATE ARTICLE RATING
-        print('Заполняю таблицу ARTICLE RATING')
-        for item in Article.objects.all():
-            rating_object = ArticleRating(article_rating=item,
-                                          rating=random.randrange(1, 50))
-            rating_object.save()
-
         # CREATE COMMENTS
         print('Заполняю таблицу COMMENTS')
         for item in User.objects.all():
@@ -134,11 +126,3 @@ class Command(BaseCommand):
                         new_comment.likes.remove(user_liked)
                     else:
                         new_comment.likes.add(user_liked)
-
-        # CREATE ARTICLE RATING
-        print('Заполняю таблицу ARTICLE RATING')
-        for item in Article.objects.all():
-            new_rating = ArticleRating()
-            new_rating.article_rating = item
-            new_rating.rating = random.randint(5, 25)
-            new_rating.save()

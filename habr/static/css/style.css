@@ -627,7 +627,7 @@ body {
 
 .content .main .publications .wrapper .publication .publicationInfo .likeCount .icon,
 .content .main .publications .wrapper .publication .publicationInfo .dateInfo .icon {
-    width: 16px;
+    /*width: 16px;*/
     /*margin: 0 6px 0 0;*/
 }
 
@@ -637,6 +637,15 @@ body {
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
+    margin-left: 5px;
+}
+
+.number_rating {
+    font-family: arial;
+    font-size: 14px;
+    line-height: 150%;
+    color: #787A80;
+    margin-top: 3px;
     margin-left: 5px;
 }
 
@@ -807,7 +816,7 @@ body {
     flex-direction: row;
     align-items: center;
     margin-left: 0;
-    width: 300px;
+    /*width: 300px;*/
     color: #787A80;
 }
 
