@@ -44,7 +44,6 @@ class User(AbstractUser, BaseModel):
         return reverse("user_article", kwargs={"pk": self.id})
 
 
-
 class UserProfile(models.Model):
     """
     Model for users
@@ -55,6 +54,8 @@ class UserProfile(models.Model):
     bio = models.TextField(verbose_name='Краткое описание', max_length=250, blank=False)
     avatar = models.ImageField(verbose_name='Аватар', upload_to='user_avatars')
     stars = models.ManyToManyField(User, blank=True, related_name='author_stars')
+    rating = models.PositiveIntegerField(default=0, verbose_name='author_rating')
+    previous_article_rating = models.PositiveIntegerField(default=0, verbose_name='article_previous_rating')
 
     def __str__(self):
         return f'Userprofile for "{self.user.username}"'
@@ -71,8 +72,18 @@ class UserProfile(models.Model):
 
 
 @receiver(m2m_changed, sender=UserProfile.stars.through)
-def create_user_profile(sender, instance, action,  **kwargs):
-    print(instance.stars.count())
-    print(action)
+def change_author_rating_by_author_likes(sender, instance, action, **kwargs):
+    """
+    Сигнал для изменения рейтинга автора от изменения лайков этому автору
+    """
+    if action == 'post_add':
+        instance.rating += 1
+        instance.save()
 
+    if action == 'post_remove' and instance.rating != 0:
+        instance.rating -= 1
+        instance.save()
 
+    elif action == 'post_remove' and instance.rating == 0:
+        instance.rating = 0
+        instance.save()
