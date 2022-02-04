@@ -297,35 +297,8 @@ class ArticleLikeRedirectView(RedirectView):
                 obj_article.likes.add(user)
         else:
             pass
+
         return url_article
-
-
-class ArticleLikeRedirectAPIView(APIView):
-    """Класс для постановки лайка статье через API REST_framework"""
-
-    authentication_classes = (authentication.SessionAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request, pk=None):
-        obj = get_object_or_404(Article, pk=pk)
-        user = self.request.user
-        updated = False
-        liked = False
-
-        if user.is_authenticated:
-            if user in obj.likes.all():
-                liked = False
-                obj.likes.remove(user)
-            else:
-                liked = True
-                obj.likes.add(user)
-            updated = True
-
-        data = {
-            "updated": updated,
-            "liked": liked
-        }
-        return Response(data)
 
 
 class CommentLikeRedirectView(RedirectView):

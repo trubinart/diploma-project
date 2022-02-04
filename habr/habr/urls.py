@@ -8,7 +8,7 @@ from mainapp.views import LkEditView, LkListView, ProfileCreateView, ProfileEdit
 
 from mainapp.views import MainListView, ArticleDetailView, \
     CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, SearchView, \
-    ArticleLikeRedirectView, ArticleLikeRedirectAPIView, CommentLikeRedirectView, \
+    ArticleLikeRedirectView, CommentLikeRedirectView, \
     AuthorStarRedirectView, AuthorArticleStarRedirectView
 
 from authapp.views import UserEditView
@@ -38,7 +38,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('article/<str:pk>/like/', ArticleLikeRedirectView.as_view(), name='like-toggle'),
-    path('api/article/<str:pk>/like/', ArticleLikeRedirectAPIView.as_view(), name='like-api-toggle'),
 
     path('article/<str:pk>/star/', AuthorStarRedirectView.as_view(), name='star_toggle'),
     path('article/<str:pk>/like/<str:id>', CommentLikeRedirectView.as_view(), name='like_comment_toggle'),

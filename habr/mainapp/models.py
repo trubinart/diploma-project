@@ -6,8 +6,11 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.db.models.signals import m2m_changed, post_save, post_delete
+from django.dispatch import receiver
+from django.db.models import Avg
 
-from authapp.models import User
+from authapp.models import User, UserProfile
 from mainapp.manager import ArticleManager
 
 
@@ -49,6 +52,7 @@ class Article(BaseModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
+    rating = models.PositiveIntegerField(default=0, verbose_name='article_rating')
 
     def __str__(self):
         return self.title
@@ -163,3 +167,41 @@ class ArticleRating(BaseModel):
     class Meta:
         db_table = 'article_rating'
         ordering = ['-created_timestamp']
+
+
+@receiver(m2m_changed, sender=ArticleComment.likes.through)
+def change_author_rating_by_likes_to_author_comments(sender, instance, action, **kwargs):
+    """
+    Сигнал для изменения рейтинга автора от изменения лайков к комментариям этого автора
+    """
+
+    author = UserProfile.objects.get(user=instance.user.id)
+
+    if action == 'post_add':
+        author.rating += 1
+        author.save()
+
+    if action == 'post_remove' and author.rating != 0:
+        author.rating -= 1
+        author.save()
+
+    elif action == 'post_remove' and author.rating == 0:
+        author.rating = 0
+        author.save()
+
+
+@receiver(post_save, sender=Article)
+@receiver(post_delete, sender=Article)
+def change_author_rating_by_article_rating(sender, instance, **kwargs):
+    """
+    Сигнал для изменения рейтинга автора от изменения рейтинга статей этого автора
+    """
+    author = instance.user.userprofile
+    previous_article_rating = author.previous_article_rating
+    author.rating -= previous_article_rating
+
+    article_by_author = Article.objects.filter(user=instance.user)
+    new_article_rating = article_by_author.aggregate(avg_duration=Avg('rating'))['avg_duration']
+    author.rating += int(new_article_rating)
+    author.previous_article_rating = int(new_article_rating)
+    print(f'author.rating - {author.rating}')
