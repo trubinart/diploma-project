@@ -21,6 +21,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # GENERATE PROJECTS
         text = Text('ru')
+        #TODO заполнить рейтинг
 
         # CREATE USERS
         person = Person()

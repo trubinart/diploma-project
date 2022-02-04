@@ -153,6 +153,7 @@ class ArticleComment(BaseModel):
         ordering = ['-created_timestamp']
 
 
+# TODO не меняется рейтинг
 @receiver(m2m_changed, sender=ArticleComment.likes.through)
 def change_author_rating_by_likes_to_author_comments(sender, instance, action, **kwargs):
     """
@@ -173,7 +174,7 @@ def change_author_rating_by_likes_to_author_comments(sender, instance, action, *
         author.rating = 0
         author.save()
 
-
+# TODO изменить модель
 @receiver(post_save, sender=Article)
 @receiver(post_delete, sender=Article)
 def change_author_rating_by_article_rating(sender, instance, **kwargs):

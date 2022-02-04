@@ -71,6 +71,7 @@ class UserProfile(models.Model):
         instance.userprofile.save()
 
 
+# TODO не меняется рейтинг
 @receiver(m2m_changed, sender=UserProfile.stars.through)
 def change_author_rating_by_author_likes(sender, instance, action, **kwargs):
     """
