@@ -297,7 +297,6 @@ class ArticleLikeRedirectView(RedirectView):
                 obj_article.likes.add(user)
         else:
             pass
-
         return url_article
 
 
