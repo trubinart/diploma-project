@@ -1007,7 +1007,7 @@ body {
 .sidebar .author {
 
     margin-top: 60px;
-    height: 148px;
+    margin-bottom: 30px;
 }
 
 .sidebar .author_title {
@@ -1074,6 +1074,39 @@ body {
 .sidebar .share_author a:hover {
     background: burlywood;
     border-radius: 30%;
+}
+
+
+.sidebar .rating_and_share{
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar .author_rating_box{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.sidebar .author_rating{
+    width: 118px;
+    //styleName: display/4;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #FF3F3A;
+    margin-left: 1px;
+}
+
+.sidebar .rating_text{
+    //styleName: base/regular;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: bold;
+    color: #787A80;
+    line-height: 1;
+    padding-left: 4px;
 }
 
 .sidebar .trending_articles {
