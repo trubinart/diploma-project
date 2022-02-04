@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 from django.urls import reverse
-from django.db.models.signals import m2m_changed, pre_save, pre_delete, post_save
+from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 from django.db.models import Avg
 
@@ -207,8 +207,8 @@ def change_author_rating_by_likes_to_author_comments(sender, instance, action, *
         author.save()
 
 
-@receiver(pre_save, sender=ArticleRating)
-@receiver(pre_delete, sender=ArticleRating)
+@receiver(post_save, sender=ArticleRating)
+@receiver(post_delete, sender=ArticleRating)
 def change_author_rating_by_article_rating(sender, instance, **kwargs):
     """
     Сигнал для изменения рейтинга автора от изменения рейтинга статей этого автора
@@ -233,6 +233,7 @@ def change_author_rating_by_article_rating(sender, instance, **kwargs):
     author.save()
 
 
+# TODO убери внутрь сигналов, не понятно к чему это относится
 # ценость одного лайка и одного комментария
 value_one_like = 1
 value_one_comments = 0.2
@@ -250,6 +251,7 @@ def change_article_rating_by_likes_to_article(instance, action, **kwargs):
             instance.get_comment_count_by_article_id() * value_one_comments)
         article_rating.rating = new_article_rating
         article_rating.save()
+        # TODO убери принт
         return print(f'рейтинг статьи - {new_article_rating}')
 
 
@@ -264,4 +266,5 @@ def change_article_rating_by_count_comments_to_article(instance, **kwargs):
         instance.article_comment.get_comment_count_by_article_id() * value_one_comments)
     article_rating.rating = new_article_rating
     article_rating.save()
+    # TODO убери принт
     return print(f'рейтинг статьи - {new_article_rating}')

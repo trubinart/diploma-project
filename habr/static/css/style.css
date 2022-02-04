@@ -1115,7 +1115,7 @@ body {
     font-weight: bold;
     color: #787A80;
     line-height: 1;
-    padding-left: 4px;
+    padding-left: 0.5px;
 }
 
 .sidebar .trending_articles {
