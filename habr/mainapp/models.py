@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 from django.urls import reverse
-from django.db.models.signals import m2m_changed, post_save, post_delete
+from django.db.models.signals import m2m_changed, pre_save, pre_delete
 from django.dispatch import receiver
 from django.db.models import Avg
 
@@ -52,7 +52,6 @@ class Article(BaseModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
-    rating = models.PositiveIntegerField(default=0, verbose_name='article_rating')
 
     def __str__(self):
         return self.title
@@ -153,7 +152,23 @@ class ArticleComment(BaseModel):
         ordering = ['-created_timestamp']
 
 
-# TODO не меняется рейтинг
+class ArticleRating(BaseModel):
+    """
+    Models for Articles Rating
+    """
+    article_rating = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='article_for_rating',
+                                       related_name='article_rating')
+    rating = models.PositiveSmallIntegerField(default=0, verbose_name='rating')
+    article_author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='article_author' )
+
+    def __str__(self):
+        return f'from article "{self.article_rating.title}" rating = "{self.rating}"'
+
+    class Meta:
+        db_table = 'article_rating'
+        ordering = ['-created_timestamp']
+
+
 @receiver(m2m_changed, sender=ArticleComment.likes.through)
 def change_author_rating_by_likes_to_author_comments(sender, instance, action, **kwargs):
     """
@@ -174,19 +189,29 @@ def change_author_rating_by_likes_to_author_comments(sender, instance, action, *
         author.rating = 0
         author.save()
 
-# TODO изменить модель
-@receiver(post_save, sender=Article)
-@receiver(post_delete, sender=Article)
+
+@receiver(pre_save, sender=ArticleRating)
+@receiver(pre_delete, sender=ArticleRating)
 def change_author_rating_by_article_rating(sender, instance, **kwargs):
     """
     Сигнал для изменения рейтинга автора от изменения рейтинга статей этого автора
     """
-    author = instance.user.userprofile
-    previous_article_rating = author.previous_article_rating
-    author.rating -= previous_article_rating
+    author = instance.article_rating.user
+    instance.article_author = author
 
-    article_by_author = Article.objects.filter(user=instance.user)
-    new_article_rating = article_by_author.aggregate(avg_duration=Avg('rating'))['avg_duration']
-    author.rating += int(new_article_rating)
-    author.previous_article_rating = int(new_article_rating)
-    print(f'author.rating - {author.rating}')
+    previous_article_rating = author.userprofile.previous_article_rating
+    author.userprofile.rating -= previous_article_rating
+
+    rating_objects_by_author = None if not ArticleRating.objects.filter(article_author=author)\
+        else ArticleRating.objects.filter(article_author=author)
+
+    if not rating_objects_by_author:
+        new_article_rating = instance.rating
+    else:
+        new_article_rating = rating_objects_by_author.aggregate(avg_duration=Avg('rating'))['avg_duration']
+
+    author.userprofile.rating += int(new_article_rating)
+    author.userprofile.previous_article_rating = int(new_article_rating)
+
+    author.save()
+

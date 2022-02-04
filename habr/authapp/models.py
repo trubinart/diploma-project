@@ -63,7 +63,6 @@ class UserProfile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, update_fields, **kwargs):
         if created:
-            print(instance.email)
             UserProfile.objects.create(user=instance)
 
     @receiver(post_save, sender=User)
@@ -71,7 +70,6 @@ class UserProfile(models.Model):
         instance.userprofile.save()
 
 
-# TODO не меняется рейтинг
 @receiver(m2m_changed, sender=UserProfile.stars.through)
 def change_author_rating_by_author_likes(sender, instance, action, **kwargs):
     """

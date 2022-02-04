@@ -2,17 +2,14 @@ import random
 import os
 import requests
 
-from mimesis import Text, BinaryFile, Person, Datetime
+from mimesis import Text, Person, Datetime
 from mimesis import Internet
 
 from django.core.management.base import BaseCommand
 from django.core.files import File
 
-from mainapp.models import ArticleCategories, ArticleRating
-from authapp.models import User
-
-from mainapp.models import Article, ArticleComment
-from authapp.models import UserProfile
+from mainapp.models import Article, ArticleComment, ArticleCategories, ArticleRating
+from authapp.models import User, UserProfile
 
 
 class Command(BaseCommand):
@@ -21,7 +18,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # GENERATE PROJECTS
         text = Text('ru')
-        #TODO заполнить рейтинг
 
         # CREATE USERS
         person = Person()
@@ -43,6 +39,9 @@ class Command(BaseCommand):
             item.name = name
             item.birthday = birthday.formatted_datetime(fmt="%Y-%m-%d")
             item.bio = "Этот автор - самый крутой. Статьи у него пушка-бомба!"
+            item.stars.set(User.objects.all())
+            item.rating = random.randrange(50, 400)
+            item.previous_article_rating = random.randrange(1, 50)
 
             img_url = Internet().stock_image(width=50, height=50, keywords=['лицо'])
             img_file = requests.get(img_url)
@@ -110,6 +109,14 @@ class Command(BaseCommand):
 
             # save article
             new_article.save()
+
+        #TODO удалить, когда сделашь сигналы для заполнения ARTICLE RATING
+        #CREATE ARTICLE RATING
+        print('Заполняю таблицу ARTICLE RATING')
+        for item in Article.objects.all():
+            rating_object = ArticleRating(article_rating=item,
+                                          rating=random.randrange(1, 50))
+            rating_object.save()
 
         # CREATE COMMENTS
         print('Заполняю таблицу COMMENTS')
