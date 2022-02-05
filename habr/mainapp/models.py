@@ -183,7 +183,7 @@ class ArticleRating(BaseModel):
 
     class Meta:
         db_table = 'article_rating'
-        ordering = ['-created_timestamp']
+        ordering = ['rating']
 
 
 @receiver(m2m_changed, sender=ArticleComment.likes.through)

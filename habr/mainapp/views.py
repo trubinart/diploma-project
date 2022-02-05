@@ -26,13 +26,39 @@ class MainListView(ListView):
     paginate_by = 9
     model = Article
 
+    def get_sort_from_request(self):
+        try:
+            sort= self.request.GET['sort']
+            return sort
+        except Exception:
+            return None
+
+
+    def get_queryset(self):
+        sort = self.get_sort_from_request()
+        if not sort:
+            return Article.objects.all()
+        elif sort == 'date_reverse':
+            return Article.objects.all().reverse()
+        elif sort == 'rating':
+            return Article.objects.order_by('article_rating__rating').reverse()
+        elif sort == 'rating_reverse':
+            return Article.objects.order_by('article_rating__rating')
+        else:
+            return Article.objects.all()
+
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
+
         # добавляем в набор запросов все категории
         context['categories_list'] = category_list
         context['search_form'] = search_form
+
+        # добавляем сортировку
+        sort = self.get_sort_from_request()
+        context['sort'] = sort
         return context
 
 
