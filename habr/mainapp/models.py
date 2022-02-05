@@ -1,15 +1,26 @@
 import uuid
-import re
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 from django.urls import reverse
+from taggit.managers import TaggableManager
+from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 
 from authapp.models import User
-from mainapp.manager import ArticleManager
 
+from ckeditor.fields import RichTextField
+
+
+class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
+    # If you only inherit GenericUUIDTaggedItemBase, you need to define
+    # a tag field. e.g.
+    tag = models.ForeignKey(Tag, related_name="uuid_tagged_items", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
 
 class BaseModel(models.Model):
     """
@@ -45,9 +56,11 @@ class Article(BaseModel):
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
     main_img = models.ImageField(upload_to='article_images', verbose_name='img')
+    # text = models.TextField(max_length=5000, verbose_name='Text Article')
     text = RichTextUploadingField(config_name='awesome_ckeditor')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
+    tags = TaggableManager(through=UUIDTaggedItem)
     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
 
     def __str__(self):
@@ -81,6 +94,22 @@ class Article(BaseModel):
         all_articles: QuerySet = cls.get_all_articles()
         pagination_articles: Paginator = Paginator(all_articles, pagination_page)
         return pagination_articles
+
+    def get_likes_by_article_id(self) -> QuerySet:
+        """
+        :param: None
+        :return: QuerySet with all LIKES in DataBase by specific Article.
+
+          Method called from Article Item.
+          All likes sorted by date descending order.
+          """
+        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id)
+
+    def get_likes_count_by_article_id(self) -> int:
+        """
+        Подсчет количества лайков для статьи.
+        """
+        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id).count()
 
     def get_comment_count_by_article_id(self) -> int:
         """
