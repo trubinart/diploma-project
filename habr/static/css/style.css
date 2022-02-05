@@ -835,12 +835,12 @@ body {
     height: 16px;
     border: none;
     border-right: 2px solid #787A80;
-    margin-right: 15px;
-    padding-right: 15px;
+    margin-right: 10px;
+    padding-right: 10px;
 }
 
 .img_chevron {
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 .img_chevron:hover {
@@ -1071,12 +1071,15 @@ body {
     margin-top: 22px;
     display: flex;
     align-items: flex-end;
-    height: 20px;
     opacity: .8;
+    border: none;
+    height: 16px;
+    border-left: 2px solid #787A80;
+    padding-left: 10px;
 }
 
 .sidebar .share_author a {
-    margin-right: 15px;
+    margin-right: 10px;
     display: flex;
 }
 
@@ -1092,30 +1095,24 @@ body {
 }
 
 .sidebar .author_rating_box{
+    margin-top: 17px;
     display: flex;
-    flex-direction: column;
-    margin-top: 10px;
+    opacity: .8;
 }
 
 .sidebar .author_rating{
-    width: 118px;
-    //styleName: display/4;
-    font-size: 30px;
+    font-size: 24px;
     font-style: normal;
-    font-weight: 900;
+    font-weight: bold;
     letter-spacing: 1px;
-    color: #FF3F3A;
-    margin-left: 1px;
+    color: #c66f;
 }
 
 .sidebar .rating_text{
-    //styleName: base/regular;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: bold;
-    color: #787A80;
-    line-height: 1;
-    padding-left: 0.5px;
+    font-size: 16px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 10px;
 }
 
 .sidebar .trending_articles {
