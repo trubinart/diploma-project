@@ -25,6 +25,34 @@ class ArticleEditForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = f'form-control {field_name}'
 
+    def clean_title(self):
+        data = self.cleaned_data['title']
+        split_data = data.split()
+        for word in split_data:
+            if len(word) > 35:
+                print(split_data)
+                raise forms.ValidationError("Максимальная длинна слова в заголовке не должна превышать 35 символов")
+        return data
+
+    def clean_subtitle(self):
+        data = self.cleaned_data['subtitle']
+        split_data = data.split()
+        for word in split_data:
+            if len(word) > 48:
+                print(split_data)
+                raise forms.ValidationError("Максимальная длинна слова в описании не должна превышать 48 символов")
+        return data
+
+    """ временно спрятал, не удаляйте пжлст"""
+    # def clean_text(self):
+    #     data = self.cleaned_data['text']
+    #     split_data = data.split()
+    #     for word in split_data:
+    #         if len(word) > 84:
+    #             print(split_data)
+    #             raise forms.ValidationError("Максимальная длинна слова в статье не должна превышать 84 символа")
+    #     return data
+
 
 class CreationCommentForm(forms.ModelForm):
     class Meta:
@@ -49,6 +77,7 @@ class SearchForm(forms.Form):
         self.fields['query'].widget.attrs['placeholder'] = 'Искать здесь...'
         self.fields['query'].widget.attrs['class'] = 'search'
 
+
 # --_--
 class UserForm(forms.ModelForm):
     class Meta:
@@ -64,25 +93,15 @@ class UserForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['class'] = 'form-input'
 
-# ====
-# class UserProfileForm(forms.ModelForm):
+
 class UserProfileForm(UserCreationForm):
     # class UserProfileEditForm(UserChangeForm):
     """Чтение и изменение объекта пользователя"""
 
     class Meta:
         model = UserProfile
-        # fields = ('name', 'birthday', 'bio', 'avatar')
         fields = '__all__'
-        # exclude = ('user',)
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     for field_name, field in self.fields.items():
-    #         field.widget.attrs['class'] = 'form-control'
-    #         field.help_text = ''
-    #         if field_name == 'password':
-    #             field.widget = forms.HiddenInput()
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         # self.fields['user'].widget = forms.HiddenInput()
@@ -100,34 +119,15 @@ class UserProfileForm(UserCreationForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['class'] = 'inputFild'
-            # if field_name == 'password':
-            #     field.widget = forms.HiddenInput()
-            # self.fields['text'].widget.attrs['class'] = 'comment_input'
-
-    # def clean_birthday(self):
-    #     data = self.cleaned_data['birthday']
-    #     # return_date = datetime.date.today() + datetime.timedelta(days=5)
-    #     # 2555 - 7 лет
-    #     dates = date.today() - timedelta(days=2555)
-    #     if data < dates:
-    #         raise forms.ValidationError("Вы слишком молоды!")
-    #     return data
 
 
-# class UserProfileForm(forms.ModelForm):
 class UserProfileEditForm(forms.ModelForm):
     """Чтение и изменение объекта пользователя"""
 
     class Meta:
         model = UserProfile
-        # fields = ('name', 'birthday', 'bio')
         fields = ('name', 'birthday', 'bio', 'avatar')
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     for field_name, field in self.fields.items():
-    #         field.widget.attrs['class'] = 'form-control'
-    #         field.help_text = ''
     def __init__(self, *args, **kwargs):
         super(UserProfileEditForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['placeholder'] = 'Имя Фамилия'
@@ -144,9 +144,6 @@ class UserProfileEditForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['class'] = 'inputFild'
-            # if field_name == 'password':
-            #     field.widget = forms.HiddenInput()
-            # self.fields['text'].widget.attrs['class'] = 'comment_input'
 
     def clean_birthday(self):
         data = self.cleaned_data['birthday']
