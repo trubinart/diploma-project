@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'authapp',
     'ckeditor',
     'ckeditor_uploader',
+    'taggit',
 ]
 
 MIDDLEWARE = [
