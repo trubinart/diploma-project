@@ -116,6 +116,7 @@ class CategoriesListView(ListView):
         context['title'] = f'Статьи по категории {category.name}'
         context['categories_list'] = category_list
         context['categories_pk'] = UUID(category_id)
+        context['category_name'] = category.name
         context['search_form'] = search_form
         # добавляем сортировку
         sort = self.get_sort_from_request()
