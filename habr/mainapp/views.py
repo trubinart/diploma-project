@@ -328,12 +328,25 @@ class SearchView(ListView):
     paginate_by = 9
     model = Article
 
+    def get_sort_from_request(self):
+        return get_sort_from_request(self)
+
     def get_queryset(self):
+        sort = self.get_sort_from_request()
         form = SearchForm(self.request.GET)
         if form.is_valid():
             query_string = form.cleaned_data['query']
-            search_results = Article.objects.search(query=query_string)
-            return search_results
+
+            if not sort:
+                return Article.objects.search(query=query_string)
+            elif sort == 'date_reverse':
+                return Article.objects.search(query=query_string).reverse()
+            elif sort == 'rating':
+                return Article.objects.search(query=query_string).order_by('article_rating__rating').reverse()
+            elif sort == 'rating_reverse':
+                return Article.objects.search(query=query_string).order_by('article_rating__rating')
+            else:
+                return Article.objects.search(query=query_string)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -341,6 +354,9 @@ class SearchView(ListView):
         context['categories_list'] = category_list
         context['title'] = 'Поиск по сайту'
         context['query'] = self.request.GET['query']
+        # добавляем сортировку
+        sort = self.get_sort_from_request()
+        context['sort'] = sort
         return context
 
 
