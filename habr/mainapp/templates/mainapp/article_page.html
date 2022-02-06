@@ -61,10 +61,7 @@
             </div>
             <div class="tags_and_share">
                 <div class="tags_habr">
-                    <p>Tags:</p>
-                    <a href="#">#дизайн</a>
-                    <a href="#">#веб-разработка</a>
-                    <a href="#">#маркетинг</a>
+                   <p>Tags: {{ article.tags.all|join:", " }}</p>
                 </div>
                 <div class="habr_info">
                     <p class="info">Likes and comments:</p>
@@ -90,6 +87,8 @@
             </div>
 
             {#            ----- ДОБАВЛЕНИЕ КОММЕНТАРИЯ ----  #}
+
+
             <div class="form_add_comment">
                 {% if user.is_authenticated %}
                     <form method="post" enctype="multipart/form-data" action="{% url 'add-comment' %}">
@@ -160,6 +159,7 @@
                     <div class="avatar">
                         <img src="/media/{{ article.user.get_profile.avatar }}">
                     </div>
+
                     <div class="name_and_share">
                         <h3>{{ article.user.get_profile.name }}</h3>
                         <p>{{ article.user.get_profile.bio }}</p>
