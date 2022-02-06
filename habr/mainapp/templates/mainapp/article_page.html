@@ -28,7 +28,12 @@
                             <img src={% static 'img/rating.png' %} alt="like">
                         </div>
                         <div>
-                            {{ article.get_rating_by_article_id }} рейтинг статьи
+                            {% if not article.get_rating_by_article_id %}
+                                0
+                            {% else %}
+                                {{ article.get_rating_by_article_id }}
+                            {% endif %}
+                            рейтинг статьи
                         </div>
                     </div>
                 </div>
@@ -153,7 +158,9 @@
                 </div>
                 <div class="rating_and_share">
                     <div class="author_rating_box">
-                        <div class="author_rating">{{ article.user.get_profile.rating }}</div>
+                        <div class="author_rating">
+                            {{ article.user.get_profile.rating }}
+                        </div>
                         <div class="rating_text">рейтинг</div>
                     </div>
                     <div class="share_author">

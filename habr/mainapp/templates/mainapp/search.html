@@ -34,12 +34,16 @@
                                 <div class="author-and-date-box">
                                     <div class="author">{{ instance_article.user.get_profile.name }}</div>
 
-                                              <div class="likeCount">
+                                    <div class="likeCount">
                                         <div class="icon">
                                             <img src={% static 'img/rating.png' %} alt="like">
                                         </div>
                                         <div class="number_rating">
-                                            {{ instance_article.get_rating_by_article_id }}
+                                            {% if not instance_article.get_rating_by_article_id %}
+                                                0
+                                            {% else %}
+                                                {{ instance_article.get_rating_by_article_id }}
+                                            {% endif %}
                                         </div>
                                     </div>
 
