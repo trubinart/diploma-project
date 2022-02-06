@@ -286,11 +286,24 @@ class UserArticleListView(ListView):
     paginate_by = 9
     model = Article
 
+    def get_sort_from_request(self):
+        return get_sort_from_request(self)
+
     def get_queryset(self):
+        sort = self.get_sort_from_request()
         # Объявляем переменную user и записываем ссылку на id автора
         user_id = self.kwargs['pk']
-        new_context = Article.objects.filter(user=user_id)
-        return new_context
+
+        if not sort:
+            return Article.objects.filter(user=user_id)
+        elif sort == 'date_reverse':
+            return Article.objects.filter(user=user_id).reverse()
+        elif sort == 'rating':
+            return Article.objects.filter(user=user_id).order_by('article_rating__rating').reverse()
+        elif sort == 'rating_reverse':
+            return Article.objects.filter(user=user_id).order_by('article_rating__rating')
+        else:
+            return Article.objects.filter(user=user_id)
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -304,6 +317,9 @@ class UserArticleListView(ListView):
         context['categories_list'] = category_list
         context['author'] = author
         context['search_form'] = search_form
+        # добавляем сортировку
+        sort = self.get_sort_from_request()
+        context['sort'] = sort
         return context
 
 
