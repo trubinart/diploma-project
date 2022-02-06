@@ -23,7 +23,7 @@
                 <div class="habr_information">
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %}>
-                        <p class="date">{{ article.created_timestamp }}</p>
+                        <p class="date">{{ article.created_timestamp|date:"H:m d.m.Y " }}</p>
                         <div style="margin-right: 10px">
                             <img src={% static 'img/rating.png' %} alt="like">
                         </div>
