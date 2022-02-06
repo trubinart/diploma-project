@@ -1,4 +1,4 @@
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -13,10 +13,6 @@ from mainapp.forms import UserProfileEditForm, UserProfileForm
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories, ArticleComment
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
