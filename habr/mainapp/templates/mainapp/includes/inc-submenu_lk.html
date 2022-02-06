@@ -3,17 +3,23 @@
     <div class="avatar">
         <div class="fioLK">
             <div class="avatarLk">
-                <a href="{% url 'lk' %}" title="Профиль пользователя">
-                    <img src="/media/{{ user.userprofile.avatar }}" alt="avatar">
-                </a>
+                {% if user.userprofile.avatar %}
+                    <a href="{% url 'lk' %}" title="Профиль пользователя">
+                        <img src="/media/{{ user.userprofile.avatar }}" alt="avatar">
+                    </a>
+                {% else %}
+                    <a href="{% url 'lk' %}" title="Профиль пользователя">
+                        <img src="/media/user_avatars/default.png" alt="avatar">
+                    </a>
+                {% endif %}
             </div>
             {{ user.userprofile.name }}
         </div>
         {% if user.userprofile.name %}
             <div class="configLK">
                 <a href="{% url 'article_create' %}">Создать статью</a>
-                </div>
-                <div class="configLK">
+            </div>
+            <div class="configLK">
                 <a href="{% url 'my_articles' user.pk %}">Редактирование статей </a>
             </div>
         {% else %}
