@@ -10,14 +10,40 @@
     <div class="contentLK">
         <div class="mainLK">
             <div class="titleLK">
-                Личный кабинет
+                Личный кабинет {% if user.is_staff %} модератора {% endif %}
             </div>
+            {% if user.is_staff %}
+            <div class="moderator">
+                <div class="requests">
+                    {% if object_list.0.get_count_new_requests_moderation %}
+                    <div class="text">
+                        <div class="info">
+                            Внимание! Есть новые запросы на модерацию контента:
+                        </div>
+                        <div class="count">
+                            {{object_list.0.get_count_new_requests_moderation}}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text">
+                        <div class="info noRequests">
+                            Нет новых заявок
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="button">
+                    <a href="#">Перейти к модерации</a>
+                </div>
+            </div>
+            {% else %}
             <div class="infoLK">
                 <div class="infoTextLeftLK">
                     Данная страница предназначена для создания и редактирования статей,
                     а так же для внесения и изменения информации о себе.
                 </div>
             </div>
+            {% endif %}
             <div class="profileLK">
                 <div class="blokPersonInfoLK">
                     <div class="baseInfoBlokLK">
@@ -26,7 +52,7 @@
                                 <li class="title_lk">Учетные данные</li>
                                 <li class="text">Логин:</li>
                                 <li> {{ user }}</li>
-                                <li class="text">Почта: </li>
+                                <li class="text">Почта:</li>
                                 <li>{{ user.email }}</li>
 
                                 <div class="buttonInLk">
@@ -36,11 +62,11 @@
                             <ul class="userInfo">
                                 {% if user.userprofile.name %}
                                 <li class="title_lk">Информация о себе</li>
-                                <li class="text">Имя Фамилия: </li>
+                                <li class="text">Имя Фамилия:</li>
                                 <li>{{ user.userprofile.name }}</li>
-                                <li class="text">Возраст: </li>
+                                <li class="text">Возраст:</li>
                                 <li>{{ user.userprofile.birthday|date:"M d, Y" }}</li>
-                                <li class="text">Краткое описание: </li>
+                                <li class="text">Краткое описание:</li>
                                 <li>{{ user.userprofile.bio }}</li>
                                 <li class="text">Аватар:</li>
                                 <li>
@@ -49,7 +75,8 @@
                                     </div>
                                 </li>
                                 <div class="buttonInLk">
-                                    <a href="{% url 'profile_edit' user.userprofile.id %}">Редактировать информацию о
+                                    <a href="{% url 'profile_edit' user.userprofile.id %}">Редактировать информацию
+                                        о
                                         себе</a>
                                 </div>
 
@@ -63,7 +90,7 @@
                                 {% endif %}
                             </ul>
                         </div>
-<!--                        <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">-->
+                        <!--                        <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">-->
                     </div>
                 </div>
             </div>

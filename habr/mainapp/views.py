@@ -12,7 +12,7 @@ from authapp.forms import UserRegisterForm
 from mainapp.forms import UserProfileEditForm, UserProfileForm
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
-from mainapp.models import Article, ArticleCategories, ArticleComment
+from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -81,14 +81,9 @@ class CategoriesListView(ListView):
 
 
 class LkListView(ListView):
-    # class LkEditView(UserChan):
     """Класс для вывода страницы ЛК """
     template_name = 'mainapp/user_lk.html'
-    LOGIN_URL = 'main'
-
-    def get_queryset(self):
-        # Заглушка на время отсутствия модели...
-        return
+    model = ModeratorNotification
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
