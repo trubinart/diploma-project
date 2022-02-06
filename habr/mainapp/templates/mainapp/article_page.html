@@ -48,12 +48,9 @@
                 </p>
             </div>
             <div class="tags_and_share">
-{#                <div class="tags_habr">#}
-{#                    <p>Tags:</p>#}
-{#                    <a href="#">#дизайн</a>#}
-{#                    <a href="#">#веб-разработка</a>#}
-{#                    <a href="#">#маркетинг</a>#}
-{#                </div>#}
+                <div class="tags_habr">
+                   <p>Tags: {{ article.tags.all|join:", " }}</p>
+                </div>
                 <div class="habr_info">
                     <p class="info">Likes :</p>
                     <div class="info_img"><img src={% static "img/like.png" %}></div>

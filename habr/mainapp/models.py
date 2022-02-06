@@ -5,21 +5,20 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 from taggit.managers import TaggableManager
-from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
+from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase, Tag
 
 from authapp.models import User
 
 from ckeditor.fields import RichTextField
 
 
-# class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
-#     # If you only inherit GenericUUIDTaggedItemBase, you need to define
-#     # a tag field. e.g.
-#     # tag = models.ForeignKey(Tag, related_name="uuid_tagged_items", on_delete=models.CASCADE)
-#
-#     class Meta:
-#         verbose_name = _("Tag")
-#         verbose_name_plural = _("Tags")
+class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
+    tag = models.ForeignKey(Tag, related_name="uuid_tagged_items", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
+
 
 class BaseModel(models.Model):
     """
@@ -57,7 +56,7 @@ class Article(BaseModel):
     text = RichTextUploadingField(config_name='awesome_ckeditor')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
-    # tags = TaggableManager(through=UUIDTaggedItem)
+    tags = TaggableManager(through=UUIDTaggedItem)
 
     def __str__(self):
         return self.title
