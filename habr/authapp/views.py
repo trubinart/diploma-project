@@ -1,5 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView
 
 from authapp.forms import UserRegisterForm, UserLoginForm
@@ -37,6 +39,10 @@ class UserEditView(UpdateView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UserEditView, self).dispatch(*args, **kwargs)
 
 
 class UserLoginView(LoginView):
