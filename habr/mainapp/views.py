@@ -19,6 +19,16 @@ category_list = ArticleCategories.objects.all()
 """обозначение формы поиска для вывода в меню во разных view"""
 search_form = SearchForm()
 
+"""метод получения параметра сортировки"""
+
+
+def get_sort_from_request(self):
+    try:
+        sort = self.request.GET['sort']
+        return sort
+    except Exception:
+        return None
+
 
 class MainListView(ListView):
     """Класс для вывода списка «Хабров» на главной """
@@ -27,12 +37,7 @@ class MainListView(ListView):
     model = Article
 
     def get_sort_from_request(self):
-        try:
-            sort= self.request.GET['sort']
-            return sort
-        except Exception:
-            return None
-
+        return get_sort_from_request(self)
 
     def get_queryset(self):
         sort = self.get_sort_from_request()
@@ -83,11 +88,24 @@ class CategoriesListView(ListView):
     paginate_by = 9
     model = Article
 
+    def get_sort_from_request(self):
+        return get_sort_from_request(self)
+
     def get_queryset(self):
+        sort = self.get_sort_from_request()
         # Объявляем переменную и записываем ссылку на id категории
         categories = self.kwargs['pk']
-        new_context = Article.objects.filter(categories_id=categories)
-        return new_context
+
+        if not sort:
+            return Article.objects.filter(categories_id=categories)
+        elif sort == 'date_reverse':
+            return Article.objects.filter(categories_id=categories).reverse()
+        elif sort == 'rating':
+            return Article.objects.filter(categories_id=categories).order_by('article_rating__rating').reverse()
+        elif sort == 'rating_reverse':
+            return Article.objects.filter(categories_id=categories).order_by('article_rating__rating')
+        else:
+            return Article.objects.filter(categories_id=categories)
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -98,6 +116,9 @@ class CategoriesListView(ListView):
         context['categories_list'] = category_list
         context['categories_pk'] = UUID(category_id)
         context['search_form'] = search_form
+        # добавляем сортировку
+        sort = self.get_sort_from_request()
+        context['sort'] = sort
         return context
 
 
