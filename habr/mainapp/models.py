@@ -146,6 +146,7 @@ def create_article_rating(instance, created, **kwargs):
     if created:
         new_rating = ArticleRating()
         new_rating.article_rating = instance
+        new_rating.article_author = instance.user
         new_rating.save()
         return None
 
@@ -233,26 +234,21 @@ def change_author_rating_by_article_rating(sender, instance, **kwargs):
     author.save()
 
 
-# TODO убери внутрь сигналов, не понятно к чему это относится
-# ценость одного лайка и одного комментария
-value_one_like = 1
-value_one_comments = 0.2
-
-
 @receiver(m2m_changed, sender=Article.likes.through)
 def change_article_rating_by_likes_to_article(instance, action, **kwargs):
     """
     Сигнал для изменения рейтинга статьи от изменения кол-ва лайков к статье
     """
     article_rating = ArticleRating.objects.get(article_rating_id=instance.id)
-
+    # ценость одного лайка и одного комментария
+    value_one_like = 1
+    value_one_comments = 0.2
     if action in ['post_add', 'post_remove']:
         new_article_rating = instance.likes.count() * value_one_like + int(
             instance.get_comment_count_by_article_id() * value_one_comments)
         article_rating.rating = new_article_rating
         article_rating.save()
-        # TODO убери принт
-        return print(f'рейтинг статьи - {new_article_rating}')
+        return None
 
 
 @receiver(post_save, sender=ArticleComment)
@@ -261,10 +257,11 @@ def change_article_rating_by_count_comments_to_article(instance, **kwargs):
     Сигнал для изменения рейтинга статьи от изменения кол-ва комментов к статье
     """
     article_rating = ArticleRating.objects.get(article_rating_id=instance.article_comment.id)
-
+    # ценость одного лайка и одного комментария
+    value_one_like = 1
+    value_one_comments = 0.2
     new_article_rating = instance.article_comment.likes.count() * value_one_like + int(
         instance.article_comment.get_comment_count_by_article_id() * value_one_comments)
     article_rating.rating = new_article_rating
     article_rating.save()
-    # TODO убери принт
-    return print(f'рейтинг статьи - {new_article_rating}')
+    return None

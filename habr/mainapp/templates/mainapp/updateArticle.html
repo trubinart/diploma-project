@@ -9,8 +9,9 @@
     <div class="contentArticleAdd">
         <div class="mainArticleAdd">
             {% if user.is_authenticated %}
+            {% if user.userprofile.name %}
             <div class="titleArticleAdd">
-                Добавление новой статьи
+                {{title}}
             </div>
             <div class="blokPersonInfoLK">
                 <div class="baseInfoBlokLK">
@@ -28,6 +29,11 @@
                 });
 
             </script>
+            {% else %}
+            <div class="titleArticleAdd">
+                Для добавления статьи необходимо заполнить информацию о себе
+            </div>
+            {% endif %}
             {% else %}
             <div class="titleArticleAdd">
                 Для добавления статьи необходимо авторизоваться

@@ -122,7 +122,7 @@
                     <div class="comment_views">
                         <div class="comment_attribute">
                             <div class="comment_author">{{ comment.user.username }}</div>
-                            <div class="comment_author">{{ comment.created_timestamp }}</div>
+                            <div class="comment_author">{{ comment.created_timestamp | date:"d.m.Y" }}</div>
                         </div>
                         <div class="comment_text">{{ comment.text }}</div>
                         <div class="habr_info">
@@ -173,8 +173,8 @@
                 </div>
                 <div class="rating_and_share">
                     <div class="author_rating_box">
-                        <div class="author_rating"> {{ article.user.get_profile.rating }}</div>
-                        <div class="rating_text"> рейтинг</div>
+                        <div class="author_rating">{{ article.user.get_profile.rating }}</div>
+                        <div class="rating_text">рейтинг</div>
                     </div>
                     <div class="share_author">
                         {% if user.is_authenticated %}
@@ -217,7 +217,7 @@
                             <div class="info_habr">
                                 <div class="habr_date_creat">
                                     <img src={% static "img/Calendar.png" %}>
-                                    <p class="date">{{ other_article.created_timestamp|date:"M d, Y" }}</p>
+                                    <p class="date">{{ other_article.created_timestamp | date:"d.m.Y" }}</p>
                                 </div>
                                 <a href="{% url 'article' other_article.pk %}">{{ other_article.title }}</a>
                             </div>

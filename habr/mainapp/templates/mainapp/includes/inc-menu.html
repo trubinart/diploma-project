@@ -1,17 +1,12 @@
 <ul class="menu">
     <li class="home">
         <a href="{% url 'main' %}" {% if request.path  == "/" %}
-           style="text-decoration: underline;" {% endif %}>Главная</a>
+           style="color: red; opacity: 1; border: 1px solid #FF3F3A;" {% endif %}>Главная</a>
     </li>
     {% for categories in categories_list %}
         <li>
             <a href="{% url 'category' categories.id %}" {% if categories_pk == categories.id %}
-               style="text-decoration: underline;" {% endif %}>| {{ categories.name }}</a>
+               style="color: red; opacity: 1; border: 1px solid #FF3F3A;" {% endif %}>{{ categories.name }}</a>
         </li>
     {% endfor %}
-    <!--{% if request.path  != "/article-add/" %}
-    <li>
-        <a class="content_topic" href="{% url 'article_create' %}">Create an article</a>
-    </li>
-    {% endif %}-->
 </ul>

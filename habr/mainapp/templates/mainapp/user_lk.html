@@ -10,87 +10,62 @@
     <div class="contentLK">
         <div class="mainLK">
             <div class="titleLK">
-                Редактирование страницы на сайте
+                Личный кабинет
             </div>
             <div class="infoLK">
                 <div class="infoTextLeftLK">
-                    Информацию на этой странице будут видеть пользователи сайта — твои потенциальные
-                    клиенты. Отнесись к ее заполнению
-                    ответственно.
-                </div>
-                <div class="infoTextRightLK">
-                    <a href="#">Как выглядит моя страница?</a>
+                    Данная страница предназначена для создания и редактирования статей,
+                    а так же для внесения и изменения информации о себе.
                 </div>
             </div>
             <div class="profileLK">
-                <div class="menuProfileLK">
-                    <ul class="menuPrLK">
-                        <li class="persInfoLK"><a href="#">Персональная информация</a></li>
-                        <!-- <li class="servicesLK"><a href="#">Услуги</a></li>
-                        <li class="scheduleLK"><a href="#">Расписание</a></li>
-                        <li class="feedbackLK"><a href="#">Отзывы</a></li> -->
-                    </ul>
-
-                </div>
-                <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
                 <div class="blokPersonInfoLK">
                     <div class="baseInfoBlokLK">
                         <div class="menuBaseInfoBlokLK">
-<!--                            <ul class="menuPrLK">-->
-<!--                                &lt;!&ndash; <li class="persInfoLK"><a href="#">Основная информация</a></li> &ndash;&gt;-->
-<!--                                <li class="baseInfoTitleLK">Основная информация</li>-->
-<!--                            </ul>-->
                             <ul class="userInfo">
-                                <li>Логин: {{ user }}</li>
-{#                                <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">#}
-                                <li>Почта: {{ user.email }}</li>
-                                <li>
-                                    <div class="buttonInLk">
-                                        <a href="{% url 'user_edit' user.pk %}">Редактировать учётные данные</a>
-                                    </div>
-                                </li>
+                                <li class="title_lk">Учетные данные</li>
+                                <li class="text">Логин:</li>
+                                <li> {{ user }}</li>
+                                <li class="text">Почта: </li>
+                                <li>{{ user.email }}</li>
+
+                                <div class="buttonInLk">
+                                    <a href="{% url 'user_edit' user.pk %}">Редактировать учётные данные</a>
+                                </div>
+                            </ul>
+                            <ul class="userInfo">
                                 {% if user.userprofile.name %}
-                                <li>Имя Фамилия: {{ user.userprofile.name }}</li>
-                                <li>Возраст: {{ user.userprofile.birthday|date:"M d, Y" }}</li>
-                                <li>Краткое описание: {{ user.userprofile.bio }}</li>
-                                <li>Аватар:
+                                <li class="title_lk">Информация о себе</li>
+                                <li class="text">Имя Фамилия: </li>
+                                <li>{{ user.userprofile.name }}</li>
+                                <li class="text">Возраст: </li>
+                                <li>{{ user.userprofile.birthday|date:"M d, Y" }}</li>
+                                <li class="text">Краткое описание: </li>
+                                <li>{{ user.userprofile.bio }}</li>
+                                <li class="text">Аватар:</li>
+                                <li>
                                     <div class="infoBlockAvatar">
                                         <img src="/media/{{ user.userprofile.avatar }}" alt="avatar">
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="buttonInLk">
-                                        <a href="{% url 'profile_edit' user.userprofile.id %}">Редактировать информацию о себе</a>
-                                    </div>
-                                </li>
+                                <div class="buttonInLk">
+                                    <a href="{% url 'profile_edit' user.userprofile.id %}">Редактировать информацию о
+                                        себе</a>
+                                </div>
+
                                 {% else %}
-                                    <li>
-                                    <div class="buttonInLk">
-                                        <a href="{% url 'profile_edit' user.userprofile.id %}">Заполнить информацию о себе</a>
-                                    </div>
-                                </li>
-{#                                <li>#}
-{#                                    <div class="buttonInLk">#}
-{#                                        <a href="{% url 'profile_add' %}">Заполнить информацию о себе</a>#}
-{#                                    </div>#}
-{#                                </li>#}
+
+                                <div class="buttonInLk">
+                                    <a href="{% url 'profile_edit' user.userprofile.id %}">Заполнить информацию о
+                                        себе</a>
+                                </div>
+
                                 {% endif %}
                             </ul>
                         </div>
-{#                        {% if form.errors %}#}
-{#                        <div class="error-text-lk">#}
-{#                            {{ form.errors.as_text }}#}
-{#                        </div>#}
-{#                        {% endif %}#}
-                        <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
-
+<!--                        <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">-->
                     </div>
-                    <!-- <div class="baseAvatarBlokLK">
-                        Картинка
-                    </div> -->
-
                 </div>
-
             </div>
         </div>
     </div>

@@ -25,6 +25,7 @@
     text-align: left;
     margin-left: 115px;
     margin-top: 20px;
+    margin-bottom: 40px;
     color: #787A80;
 }
 
@@ -59,8 +60,8 @@
 }
 
 .article-content-search-box {
-    margin-top: 32px;
-    margin-left: 117px;
+    margin-top: 30px;
+    margin-left: 100px;
     display: flex;
     flex-direction: row;
 }
@@ -80,23 +81,40 @@
 
 .author-and-date-box {
     width: 150px;
-    height: 60px;
-
 }
 
 .article-search-box .author {
-    width: 150px;
-    height: 30px;
+    width: 130px;
+    height: 50px;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 150%;
     color: #1E212C;
+    margin-top: 3px;
 }
 
 .article-search-box .date {
-    width: 100px;
-    height: 30px;
+    width: 135px;
+    margin-left: 5px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 160%;
+    color: #787A80;
+}
+
+.dateInfo {
+    display: flex;
+    margin-top: 5px;
+}
+
+.likeCount {
+    display: flex;
+    margin-top: 5px;
+}
+
+.number_rating {
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
