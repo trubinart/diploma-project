@@ -131,6 +131,15 @@
                                 {% endif %}
                             </div>
                             <p class="info">{{ comment.likes.count }}</p>
+                        </div>
+                        <div class="delete_comment">
+
+                            <form method="post" action="{% url 'comment_delete' comment.pk %}">
+                                {% csrf_token %}
+                                <p>Are you sure you want to delete "{{ object }}"?</p>
+                                <input type="submit" value="{{ comment.pk }}">
+                            </form>
+
 
                         </div>
                     </div>

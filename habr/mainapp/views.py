@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, UpdateView, DeleteView
 from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
 
 from uuid import UUID
@@ -425,3 +425,16 @@ class AuthorArticleStarRedirectView(RedirectView):
         else:
             pass
         return url_author_article
+
+
+class UserCommentDeleteView(DeleteView):
+    model = ArticleComment
+
+    def get_success_url(self):
+        article_id = self.request.META['HTTP_REFERER'].split('/')[-2]
+        print(article_id)
+        return reverse_lazy('article', kwargs={'pk': article_id})
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
