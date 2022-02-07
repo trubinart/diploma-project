@@ -114,13 +114,6 @@
     display: inline-flex;
 }
 
-.number_rating {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 160%;
-    color: #787A80;
-}
 
 .article-search-text {
     width: 700px;

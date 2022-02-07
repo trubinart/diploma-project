@@ -616,6 +616,7 @@ body {
 
 .content .main .publications .wrapper .publication .publicationInfo .category {
     font-family: arial;
+    padding-top: 4px;
     font-weight: bold;
     font-size: 14px;
     line-height: 150%;
@@ -625,7 +626,7 @@ body {
 .content .main .publications .wrapper .publication .publicationInfo .divider {
     border: none;
     border-left: 1px solid #787A80;
-    height: 12px;
+    height: 14px;
     margin: 0 5px;
 }
 

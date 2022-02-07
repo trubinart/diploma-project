@@ -14,6 +14,7 @@
                 {% elif sort == 'date_reverse' %}
                     <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}" style="color: #FF3F3A; text-decoration: underline">по
                         дате</a>
+{#                    TODO стрелочки не однозначно считываются, может сделать по дате (новые/старые), по рейтингу (высокий/низкий)?#}
                     <img src="https://img.icons8.com/ios/13/fa314a/double-up.png"/>
                 {% else %}
                     <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}">по дате</a>
