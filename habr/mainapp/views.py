@@ -42,9 +42,7 @@ class MainListView(ListView):
 
     def get_queryset(self):
         sort = self.get_sort_from_request()
-        # TODO проверка на отсутствие сортировки лишняя, можно везде ее убрать
-        # if not sort:
-        #     return Article.objects.all()
+
         if sort == 'date_reverse':
             return Article.objects.all().reverse()
         elif sort == 'rating':
@@ -97,10 +95,8 @@ class CategoriesListView(ListView):
         sort = self.get_sort_from_request()
         # Объявляем переменную и записываем ссылку на id категории
         categories = self.kwargs['pk']
-        # TODO проверка на отсутствие сортировки лишняя, можно везде ее убрать
-        if not sort:
-            return Article.objects.filter(categories_id=categories)
-        elif sort == 'date_reverse':
+
+        if sort == 'date_reverse':
             return Article.objects.filter(categories_id=categories).reverse()
         elif sort == 'rating':
             return Article.objects.filter(categories_id=categories).order_by('article_rating__rating').reverse()
@@ -259,10 +255,8 @@ class UserArticleListView(ListView):
         sort = self.get_sort_from_request()
         # Объявляем переменную user и записываем ссылку на id автора
         user_id = self.kwargs['pk']
-        # TODO проверка на отсутствие сортировки лишняя, можно везде ее убрать
-        if not sort:
-            return Article.objects.filter(user=user_id)
-        elif sort == 'date_reverse':
+
+        if sort == 'date_reverse':
             return Article.objects.filter(user=user_id).reverse()
         elif sort == 'rating':
             return Article.objects.filter(user=user_id).order_by('article_rating__rating').reverse()
@@ -322,10 +316,8 @@ class SearchView(ListView):
         form = SearchForm(self.request.GET)
         if form.is_valid():
             query_string = form.cleaned_data['query']
-            # TODO проверка на отсутствие сортировки лишняя, можно везде ее убрать
-            if not sort:
-                return Article.objects.search(query=query_string)
-            elif sort == 'date_reverse':
+
+            if sort == 'date_reverse':
                 return Article.objects.search(query=query_string).reverse()
             elif sort == 'rating':
                 return Article.objects.search(query=query_string).order_by('article_rating__rating').reverse()
