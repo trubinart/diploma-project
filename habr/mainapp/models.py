@@ -4,12 +4,15 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
+from django.urls import reverse
 from taggit.managers import TaggableManager
-from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
+from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase, Tag
 
 from authapp.models import User
 
 from ckeditor.fields import RichTextField
+
+from mainapp.manager import ArticleManager
 
 
 class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
@@ -91,22 +94,6 @@ class Article(BaseModel):
         all_articles: QuerySet = cls.get_all_articles()
         pagination_articles: Paginator = Paginator(all_articles, pagination_page)
         return pagination_articles
-
-    def get_likes_by_article_id(self) -> QuerySet:
-        """
-        :param: None
-        :return: QuerySet with all LIKES in DataBase by specific Article.
-
-          Method called from Article Item.
-          All likes sorted by date descending order.
-          """
-        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id)
-
-    def get_likes_count_by_article_id(self) -> int:
-        """
-        Подсчет количества лайков для статьи.
-        """
-        return ArticleLike.objects.select_related('article_like').filter(article_like=self.id).count()
 
     def get_comment_count_by_article_id(self) -> int:
         """
