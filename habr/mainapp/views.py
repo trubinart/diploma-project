@@ -1,4 +1,4 @@
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
 from django.utils.decorators import method_decorator
