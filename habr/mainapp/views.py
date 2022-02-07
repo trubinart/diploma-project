@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
@@ -175,6 +175,10 @@ class UpdateArticle(UpdateView):
         pk = self.object.pk
         return reverse_lazy('article', args=[pk])
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UpdateArticle, self).dispatch(*args, **kwargs)
+
 
 class ProfileCreateView(CreateView):
     model = UserProfile
@@ -189,6 +193,10 @@ class ProfileCreateView(CreateView):
         context['categories_list'] = category_list
         return context
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProfileCreateView, self).dispatch(*args, **kwargs)
+
 
 class ProfileEditView(UpdateView):
     model = UserProfile
@@ -202,6 +210,10 @@ class ProfileEditView(UpdateView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProfileEditView, self).dispatch(*args, **kwargs)
 
 
 class LkEditView(UpdateView):

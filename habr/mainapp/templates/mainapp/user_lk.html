@@ -2,73 +2,83 @@
 {% load static %}
 
 {% block content %}
-<div class="main">
-    <!--Вставка кода для кабинета-->
-    <div class="subNavbarLK">
-        {% include 'mainapp/includes/inc-submenu_lk.html' %}
-    </div>
-    <div class="contentLK">
-        <div class="mainLK">
-            <div class="titleLK">
-                Личный кабинет
-            </div>
-            <div class="infoLK">
-                <div class="infoTextLeftLK">
-                    Данная страница предназначена для создания и редактирования статей,
-                    а так же для внесения и изменения информации о себе.
+    <div class="main">
+        <div class="subNavbarLK">
+            {% include 'mainapp/includes/inc-submenu_lk.html' %}
+        </div>
+        <div class="contentLK">
+            <div class="mainLK">
+                <div class="titleLK">
+                    Личный кабинет
                 </div>
-            </div>
-            <div class="profileLK">
-                <div class="blokPersonInfoLK">
-                    <div class="baseInfoBlokLK">
-                        <div class="menuBaseInfoBlokLK">
-                            <ul class="userInfo">
-                                <li class="title_lk">Учетные данные</li>
-                                <li class="text">Логин:</li>
-                                <li> {{ user }}</li>
-                                <li class="text">Почта: </li>
-                                <li>{{ user.email }}</li>
-
-                                <div class="buttonInLk">
-                                    <a href="{% url 'user_edit' user.pk %}">Редактировать учётные данные</a>
-                                </div>
-                            </ul>
-                            <ul class="userInfo">
-                                {% if user.userprofile.name %}
-                                <li class="title_lk">Информация о себе</li>
-                                <li class="text">Имя Фамилия: </li>
-                                <li>{{ user.userprofile.name }}</li>
-                                <li class="text">Возраст: </li>
-                                <li>{{ user.userprofile.birthday|date:"M d, Y" }}</li>
-                                <li class="text">Краткое описание: </li>
-                                <li>{{ user.userprofile.bio }}</li>
-                                <li class="text">Аватар:</li>
-                                <li>
-                                    <div class="infoBlockAvatar">
-                                        <img src="/media/{{ user.userprofile.avatar }}" alt="avatar">
-                                    </div>
-                                </li>
-                                <div class="buttonInLk">
-                                    <a href="{% url 'profile_edit' user.userprofile.id %}">Редактировать информацию о
-                                        себе</a>
-                                </div>
-
-                                {% else %}
-
-                                <div class="buttonInLk">
-                                    <a href="{% url 'profile_edit' user.userprofile.id %}">Заполнить информацию о
-                                        себе</a>
-                                </div>
-
-                                {% endif %}
-                            </ul>
+                {% if user.userprofile.name %}
+                    <div class="infoLK">
+                        <div class="infoTextLeftLK">
+                            Данная страница предназначена для создания и редактирования статей,
+                            а так же для внесения и изменения информации о себе.
                         </div>
-<!--                        <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">-->
+                    </div>
+                {% else %}
+                    <div class="infoLK">
+                        <div class="infoTextLeftLK">
+                            Что бы иметь возможность публиковать собственные статьи, необходимо заполнить информацию о
+                            себе.
+                            Для продолжения работы на сайте необходимо: нажать на кнопку <b>"Заполнить информацию о
+                            себе"</b>
+                            в блоке <b>"Информация о себе"</b> или перейти по ссылке <b>"ЗАПОЛНИТЬ ИНФОРМАЦИЮ О
+                            СЕБЕ"</b> в
+                            меню <b>"Личного кабинета"</b>.
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="profileLK">
+                    <div class="blokPersonInfoLK">
+                        <div class="baseInfoBlokLK">
+                            <div class="menuBaseInfoBlokLK">
+                                <ul class="userInfo">
+                                    <li class="title_lk">Учетные данные</li>
+                                    <li class="text">Логин:</li>
+                                    <li>{{ user }}</li>
+                                    <li class="text">Почта:</li>
+                                    <li>{{ user.email }}</li>
+
+                                    <div class="buttonInLk">
+                                        <a href="{% url 'user_edit' user.pk %}">Редактировать учётные данные</a>
+                                    </div>
+                                </ul>
+                                <ul class="userInfo">
+                                    <li class="title_lk">Информация о себе</li>
+                                    {% if user.userprofile.name %}
+                                        <li class="text">Имя Фамилия:</li>
+                                        <li>{{ user.userprofile.name }}</li>
+                                        <li class="text">Возраст:</li>
+                                        <li>{{ user.userprofile.birthday|date:"M d, Y" }}</li>
+                                        <li class="text">Краткое описание:</li>
+                                        <li>{{ user.userprofile.bio }}</li>
+                                        <li class="text">Аватар:</li>
+                                        <li>
+                                            <div class="infoBlockAvatar">
+                                                <img src="/media/{{ user.userprofile.avatar }}" alt="avatar">
+                                            </div>
+                                        </li>
+                                        <div class="buttonInLk">
+                                            <a href="{% url 'profile_edit' user.userprofile.id %}">Редактировать
+                                                информацию о
+                                                себе</a>
+                                        </div>
+                                    {% else %}
+                                        <div class="buttonInLk">
+                                            <a href="{% url 'profile_edit' user.userprofile.id %}">Заполнить информацию
+                                                о
+                                                себе</a>
+                                        </div>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!--/Вставка кода для кабинета-->
 {% endblock %}
