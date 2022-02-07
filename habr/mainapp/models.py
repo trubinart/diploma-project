@@ -203,10 +203,6 @@ def change_author_rating_by_likes_to_author_comments(sender, instance, action, *
         author.rating -= 1
         author.save()
 
-    elif action == 'post_remove' and author.rating == 0:
-        author.rating = 0
-        author.save()
-
 
 @receiver(post_save, sender=ArticleRating)
 @receiver(post_delete, sender=ArticleRating)

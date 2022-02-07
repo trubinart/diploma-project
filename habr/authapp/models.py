@@ -82,7 +82,3 @@ def change_author_rating_by_author_likes(sender, instance, action, **kwargs):
     if action == 'post_remove' and instance.rating != 0:
         instance.rating -= 1
         instance.save()
-
-    elif action == 'post_remove' and instance.rating == 0:
-        instance.rating = 0
-        instance.save()
