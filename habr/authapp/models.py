@@ -1,7 +1,7 @@
 import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse
 
@@ -54,15 +54,31 @@ class UserProfile(models.Model):
     bio = models.TextField(verbose_name='Краткое описание', max_length=250, blank=False)
     avatar = models.ImageField(verbose_name='Аватар', upload_to='user_avatars')
     stars = models.ManyToManyField(User, blank=True, related_name='author_stars')
+    rating = models.PositiveIntegerField(default=0, verbose_name='author_rating')
+    previous_article_rating = models.PositiveIntegerField(default=0, verbose_name='article_previous_rating')
 
     def __str__(self):
         return f'Userprofile for "{self.user.username}"'
 
     @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_user_profile(sender, instance, created, update_fields, **kwargs):
         if created:
             UserProfile.objects.create(user=instance)
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.userprofile.save()
+
+
+@receiver(m2m_changed, sender=UserProfile.stars.through)
+def change_author_rating_by_author_likes(sender, instance, action, **kwargs):
+    """
+    Сигнал для изменения рейтинга автора от изменения лайков этому автору
+    """
+    if action == 'post_add':
+        instance.rating += 1
+        instance.save()
+
+    if action == 'post_remove' and instance.rating != 0:
+        instance.rating -= 1
+        instance.save()
