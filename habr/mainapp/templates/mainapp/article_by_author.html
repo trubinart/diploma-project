@@ -21,42 +21,46 @@
                     <div class="name_and_share">
                         <h3>{{ author.get_profile.name }}</h3>
                         <p>{{ author.get_profile.bio }}</p>
-                        <div class="share_author">
-                            {% if user.is_authenticated %}
-                                {% if request.user in author.get_profile.stars.all %}
-                                    <a title="Понизить ранг автора"
-                                       href="{% url 'user_article_star_toggle' author.pk %}">
-                                        <img src={% static "img/chevron_blue.png" %}>
-                                    </a>
-                                {% else %}
-                                    <a title="Повысить ранг автора"
-                                       href="{% url 'user_article_star_toggle' author.pk %}">
-                                        <img src={% static "img/chevron_red.png" %}>
-                                    </a>
-                                {% endif %}
+                    </div>
+                </div>
+                <div class="rating_and_share">
+                    <div class="author_rating_box">
+                        <div class="author_rating"> {{ author.get_profile.rating }}</div>
+                        <div class="rating_text">рейтинг</div>
+                    </div>
+                    <div class="share_author">
+                        {% if user.is_authenticated %}
+                            {% if request.user in author.get_profile.stars.all %}
+                                <a title="Понизить ранг автора"
+                                   href="{% url 'user_article_star_toggle' author.pk %}">
+                                    <img src={% static "img/chevron_blue.png" %}>
+                                </a>
                             {% else %}
-                                <img class="img_chevron" title="Авторизуйтесь, чтобы наградить автора"
-                                     src={% static "img/chevron_red.png" %}>
+                                <a title="Повысить ранг автора"
+                                   href="{% url 'user_article_star_toggle' author.pk %}">
+                                    <img src={% static "img/chevron_red.png" %}>
+                                </a>
                             {% endif %}
-                            <div class="count_star">
-                                {{ author.get_profile.stars.count }} ранг
-                            </div>
-                            <a href="https://telegram.org/" target="_blank">
-                                <img src={% static "img/telegram_red.png" %}>
-                            </a>
-                            <a href="https://www.instagram.com/" target="_blank">
-                                <img src={% static "img/instagram_red.png" %}>
-                            </a>
-                            <a href="https://www.facebook.com/" target="_blank">
-                                <img src={% static "img/facebook_red.png" %}>
-                            </a>
+                        {% else %}
+                            <img class="img_chevron" title="Авторизуйтесь, чтобы наградить автора"
+                                 src={% static "img/chevron_red.png" %}>
+                        {% endif %}
+                        <div class="count_star">
+                            {{ author.get_profile.stars.count }} ранг
                         </div>
+                        <a href="https://telegram.org/" target="_blank">
+                            <img src={% static "img/telegram_red.png" %}>
+                        </a>
+                        <a href="https://www.instagram.com/" target="_blank">
+                            <img src={% static "img/instagram_red.png" %}>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank">
+                            <img src={% static "img/facebook_red.png" %}>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-
-
         <div class="publications">
             <div class="wrapper">
                 {% for instance_article in object_list %}
@@ -74,16 +78,20 @@
                                     <img src={% static 'img/Calendar.png' %} alt="Calendar">
                                 </div>
                                 <div class="date">
-                                    {{ instance_article.created_timestamp | date:"d.m.Y"}}
+                                    {{ instance_article.created_timestamp|date:"d.m.Y" }}
                                 </div>
                             </div>
                             <div class="divider"></div>
                             <div class="likeCount">
                                 <div class="icon">
-                                    <img src={% static 'img/like.png' %} alt="like">
+                                    <img src={% static 'img/rating.png' %} alt="like">
                                 </div>
-                                <div class="number">
-                                    {{ instance_article.likes.count }}
+                                <div class="number_rating">
+                                    {% if not instance_article.get_rating_by_article_id %}
+                                        0
+                                    {% else %}
+                                        {{ instance_article.get_rating_by_article_id }}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -108,21 +116,22 @@
             <div class="paginator">
                 {% if page_obj.has_previous %}
                     <div class="pagLeft">
-                        <a href="?page={{ page_obj.previous_page_number }}"><img src={% static 'img/pagLeft.png' %}
-                                                                                         alt="left"></a>
+                        <a href="?page={{ page_obj.previous_page_number }}{% if sort %}&sort={{ sort }}{% endif %}"><img
+                                src={% static 'img/pagLeft.png' %}
+                                        alt="left"></a>
                     </div>
                 {% endif %}
 
                 {% for num_page in page_obj.paginator.page_range %}
                     <div class="pagNum" {% if num_page == page_obj.number %}
                          style="text-decoration: underline" {% endif %}>
-                        <a href="?page={{ num_page }}">{{ num_page }}</a>
+                        <a href="?page={{ num_page }}{% if sort %}&sort={{ sort }}{% endif %}">{{ num_page }}</a>
                     </div>
                 {% endfor %}
 
                 {% if page_obj.has_next %}
                     <div class="pagRight">
-                        <a href="?page={{ page_obj.next_page_number }}"><img
+                        <a href="?page={{ page_obj.next_page_number }}{% if sort %}&sort={{ sort }}{% endif %}"><img
                                 src={% static 'img/pagRight.png' %} alt="right"></a>
                     </div>
                 {% endif %}

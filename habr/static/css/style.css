@@ -468,9 +468,12 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
-    width: 300px;
     height: 44px;
     margin: 0 30px;
+}
+
+.content .main .menu .side .sort .sortDate img {
+  margin-top: 2px;
 }
 
 .content .main .menu .side .sort .title {
@@ -483,14 +486,13 @@ body {
 }
 
 .content .main .menu .side .sort a {
-    display: block;
+    display: inline-block;
     margin-left: 20px;
     text-decoration: none;
-    font-family: arial;
-    font-weight: bold;
     font-size: 16px;
     line-height: 160%;
     color: #9A9CA5;
+    margin-bottom: 1px;
 }
 
 .content .main .menu .side .sort a:hover {
@@ -614,6 +616,7 @@ body {
 
 .content .main .publications .wrapper .publication .publicationInfo .category {
     font-family: arial;
+    padding-top: 4px;
     font-weight: bold;
     font-size: 14px;
     line-height: 150%;
@@ -623,7 +626,7 @@ body {
 .content .main .publications .wrapper .publication .publicationInfo .divider {
     border: none;
     border-left: 1px solid #787A80;
-    height: 12px;
+    height: 14px;
     margin: 0 5px;
 }
 
@@ -634,7 +637,7 @@ body {
 
 .content .main .publications .wrapper .publication .publicationInfo .likeCount .icon,
 .content .main .publications .wrapper .publication .publicationInfo .dateInfo .icon {
-    width: 16px;
+    /*width: 16px;*/
     /*margin: 0 6px 0 0;*/
 }
 
@@ -644,6 +647,15 @@ body {
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
+    margin-left: 5px;
+}
+
+.number_rating {
+    font-family: arial;
+    font-size: 14px;
+    line-height: 150%;
+    color: #787A80;
+    margin-top: 3px;
     margin-left: 5px;
 }
 
@@ -845,7 +857,7 @@ body {
     flex-direction: row;
     align-items: center;
     margin-left: 0;
-    width: 300px;
+    /*width: 300px;*/
     color: #787A80;
 }
 
@@ -864,12 +876,12 @@ body {
     height: 16px;
     border: none;
     border-right: 2px solid #787A80;
-    margin-right: 15px;
-    padding-right: 15px;
+    margin-right: 10px;
+    padding-right: 10px;
 }
 
 .img_chevron {
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 .img_chevron:hover {
@@ -1045,7 +1057,7 @@ body {
 .sidebar .author {
 
     margin-top: 60px;
-    height: 148px;
+    margin-bottom: 30px;
 }
 
 .sidebar .author_title {
@@ -1100,18 +1112,48 @@ body {
     margin-top: 22px;
     display: flex;
     align-items: flex-end;
-    height: 20px;
     opacity: .8;
+    border: none;
+    height: 16px;
+    border-left: 2px solid #787A80;
+    padding-left: 10px;
 }
 
 .sidebar .share_author a {
-    margin-right: 15px;
+    margin-right: 10px;
     display: flex;
 }
 
 .sidebar .share_author a:hover {
     background: burlywood;
     border-radius: 30%;
+}
+
+
+.sidebar .rating_and_share{
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar .author_rating_box{
+    margin-top: 17px;
+    display: flex;
+    opacity: .8;
+}
+
+.sidebar .author_rating{
+    font-size: 24px;
+    font-style: normal;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #c66f;
+}
+
+.sidebar .rating_text{
+    font-size: 16px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 10px;
 }
 
 .sidebar .trending_articles {
@@ -2065,5 +2107,6 @@ body {
 }
 
 /* end my-articles */
+
 
 

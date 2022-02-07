@@ -1,40 +1,54 @@
 {% load static %}
 
-  <div class="menu">
-            <div class="side">
-                <div class="buttonAll">
-                    <a href="{% url 'main' %}">Все</a>
-                </div>
-                {#                <div class="sort">#}
-                {#                    <div class="title">#}
-                {#                        Сортировать#}
-                {#                    </div>#}
-                {#                    <div class="sortDate">#}
-                {#                        <a class="text" href="#"><img src={% static 'img/Calendar.png' %} alt="date"></a>#}
-                {#                    </div>#}
-                {#                    <div class="sortlike">#}
-                {#                        <a class="text" href="#"><img src={% static 'img/like.png' %} alt="like"></a>#}
-                {#                    </div>#}
-                {#                </div>#}
+<div class="menu">
+    <div class="side">
+        <div class="sort">
+            <div class="title">
+                Сортировать:
             </div>
-            <div class="side">
-                <div class="category">
-                    {#                                <div class="categoryTitle">#}
-                    {#                                    Выбор категории#}
-                    {#                                </div>#}
-                    {#                                <select class="categoriItems">#}
-                    {#                                    <option value="all">Все категории</option>#}
-                    {#                                    <option value="design">Дизайн</option>#}
-                    {#                                    <option value="web_development">Веб-разработка</option>#}
-                    {#                                    <option value="mobile_development">Мобильная разработка</option>#}
-                    {#                                    <option value="marketing">Маркетинг</option>#}
-                    {#                                </select>#}
-                </div>
-                <div class="search">
-                    <form method="get" action="{% url 'search' %}">
-                        {{ search_form.query }}
-                        <button type="submit"></button>
-                    </form>
-                </div>
+            <div class="sortDate">
+                {% if not sort %}
+                    <a class="text"
+                       href="{{ request.path }}?sort=date_reverse{% if query %}&query={{ query }}{% endif %}"
+                       style="color: #FF3F3A; text-decoration: underline">по дате</a>
+                    <img src="https://img.icons8.com/ios/13/fa314a/double-down--v1.png"/>
+                {% elif sort == 'date_reverse' %}
+                    <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}"
+                       style="color: #FF3F3A; text-decoration: underline">по
+                        дате</a>
+                    <img src="https://img.icons8.com/ios/13/fa314a/double-up.png"/>
+                {% else %}
+                    <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}">по дате</a>
+                {% endif %}
+
+            </div>
+            <div class="sortDate">
+                {% if not sort or sort == 'date_reverse' %}
+                    <a class="text" href="{{ request.path }}?sort=rating{% if query %}&query={{ query }}{% endif %}">по
+                        рейтингу</a>
+                {% elif sort == 'rating' %}
+                    <a class="text"
+                       href="{{ request.path }}?sort=rating_reverse{% if query %}&query={{ query }}{% endif %}"
+                       style="color: #FF3F3A; text-decoration: underline">по рейтингу</a>
+                    <img src="https://img.icons8.com/ios/13/fa314a/double-down--v1.png"/>
+                {% elif sort == 'rating_reverse' %}
+                    <a class="text" href="{{ request.path }}?sort=rating{% if query %}&query={{ query }}{% endif %}"
+                       style="color: #FF3F3A; text-decoration: underline">по рейтингу</a>
+                    <img src="https://img.icons8.com/ios/13/fa314a/double-up.png"/>
+
+                {% endif %}
             </div>
         </div>
+    </div>
+
+    <div class="side">
+        <div class="search">
+            <form method="get" action="{% url 'search' %}">
+                {{ search_form.query }}
+                <button type="submit"></button>
+            </form>
+        </div>
+    </div>
+
+</div>
+

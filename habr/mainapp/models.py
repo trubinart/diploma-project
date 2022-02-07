@@ -6,8 +6,11 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.db.models.signals import m2m_changed, post_delete, post_save
+from django.dispatch import receiver
+from django.db.models import Avg
 
-from authapp.models import User
+from authapp.models import User, UserProfile
 from mainapp.manager import ArticleManager
 
 
@@ -129,12 +132,30 @@ class Article(BaseModel):
         """
         return reverse("like-api-toggle", kwargs={"pk": self.id})
 
+    def get_rating_by_article_id(self) -> QuerySet:
+        """
+        Получение рейтинга для статьи.
+        """
+        # return ArticleRating.objects.filter(article_rating=self.id).select_related('rating')
+        return ArticleRating.objects.get(article_rating=self.id).rating
+
+
+# сигнал для создания таблицы рейтинга к статье
+@receiver(post_save, sender=Article)
+def create_article_rating(instance, created, **kwargs):
+    if created:
+        new_rating = ArticleRating()
+        new_rating.article_rating = instance
+        new_rating.article_author = instance.user
+        new_rating.save()
+        return None
+
 
 class ArticleComment(BaseModel):
     """
     Models for Articles Comments
     """
-    article_comment = models.ForeignKey(Article, on_delete=models.DO_NOTHING, verbose_name='Article for comment',
+    article_comment = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='Article for comment',
                                         related_name='article_comment')
     text = models.TextField(max_length=300, verbose_name='Comment text')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Comment Author',
@@ -147,3 +168,96 @@ class ArticleComment(BaseModel):
     class Meta:
         db_table = 'article_comments'
         ordering = ['-created_timestamp']
+
+
+class ArticleRating(BaseModel):
+    """
+    Models for Articles Rating
+    """
+    article_rating = models.ForeignKey(Article, on_delete=models.CASCADE, verbose_name='article_for_rating',
+                                       related_name='article_rating')
+    rating = models.PositiveSmallIntegerField(default=0, verbose_name='rating')
+    article_author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='article_author')
+
+    def __str__(self):
+        return f'from article "{self.article_rating.title}" rating = "{self.rating}"'
+
+    class Meta:
+        db_table = 'article_rating'
+        ordering = ['rating']
+
+
+@receiver(m2m_changed, sender=ArticleComment.likes.through)
+def change_author_rating_by_likes_to_author_comments(sender, instance, action, **kwargs):
+    """
+    Сигнал для изменения рейтинга автора от изменения лайков к комментариям этого автора
+    """
+
+    author = UserProfile.objects.get(user=instance.user.id)
+
+    if action == 'post_add':
+        author.rating += 1
+        author.save()
+
+    if action == 'post_remove' and author.rating != 0:
+        author.rating -= 1
+        author.save()
+
+
+@receiver(post_save, sender=ArticleRating)
+@receiver(post_delete, sender=ArticleRating)
+def change_author_rating_by_article_rating(sender, instance, **kwargs):
+    """
+    Сигнал для изменения рейтинга автора от изменения рейтинга статей этого автора
+    """
+    author = instance.article_rating.user
+    instance.article_author = author
+
+    previous_article_rating = author.userprofile.previous_article_rating
+    author.userprofile.rating -= previous_article_rating
+
+    rating_objects_by_author = None if not ArticleRating.objects.filter(article_author=author) \
+        else ArticleRating.objects.filter(article_author=author)
+
+    if not rating_objects_by_author:
+        new_article_rating = instance.rating
+    else:
+        new_article_rating = rating_objects_by_author.aggregate(avg_duration=Avg('rating'))['avg_duration']
+
+    author.userprofile.rating += int(new_article_rating)
+    author.userprofile.previous_article_rating = int(new_article_rating)
+
+    author.save()
+
+
+@receiver(m2m_changed, sender=Article.likes.through)
+def change_article_rating_by_likes_to_article(instance, action, **kwargs):
+    """
+    Сигнал для изменения рейтинга статьи от изменения кол-ва лайков к статье
+    """
+    article_rating = ArticleRating.objects.get(article_rating_id=instance.id)
+    # ценость одного лайка и одного комментария
+    value_one_like = 1
+    value_one_comments = 0.2
+    if action in ['post_add', 'post_remove']:
+        new_article_rating = instance.likes.count() * value_one_like + int(
+            instance.get_comment_count_by_article_id() * value_one_comments)
+        article_rating.rating = new_article_rating
+        article_rating.save()
+        return None
+
+
+@receiver(post_save, sender=ArticleComment)
+def change_article_rating_by_count_comments_to_article(instance, **kwargs):
+    """
+    Сигнал для изменения рейтинга статьи от изменения кол-ва комментов к статье
+    """
+    article_rating = ArticleRating.objects.get(article_rating_id=instance.article_comment.id)
+    # ценость одного лайка и одного комментария
+    value_one_like = 1
+    value_one_comments = 0.2
+    new_article_rating = instance.article_comment.likes.count() * value_one_like + int(
+        instance.article_comment.get_comment_count_by_article_id() * value_one_comments)
+    article_rating.rating = new_article_rating
+    article_rating.save()
+    return None

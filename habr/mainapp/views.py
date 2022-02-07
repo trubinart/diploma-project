@@ -14,15 +14,21 @@ from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories, ArticleComment
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
-
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
 
 """обозначение формы поиска для вывода в меню во разных view"""
 search_form = SearchForm()
+
+"""метод получения параметра сортировки"""
+
+
+def get_sort_from_request(self):
+    try:
+        sort = self.request.GET['sort']
+        return sort
+    except Exception:
+        return None
 
 
 class MainListView(ListView):
@@ -31,13 +37,33 @@ class MainListView(ListView):
     paginate_by = 9
     model = Article
 
+    def get_sort_from_request(self):
+        return get_sort_from_request(self)
+
+    def get_queryset(self):
+        sort = self.get_sort_from_request()
+
+        if sort == 'date_reverse':
+            return Article.objects.all().reverse()
+        elif sort == 'rating':
+            return Article.objects.order_by('article_rating__rating').reverse()
+        elif sort == 'rating_reverse':
+            return Article.objects.order_by('article_rating__rating')
+        else:
+            return Article.objects.all()
+
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
+
         # добавляем в набор запросов все категории
         context['categories_list'] = category_list
         context['search_form'] = search_form
+
+        # добавляем сортировку
+        sort = self.get_sort_from_request()
+        context['sort'] = sort
         return context
 
 
@@ -62,11 +88,22 @@ class CategoriesListView(ListView):
     paginate_by = 9
     model = Article
 
+    def get_sort_from_request(self):
+        return get_sort_from_request(self)
+
     def get_queryset(self):
+        sort = self.get_sort_from_request()
         # Объявляем переменную и записываем ссылку на id категории
         categories = self.kwargs['pk']
-        new_context = Article.objects.filter(categories_id=categories)
-        return new_context
+
+        if sort == 'date_reverse':
+            return Article.objects.filter(categories_id=categories).reverse()
+        elif sort == 'rating':
+            return Article.objects.filter(categories_id=categories).order_by('article_rating__rating').reverse()
+        elif sort == 'rating_reverse':
+            return Article.objects.filter(categories_id=categories).order_by('article_rating__rating')
+        else:
+            return Article.objects.filter(categories_id=categories)
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -76,7 +113,11 @@ class CategoriesListView(ListView):
         context['title'] = f'Статьи по категории {category.name}'
         context['categories_list'] = category_list
         context['categories_pk'] = UUID(category_id)
+        context['category_name'] = category.name
         context['search_form'] = search_form
+        # добавляем сортировку
+        sort = self.get_sort_from_request()
+        context['sort'] = sort
         return context
 
 
@@ -219,11 +260,22 @@ class UserArticleListView(ListView):
     paginate_by = 9
     model = Article
 
+    def get_sort_from_request(self):
+        return get_sort_from_request(self)
+
     def get_queryset(self):
+        sort = self.get_sort_from_request()
         # Объявляем переменную user и записываем ссылку на id автора
         user_id = self.kwargs['pk']
-        new_context = Article.objects.filter(user=user_id)
-        return new_context
+
+        if sort == 'date_reverse':
+            return Article.objects.filter(user=user_id).reverse()
+        elif sort == 'rating':
+            return Article.objects.filter(user=user_id).order_by('article_rating__rating').reverse()
+        elif sort == 'rating_reverse':
+            return Article.objects.filter(user=user_id).order_by('article_rating__rating')
+        else:
+            return Article.objects.filter(user=user_id)
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -237,6 +289,9 @@ class UserArticleListView(ListView):
         context['categories_list'] = category_list
         context['author'] = author
         context['search_form'] = search_form
+        # добавляем сортировку
+        sort = self.get_sort_from_request()
+        context['sort'] = sort
         return context
 
 
@@ -265,12 +320,23 @@ class SearchView(ListView):
     paginate_by = 9
     model = Article
 
+    def get_sort_from_request(self):
+        return get_sort_from_request(self)
+
     def get_queryset(self):
+        sort = self.get_sort_from_request()
         form = SearchForm(self.request.GET)
         if form.is_valid():
             query_string = form.cleaned_data['query']
-            search_results = Article.objects.search(query=query_string)
-            return search_results
+
+            if sort == 'date_reverse':
+                return Article.objects.search(query=query_string).reverse()
+            elif sort == 'rating':
+                return Article.objects.search(query=query_string).order_by('article_rating__rating').reverse()
+            elif sort == 'rating_reverse':
+                return Article.objects.search(query=query_string).order_by('article_rating__rating')
+            else:
+                return Article.objects.search(query=query_string)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -278,6 +344,9 @@ class SearchView(ListView):
         context['categories_list'] = category_list
         context['title'] = 'Поиск по сайту'
         context['query'] = self.request.GET['query']
+        # добавляем сортировку
+        sort = self.get_sort_from_request()
+        context['sort'] = sort
         return context
 
 
@@ -298,36 +367,6 @@ class ArticleLikeRedirectView(RedirectView):
         else:
             pass
         return url_article
-
-
-
-
-class ArticleLikeRedirectAPIView(APIView):
-    """Класс для постановки лайка статье через API REST_framework"""
-
-    authentication_classes = (authentication.SessionAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request, pk=None):
-        obj = get_object_or_404(Article, pk=pk)
-        user = self.request.user
-        updated = False
-        liked = False
-
-        if user.is_authenticated:
-            if user in obj.likes.all():
-                liked = False
-                obj.likes.remove(user)
-            else:
-                liked = True
-                obj.likes.add(user)
-            updated = True
-
-        data = {
-            "updated": updated,
-            "liked": liked
-        }
-        return Response(data)
 
 
 class CommentLikeRedirectView(RedirectView):
