@@ -2176,6 +2176,23 @@ body {
     justify-content: center;
 }
 
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .toLk {
+    display: flex;
+    text-decoration: none;
+    width: 840px;
+    background: linear-gradient(55.95deg, #3a40ff 0%, #1e278f 100%);
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 44px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.5px;
+    color: #FFFFFF;
+    justify-content: center;
+    margin: 0 auto 40px;
+}
+
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK a:hover,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal input[type="submit"]:hover {
     opacity: .9;
     cursor: pointer;
@@ -2185,6 +2202,36 @@ body {
     padding: 8.5px;
 }
 
+.contentArticleAdd .mainArticleAdd .preview {
+    width: 1000px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.contentArticleAdd .mainArticleAdd .preview .name_habr,
+.contentArticleAdd .mainArticleAdd .preview .habr_information,
+.contentArticleAdd .mainArticleAdd .preview .image_habr_page,
+.contentArticleAdd .mainArticleAdd .preview .text_habr_page,
+.contentArticleAdd .mainArticleAdd .preview .text_normal,
+.contentArticleAdd .mainArticleAdd .preview .name_habr {
+    margin: 20px 0;
+}
+
+.contentArticleAdd .mainArticleAdd .preview .image_habr_page img{
+    width: 390px;
+    height: 300px;
+}
+.contentArticleAdd .mainArticleAdd .preview .habr_information .habr_date_creat{
+    display: flex;
+}
+
+.contentArticleAdd .mainArticleAdd .preview .habr_information .habr_date_creat img {
+    margin-right: 10px;
+}
+
+.contentArticleAdd .mainArticleAdd .preview .text_habr_page .text_bold {
+}
 
 .errorlist {
     list-style-type: none;

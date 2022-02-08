@@ -174,7 +174,7 @@ class ModeratorNotification(BaseModel):
         verbose_name='Comment initiator',
         related_name='comment_initiator'
     )
-    responsible_moderator = models.OneToOneField(
+    responsible_moderator = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
         verbose_name='Responsible moderator',
@@ -204,7 +204,4 @@ class ModeratorNotification(BaseModel):
     @receiver(post_save, sender=ArticleComment)
     def create_moderator_notification(sender, instance, **kwargs):
         if '@moderator' in instance.text:
-            ModeratorNotification.objects.create(comment_initiator=instance,)
-
-
-
+            ModeratorNotification.objects.create(comment_initiator=instance, )

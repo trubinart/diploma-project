@@ -34,9 +34,11 @@
                 </div>
             </div>
             <div class="new_requests">
+                {% if object_list.0.get_count_new_requests_moderation %}
                 <div class="requests_title">
                     Новые запросы на модерацию
                 </div>
+                {% endif %}
                 {% for notification in object_list %}
                 {% if notification.status == 'N' %}
                 <div class="request_wrapper">
@@ -50,11 +52,13 @@
                     </div>
                     <div class="buttons">
                         <div class="take">
-                            <a href="#">Взять на модерацию</a>
-                        </div>
-                        <div class="watch">
                             <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}">
                                 Просмотреть статью
+                            </a>
+                        </div>
+                        <div class="watch">
+                            <a href="{% url 'moder_not_update' notification.pk %}">
+                                Взять на модерацию
                             </a>
                         </div>
                     </div>
@@ -72,18 +76,18 @@
                 <div class="request_wrapper">
                     <div class="info">
                         <div class="article">
-                            Запрос на проверку статьи: &nbsp;&nbsp; {{ object_list.0.comment_initiator.article_comment }}
+                            Запрос на проверку статьи: &nbsp;&nbsp; {{ notification.comment_initiator.article_comment }}
                         </div>
                         <div class="initiator">
-                            Запрос от пользователя: &nbsp;&nbsp; {{ object_list.0.comment_initiator.user }}
+                            Запрос от пользователя: &nbsp;&nbsp; {{ notification.comment_initiator.user }}
                         </div>
                     </div>
                     <div class="buttons">
                         <div class="take">
-                            <a href="#">Заблокировать статью</a>
+                            <a href="#">Приступить к модерации</a>
                         </div>
                         <div class="watch">
-                            <a href="{% url 'article' object_list.0.comment_initiator.article_comment.pk %}">
+                            <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}">
                                 Просмотреть статью
                             </a>
                         </div>

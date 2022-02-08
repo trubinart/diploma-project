@@ -26,7 +26,7 @@ class User(AbstractUser, BaseModel):
     """
     username = models.CharField(verbose_name='user_name', unique=True, max_length=25, blank=False)
     email = models.EmailField(verbose_name='email', unique=True, blank=False)
-    password = models.CharField(verbose_name='password', max_length=25, blank=False)
+    password = models.CharField(verbose_name='password', max_length=250, blank=False)
     first_name = None
     last_name = None
 
