@@ -182,7 +182,12 @@ class ModeratorNotification(BaseModel):
         blank=True,
         null=True
     )
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Статус', default='N')
+    status = models.CharField(
+        max_length=1,
+        choices=STATUS_CHOICES,
+        verbose_name='Статус',
+        default='N'
+    )
 
     def __str__(self):
         return f'Запрос на проверку статьи "{self.comment_initiator.article_comment}" ' \
@@ -200,6 +205,6 @@ class ModeratorNotification(BaseModel):
     def create_moderator_notification(sender, instance, **kwargs):
         if '@moderator' in instance.text:
             ModeratorNotification.objects.create(comment_initiator=instance,)
-            print(instance.text)
+
 
 

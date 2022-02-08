@@ -5,6 +5,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
+import mainapp.models as mainapp_models
+
 
 class BaseModel(models.Model):
     """
@@ -42,6 +44,9 @@ class User(AbstractUser, BaseModel):
         Метод отдает абсолютную ссылку на страницу статей автора
         """
         return reverse("user_article", kwargs={"pk": self.id})
+
+    def get_count_notifications_on_moderation(self):
+        return mainapp_models.ModeratorNotification.objects.filter(responsible_moderator=self).count()
 
 
 class UserProfile(models.Model):

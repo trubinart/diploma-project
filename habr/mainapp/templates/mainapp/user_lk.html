@@ -25,17 +25,74 @@
                         </div>
                     </div>
                     {% else %}
-                    <div class="text">
-                        <div class="info noRequests">
-                            Нет новых заявок
+                    <div class="text noRequests">
+                        <div class="info">
+                            Нет новых заявок на модерацию
                         </div>
                     </div>
                     {% endif %}
                 </div>
-                <div class="button">
-                    <a href="#">Перейти к модерации</a>
-                </div>
             </div>
+            <div class="new_requests">
+                <div class="requests_title">
+                    Новые запросы на модерацию
+                </div>
+                {% for notification in object_list %}
+                {% if notification.status == 'N' %}
+                <div class="request_wrapper">
+                    <div class="info">
+                        <div class="article">
+                            Запрос на проверку статьи: &nbsp;&nbsp; {{ notification.comment_initiator.article_comment }}
+                        </div>
+                        <div class="initiator">
+                            Запрос от пользователя: &nbsp;&nbsp; {{ notification.comment_initiator.user }}
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <div class="take">
+                            <a href="#">Взять на модерацию</a>
+                        </div>
+                        <div class="watch">
+                            <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}">
+                                Просмотреть статью
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif  %}
+                {% endfor %}
+            </div>
+            {% if user.get_count_notifications_on_moderation  %}
+            <div class="new_requests my_request">
+                <div class="requests_title">
+                    Взятые в работу запросы на модерацию
+                </div>
+                {% for notification in object_list %}
+                {% if notification.responsible_moderator == user %}
+                <div class="request_wrapper">
+                    <div class="info">
+                        <div class="article">
+                            Запрос на проверку статьи: &nbsp;&nbsp; {{ object_list.0.comment_initiator.article_comment }}
+                        </div>
+                        <div class="initiator">
+                            Запрос от пользователя: &nbsp;&nbsp; {{ object_list.0.comment_initiator.user }}
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <div class="take">
+                            <a href="#">Заблокировать статью</a>
+                        </div>
+                        <div class="watch">
+                            <a href="{% url 'article' object_list.0.comment_initiator.article_comment.pk %}">
+                                Просмотреть статью
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif  %}
+                {% endfor %}
+            </div>
+             {% endif  %}
             {% else %}
             <div class="infoLK">
                 <div class="infoTextLeftLK">
