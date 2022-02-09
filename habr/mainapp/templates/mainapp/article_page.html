@@ -23,7 +23,7 @@
                 <div class="habr_information">
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %}>
-                        <p class="date">{{ article.created_timestamp | date:"d.m.Y"}}</p>
+                        <p class="date">{{ article.created_timestamp | date:"d.m.Y" }}</p>
 
                         {#                        Изменение кол-ва лайков через api#}
                         {#                        <a class="like-btn" data-href="{{ article.get_like_api_url }}"#}
@@ -61,7 +61,7 @@
             </div>
             <div class="tags_and_share">
                 <div class="tags_habr">
-                   <p>Tags: {{ article.tags.all|join:", " }}</p>
+                    <p>Tags: {{ article.tags.all|join:", " }}</p>
                 </div>
                 <div class="habr_info">
                     <p class="info">Likes and comments:</p>
@@ -175,7 +175,8 @@
                                     </a>
                                 {% endif %}
                             {% else %}
-                                <img class="img_chevron" title="Авторизуйтесь, чтобы наградить автора" src={% static "img/chevron_red.png" %}>
+                                <img class="img_chevron" title="Авторизуйтесь, чтобы наградить автора"
+                                     src={% static "img/chevron_red.png" %}>
                             {% endif %}
                             <div class="count_star">
                                 {{ article.user.userprofile.stars.count }} ранг
@@ -217,12 +218,17 @@
 
                 {% endif %}
             </div>
-            <div class="tags_trending">
-                <h6 class="trending_articles_title">Tags:</h6>
-                <div class="tags">
-                    <p>{{ article.tags.all|join:", " }}</p>
+            {% if article.tags.all %}
+                <div class="tags_trending">
+                    <h6 class="trending_articles_title">Tags:</h6>
+                    <div class="tags">
+                        {% for tag in article.tags.all %}
+                            <p>#{{ tag }}</p>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
+
         </div>
     </div>
 {% endblock %}

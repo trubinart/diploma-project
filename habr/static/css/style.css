@@ -1185,7 +1185,7 @@ body {
     display: inline;
 }
 
-.sidebar .tags a {
+.sidebar .tags p {
     text-decoration: none;
     display: inline-block;
     margin-top: 15px;
