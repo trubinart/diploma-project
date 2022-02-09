@@ -1,5 +1,5 @@
 import uuid
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
@@ -18,15 +18,17 @@ class BaseModel(models.Model):
         return cls.objects.filter(id=search_id)
 
 
-class User(AbstractUser, BaseModel):
+class User(AbstractUser, BaseModel, PermissionsMixin):
     """
     Model for user`s registration
     """
     username = models.CharField(verbose_name='user_name', unique=True, max_length=25, blank=False)
     email = models.EmailField(verbose_name='email', unique=True, blank=False)
-    password = models.CharField(verbose_name='password', max_length=25, blank=False)
+    password = models.CharField(verbose_name='password', max_length=100, blank=False)
     first_name = None
     last_name = None
+    is_banned = models.BooleanField(default=False, verbose_name='Заблокирован')
+    date_end_banned = models.DateTimeField(null=True, blank=True, default=None)
 
     def __str__(self):
         return self.username

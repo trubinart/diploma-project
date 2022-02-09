@@ -1,3 +1,6 @@
+from datetime import timedelta
+from django.utils import timezone
+
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
@@ -222,7 +225,7 @@ class LkEditView(UpdateView):
     template_name = 'mainapp/user_lk_update.html'
 
     @staticmethod
-    def post(request):
+    def post(request, **kwargs):
         title = 'Редактирование ЛК'
         if request.POST:
             edit_user_form = UserRegisterForm(request.POST, request.FILES, instance=request.user)
@@ -359,7 +362,7 @@ class ArticleLikeRedirectView(RedirectView):
         url_article = obj_article.get_absolute_url()
         user = self.request.user
 
-        if user.is_authenticated:
+        if user.is_authenticated and user.is_banned is False:
             if user in obj_article.likes.all():
                 obj_article.likes.remove(user)
             else:
@@ -378,7 +381,7 @@ class CommentLikeRedirectView(RedirectView):
         user = self.request.user
 
         obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
-        if user.is_authenticated:
+        if user.is_authenticated and user.is_banned is False:
             if user in obj_comment.likes.all():
                 obj_comment.likes.remove(user)
             else:
@@ -397,7 +400,7 @@ class AuthorStarRedirectView(RedirectView):
         user = self.request.user
 
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
-        if user.is_authenticated:
+        if user.is_authenticated and user.is_banned is False:
             if user in obj_userprofile.stars.all():
                 obj_userprofile.stars.remove(user)
             else:
@@ -417,7 +420,7 @@ class AuthorArticleStarRedirectView(RedirectView):
         user = self.request.user
 
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_author.id)
-        if user.is_authenticated:
+        if user.is_authenticated and user.is_banned is False:
             if user in obj_userprofile.stars.all():
                 obj_userprofile.stars.remove(user)
             else:
@@ -425,3 +428,41 @@ class AuthorArticleStarRedirectView(RedirectView):
         else:
             pass
         return url_author_article
+
+
+class BannedAuthorCommentView(RedirectView):
+    """Класс для блокировки пользователя (автора комментария) на 2 недели"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
+        if user.is_authenticated and user.is_staff is True:
+            banned_date = timezone.now() + timedelta(days=14)
+            obj_comment.user.is_banned = True
+            obj_comment.user.date_end_banned = banned_date
+            obj_comment.user.save()
+        else:
+            pass
+        return url_article
+
+
+class BannedAuthorArticleView(RedirectView):
+    """Класс для блокировки пользователя (автора статьи) на 2 недели"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
+        if user.is_authenticated and user.is_staff is True:
+            banned_date = timezone.now() + timedelta(days=14)
+            obj_userprofile.user.is_banned = True
+            obj_userprofile.user.date_end_banned = banned_date
+            obj_userprofile.user.save()
+        else:
+            pass
+        return url_article
