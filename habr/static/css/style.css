@@ -2239,6 +2239,21 @@ body {
     flex-direction: column;
 }
 
+.contentArticleAdd .mainArticleAdd .preview .text_comment {
+    width: 1000px;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 40px 0;
+}
+
+.contentArticleAdd .mainArticleAdd .preview .text_comment .comment_title,
+.contentArticleAdd .mainArticleAdd .preview .text_comment .comment_text {
+    display:flex;
+    width: 840px;
+    margin: 10px 40px;
+}
+
 .contentArticleAdd .mainArticleAdd .preview .name_habr,
 .contentArticleAdd .mainArticleAdd .preview .habr_information,
 .contentArticleAdd .mainArticleAdd .preview .image_habr_page,

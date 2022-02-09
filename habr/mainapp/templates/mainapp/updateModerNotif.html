@@ -24,6 +24,12 @@
                 </div>
             </div>
             <div class="preview">
+                <div class="text_comment">
+                    <h4 class="comment_title">Текст комментария: </h4>
+                    <p class="comment_text">
+                       {{ object.comment_initiator.text }}
+                    </p>
+                </div>
                 <h1 class="name_habr">
                     {{ object.comment_initiator.article_comment.title }}
                 </h1>
