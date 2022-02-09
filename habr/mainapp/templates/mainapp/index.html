@@ -3,40 +3,44 @@
 
 
 {% block content %}
-<div class="main">
-    <div class="title">
-        Все публикации
-    </div>
+    <div class="main">
+        <div class="title">
+            Все публикации
+        </div>
 
-    {% include 'mainapp/includes/inc-search-menu.html' %}
+        {% include 'mainapp/includes/inc-search-menu.html' %}
 
-    <div class="publications">
-        <div class="wrapper">
-            {% for instance_article in object_list %}
-            <div class="publication">
-                <div class="image">
-                    <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
-                </div>
-                <div class="publicationInfo">
-                    <div class="category">
-                        {{ instance_article.categories }}
-                    </div>
-                    <div class="divider"></div>
-                    <div class="dateInfo">
-                        <div class="icon">
-                            <img src={% static 'img/Calendar.png' %} alt="Calendar">
+        <div class="publications">
+            <div class="wrapper">
+                {% for instance_article in object_list %}
+                    <div class="publication">
+                        <div class="image">
+                            <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
                         </div>
+                        <div class="publicationInfo">
+                            <div class="category">
+                                {{ instance_article.categories }}
+                            </div>
+                            <div class="divider"></div>
+                            <div class="dateInfo">
+                                <div class="icon">
+                                    <img src={% static 'img/Calendar.png' %} alt="Calendar">
+                                </div>
                                 <div class="date">
-                                    {{ instance_article.created_timestamp | date:"d.m.Y"}}
+                                    {{ instance_article.created_timestamp|date:"d.m.Y" }}
                                 </div>
                             </div>
                             <div class="divider"></div>
                             <div class="likeCount">
                                 <div class="icon">
-                                    <img src={% static 'img/like.png' %} alt="like">
+                                    <img src={% static 'img/rating.png' %} alt="like">
                                 </div>
-                                <div class="number">
-                                    {{ instance_article.likes.count }}
+                                <div class="number_rating">
+                                    {% if not instance_article.get_rating_by_article_id %}
+                                        0
+                                    {% else %}
+                                        {{ instance_article.get_rating_by_article_id }}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -61,23 +65,25 @@
             <div class="paginator">
                 {% if page_obj.has_previous %}
                     <div class="pagLeft">
-                        <a href="?page={{ page_obj.previous_page_number }}"><img
+                        <a href="?page={{ page_obj.previous_page_number }}{% if sort %}&sort={{ sort }}{% endif %}"><img
                                 src={% static 'img/pagLeft.png' %} alt="left"></a>
                     </div>
                 {% endif %}
 
-            {% for num_page in page_obj.paginator.page_range %}
-            <div class="pagNum" {% if num_page == page_obj.number %} style="text-decoration: underline" {% endif %}>
-                <a href="?page={{ num_page }}">{{ num_page }}</a>
-            </div>
-            {% endfor %}
+                {% for num_page in page_obj.paginator.page_range %}
+                    <div class="pagNum" {% if num_page == page_obj.number %}
+                         style="text-decoration: underline" {% endif %}>
+                        <a href="?page={{ num_page }}{% if sort %}&sort={{ sort }}{% endif %}">{{ num_page }}</a>
+                    </div>
+                {% endfor %}
 
-            {% if page_obj.has_next %}
-            <div class="pagRight">
-                <a href="?page={{ page_obj.next_page_number }}"><img src={% static 'img/pagRight.png' %} alt="right"></a>
+                {% if page_obj.has_next %}
+                    <div class="pagRight">
+                        <a href="?page={{ page_obj.next_page_number }}{% if sort %}&sort={{ sort }}{% endif %}"><img
+                                src={% static 'img/pagRight.png' %} alt="right"></a>
+                    </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
-</div>
 {% endblock %}
