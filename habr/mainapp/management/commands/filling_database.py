@@ -2,17 +2,14 @@ import random
 import os
 import requests
 
-from mimesis import Text, BinaryFile, Person, Datetime
+from mimesis import Text, Person, Datetime
 from mimesis import Internet
 
 from django.core.management.base import BaseCommand
 from django.core.files import File
 
-from mainapp.models import ArticleCategories
-from authapp.models import User
-
-from mainapp.models import Article, ArticleComment
-from authapp.models import UserProfile
+from mainapp.models import Article, ArticleComment, ArticleCategories
+from authapp.models import User, UserProfile
 
 
 class Command(BaseCommand):
@@ -21,7 +18,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # GENERATE PROJECTS
         text = Text('ru')
-        img_cls = BinaryFile()
 
         # CREATE USERS
         person = Person()
@@ -37,13 +33,15 @@ class Command(BaseCommand):
             user.save()
 
         print('Заполняю таблицу USERS PROFILE')
-        for item in User.objects.all():
+        for item in UserProfile.objects.all():
             name = person.name()
-            user_profile = UserProfile(
-                user=item,
-                name=name,
-                birthday=birthday.formatted_datetime(fmt="%Y-%m-%d"),
-                bio="Этот автор - самый крутой. Статьи у него пушка-бомба!")
+
+            item.name = name
+            item.birthday = birthday.formatted_datetime(fmt="%Y-%m-%d")
+            item.bio = "Этот автор - самый крутой. Статьи у него пушка-бомба!"
+            item.stars.set(User.objects.all())
+            item.rating = random.randrange(50, 400)
+            item.previous_article_rating = random.randrange(1, 50)
 
             img_url = Internet().stock_image(width=50, height=50, keywords=['лицо'])
             img_file = requests.get(img_url)
@@ -54,18 +52,18 @@ class Command(BaseCommand):
 
             with open(file_name, 'rb') as file:
                 data = File(file)
-                user_profile.avatar.save(file_name, data, True)
+                item.avatar.save(file_name, data, True)
 
             os.remove(file_name)
             # заполняется поле stars у таблицы USERS PROFILE
             for _ in range(random.randint(0, 10)):
                 user_liked = random.choice(User.objects.all())
-                if user_liked in user_profile.stars.all():
-                    user_profile.stars.remove(user_liked)
+                if user_liked in item.stars.all():
+                    item.stars.remove(user_liked)
                 else:
-                    user_profile.stars.add(user_liked)
+                    item.stars.add(user_liked)
 
-            user_profile.save()
+            item.save()
 
         # CREATE ARTICLE CATEGORIES
         ARTICLE_CATEGORIES = ['Дизайн', 'Веб-разработка', 'Мобильная разработка', 'Маркетинг']
@@ -111,6 +109,7 @@ class Command(BaseCommand):
 
             # save article
             new_article.save()
+            new_article.tags.add(*[text.word() for i in range(4)])
 
         # CREATE COMMENTS
         print('Заполняю таблицу COMMENTS')

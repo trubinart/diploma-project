@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'authapp',
     'ckeditor',
     'ckeditor_uploader',
-    'rest_framework'
+    'rest_framework',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -95,6 +96,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+LOGIN_REDIRECT_URL = '/accounts/login/'
+LOGIN_URL = '/accounts/login/'
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -131,7 +139,6 @@ CKEDITOR_CONFIGS = {
 CKEDITOR_JQUERY_URL = 'static/js/jquery-3.6.0.min.js'
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_THUMBNAIL_SIZE = (500, 500)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

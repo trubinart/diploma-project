@@ -11,7 +11,7 @@
                         <form class="form-horizontal" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                         {{ form.as_p }}
-                            {% if user.userprofile %}
+                            {% if user.userprofile.avatar %}
                                 <div class="form-avatar"><img src="/media/{{ user.userprofile.avatar }}" alt="avatar">
                                 </div>
                             {% endif %}

@@ -23,28 +23,19 @@
                 <div class="habr_information">
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %}>
-                        <p class="date">{{ article.created_timestamp | date:"d.m.Y"}}</p>
-
-                        {#                        Изменение кол-ва лайков через api#}
-                        {#                        <a class="like-btn" data-href="{{ article.get_like_api_url }}"#}
-                        {#                           data-likes="{{ article.likes.count }}"#}
-                        {#                           href="{{ article.get_like_url }}">#}
-                        {#                            {{ article.likes.count }}#}
-                        {#                        </a>#}
-
+                        <p class="date">{{ article.created_timestamp|date:"H:m d.m.Y " }}</p>
+                        <div style="margin-right: 10px">
+                            <img src={% static 'img/rating.png' %} alt="like">
+                        </div>
+                        <div>
+                            {% if not article.get_rating_by_article_id %}
+                                0
+                            {% else %}
+                                {{ article.get_rating_by_article_id }}
+                            {% endif %}
+                            рейтинг статьи
+                        </div>
                     </div>
-                    {#                    <div class="habr_share">#}
-                    {#                        <p>Share:</p>#}
-                    {#                        <a href="https://www.instagram.com/" target="_blank">#}
-                    {#                            <img src={% static "img/instagram_article.png" %}>#}
-                    {#                        </a>#}
-                    {#                        <a href="https://www.facebook.com/" target="_blank">#}
-                    {#                            <img src={% static "img/facebook_article.png" %}>#}
-                    {#                        </a>#}
-                    {#                        <a href="https://twitter.com/" target="_blank">#}
-                    {#                            <img src={% static "img/twitter_article.png" %}>#}
-                    {#                        </a>#}
-                    {#                    </div>#}
                 </div>
             </div>
             <div class="image_habr_page">
@@ -60,12 +51,14 @@
                 </p>
             </div>
             <div class="tags_and_share">
-                <div class="tags_habr">
-                    <p>Tags:</p>
-                    <a href="#">#дизайн</a>
-                    <a href="#">#веб-разработка</a>
-                    <a href="#">#маркетинг</a>
-                </div>
+                {% if article.tags.all %}
+                    <div class="tags_habr">
+                        <p>Tags:</p>
+                        {% for tag in article.tags.all %}
+                            <a>#{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <div class="habr_info">
                     <p class="info">Likes and comments:</p>
                     <div class="info_img">
@@ -163,33 +156,42 @@
                     <div class="name_and_share">
                         <h3>{{ article.user.get_profile.name }}</h3>
                         <p>{{ article.user.get_profile.bio }}</p>
-                        <div class="share_author">
-                            {% if user.is_authenticated %}
-                                {% if request.user in article.user.userprofile.stars.all %}
-                                    <a title="Понизить ранг автора" href="{% url 'star_toggle' article.pk %}">
-                                        <img src={% static "img/chevron_blue.png" %}>
-                                    </a>
-                                {% else %}
-                                    <a title="Повысить ранг автора" href="{% url 'star_toggle' article.pk %}">
-                                        <img src={% static "img/chevron_red.png" %}>
-                                    </a>
-                                {% endif %}
-                            {% else %}
-                                <img class="img_chevron" title="Авторизуйтесь, чтобы наградить автора" src={% static "img/chevron_red.png" %}>
-                            {% endif %}
-                            <div class="count_star">
-                                {{ article.user.userprofile.stars.count }} ранг
-                            </div>
-                            <a href="https://telegram.org/" target="_blank">
-                                <img src={% static "img/telegram_red.png" %}>
-                            </a>
-                            <a href="https://www.instagram.com/" target="_blank">
-                                <img src={% static "img/instagram_red.png" %}>
-                            </a>
-                            <a href="https://www.facebook.com/" target="_blank">
-                                <img src={% static "img/facebook_red.png" %}>
-                            </a>
+                    </div>
+                </div>
+                <div class="rating_and_share">
+                    <div class="author_rating_box">
+                        <div class="author_rating">
+                            {{ article.user.get_profile.rating }}
                         </div>
+                        <div class="rating_text">рейтинг</div>
+                    </div>
+                    <div class="share_author">
+                        {% if user.is_authenticated %}
+                            {% if request.user in article.user.userprofile.stars.all %}
+                                <a title="Понизить ранг автора" href="{% url 'star_toggle' article.pk %}">
+                                    <img src={% static "img/chevron_blue.png" %}>
+                                </a>
+                            {% else %}
+                                <a title="Повысить ранг автора" href="{% url 'star_toggle' article.pk %}">
+                                    <img src={% static "img/chevron_red.png" %}>
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <img class="img_chevron" title="Авторизуйтесь, чтобы наградить автора"
+                                 src={% static "img/chevron_red.png" %}>
+                        {% endif %}
+                        <div class="count_star">
+                            {{ article.user.userprofile.stars.count }} ранг
+                        </div>
+                        <a href="https://telegram.org/" target="_blank">
+                            <img src={% static "img/telegram_red.png" %}>
+                        </a>
+                        <a href="https://www.instagram.com/" target="_blank">
+                            <img src={% static "img/instagram_red.png" %}>
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank">
+                            <img src={% static "img/facebook_red.png" %}>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -217,15 +219,17 @@
 
                 {% endif %}
             </div>
-            <div class="tags_trending">
-                <h6 class="trending_articles_title">Tags:</h6>
-                <div class="tags">
-                    <a href="#">#дизайн</a>
-                    <a href="#">#веб-разработка</a>
-                    <a href="#">#маркетинг</a>
-                    <a href="#">#мобильная разработка</a>
+            {% if article.tags.all %}
+                <div class="tags_trending">
+                    <h6 class="trending_articles_title">Tags:</h6>
+                    <div class="tags">
+                        {% for tag in article.tags.all %}
+                            <p>#{{ tag }}</p>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
+
         </div>
     </div>
 {% endblock %}

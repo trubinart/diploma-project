@@ -2,135 +2,85 @@
 {% load static %}
 
 {% block content %}
-<div class="main">
-    <!--Вставка кода для кабинета-->
-    <div class="subNavbarLK">
-        {% include 'mainapp/includes/inc-submenu_lk.html' %}
-    </div>
-    <div class="contentLK">
-        <div class="mainLK">
-            <div class="titleLK">
-                Редактирование страницы на сайте
-            </div>
-            <div class="infoLK">
-                <div class="infoTextLeftLK">
-                    Информацию на этой странице будут видеть пользователи сайта — твои потенциальные
-                    клиенты. Отнесись к ее заполнению
-                    ответственно.
+    <div class="main">
+        <div class="subNavbarLK">
+            {% include 'mainapp/includes/inc-submenu_lk.html' %}
+        </div>
+        <div class="contentLK">
+            <div class="mainLK">
+                <div class="titleLK">
+                    Редактирование страницы на сайте
                 </div>
-                <div class="infoTextRightLK">
-                    <a href="#">Как выглядит моя страница?</a>
-                </div>
-            </div>
-            <div class="profileLK">
-                <div class="menuProfileLK">
-                    <ul class="menuPrLK">
-                        <li class="persInfoLK"><a href="#">Персональная информация</a></li>
-                        <!-- <li class="servicesLK"><a href="#">Услуги</a></li>
-                        <li class="scheduleLK"><a href="#">Расписание</a></li>
-                        <li class="feedbackLK"><a href="#">Отзывы</a></li> -->
-                    </ul>
-
-                </div>
-                <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
-                <div class="blokPersonInfoLK">
-                    <div class="baseInfoBlokLK">
-                        <div class="menuBaseInfoBlokLK">
-                            <ul class="menuPrLK">
-                                <!-- <li class="persInfoLK"><a href="#">Основная информация</a></li> -->
-                                <li class="baseInfoTitleLK">Основная информация</li>
-                            </ul>
-                        </div>
-                        {% if form.errors %}
-                        <div class="error-text-lk">
-                            {{ form.errors.as_text }}
-                        </div>
-                        {% endif %}
-                        <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
-                        <!-- <div class="baseBlokLK"> -->
-                        <form class="baseBlokLK" method="post" id="lk-form" action=""
-                              enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="blokFirstName">
-                                <!--                                <div class="FirstName">-->
-                                <div class="FirstName">
-                                    Имя Фамилия
-                                </div>
-                                <div class="fieldName">
-                                    <!--                                    <input class="inputFild" type="text" name="fieldFirstName" placeholder="Введите имя"-->
-                                    <!--                                        id="fieldFirstName">-->
-                                    <!--                                    <input class="inputFild" type="text" id="fieldFirstName">-->
-                                    <!--                                    <label>-->
-<!--                                    <input class="inputFild" name="name" placeholder="Имя Фамилия">-->
-                                    <!--                                    {{ form.birthday }}&lt;!&ndash;                                    </label>&ndash;&gt;-->
-                                    <!--                                    {{ forms.name }}-->
-<!--                                    {{ form.name }}-->
-                                    {{ form.name }}
-                                </div>
-                            </div>
-                            <!--                            <div class="blokLastName">-->
-                            <!--                                <div class="LastName">-->
-                            <!--                                    Фамилия-->
-                            <!--                                </div>-->
-                            <!--                                <div class="fieldName">-->
-                            <!--                                    <input class="inputFild" type="text" name="fieldLastName"-->
-                            <!--                                        placeholder="Введите фамилию" id="fieldLastName">-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-
-                            <div class="blokBirthdate">
-                                <div class="Birthdate">
-                                    Возраст
-                                </div>
-                                <div class="fieldName">
-                                    <!--                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="18"-->
-                                    <!--                                        id="fieldBirthdate">-->
-<!--                                    <input class="inputFild" type="date" name="birthday">-->
-                                     {{ form.birthday }}
-                                </div>
-                            </div>
-                            <div class="blokShortDescription">
-                                <div class="shortDescription">
-                                    Краткое описание
-                                </div>
-                                <div class="fieldName">
-                                    <!-- <input class="inputFild" type="text" name="fieldSecondName"
-                                                                    placeholder="Введите возраст" id="fieldSecondName"> -->
-                                    <!--                                    <textarea class="inputFild" name="fieldShortDescription"-->
-                                    <!--                                        placeholder="Краткое описание" id="fieldShortDescription"-->
-                                    <!--                                        type="textarea"></textarea>-->
-<!--                                    <textarea class="inputFild" name="bio"-->
-<!--                                              type="textarea"></textarea>-->
-                                                                        {{ form.bio }}
-                                </div>
-                            </div>
-                            <div class="blokButton">
-
-                                <input class="form-control" type="submit" value="сохранить изменения"/>
-                                <!-- <button type="submit" value="сохранить изменения"></button> -->
-
-                            </div>
-
-                            <!-- <div class="blokBirthdate">
-                                <div class="Birthdate">
-                                    Название студии
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="01.01.1990"
-                                        id="fieldBirthdate">
-                                </div>
-                            </div> -->
-                        </form>
-                        <!-- </div> -->
+                <div class="infoLK">
+                    <div class="infoTextLeftLK">
+                        Информацию на этой странице будут видеть пользователи сайта — твои потенциальные
+                        клиенты. Отнесись к ее заполнению
+                        ответственно.
                     </div>
-                    <!-- <div class="baseAvatarBlokLK">
-                        Картинка
-                    </div> -->
+                    <div class="infoTextRightLK">
+                        <a href="#">Как выглядит моя страница?</a>
+                    </div>
                 </div>
+                <div class="profileLK">
+                    <div class="menuProfileLK">
+                        <ul class="menuPrLK">
+                            <li class="persInfoLK"><a href="#">Персональная информация</a></li>
+                        </ul>
 
+                    </div>
+                    <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
+                    <div class="blokPersonInfoLK">
+                        <div class="baseInfoBlokLK">
+                            <div class="menuBaseInfoBlokLK">
+                                <ul class="menuPrLK">
+                                    <li class="baseInfoTitleLK">Основная информация</li>
+                                </ul>
+                            </div>
+                            {% if form.errors %}
+                                <div class="error-text-lk">
+                                    {{ form.errors.as_text }}
+                                </div>
+                            {% endif %}
+                            <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
+                            <form class="baseBlokLK" method="post" id="lk-form" action=""
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="blokFirstName">
+                                    <div class="FirstName">
+                                        Имя Фамилия
+                                    </div>
+                                    <div class="fieldName">
+                                        {{ form.birthday }}
+                                        {{ forms.name }}
+                                        {{ form.name }}
+                                        {{ form.name }}
+                                    </div>
+                                </div>
+
+                                <div class="blokBirthdate">
+                                    <div class="Birthdate">
+                                        Возраст
+                                    </div>
+                                    <div class="fieldName">
+                                        {{ form.birthday }}
+                                    </div>
+                                </div>
+                                <div class="blokShortDescription">
+                                    <div class="shortDescription">
+                                        Краткое описание
+                                    </div>
+                                    <div class="fieldName">
+                                        {{ form.bio }}
+                                    </div>
+                                </div>
+                                <div class="blokButton">
+                                    <input class="form-control" type="submit" value="сохранить изменения"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!--/Вставка кода для кабинета-->
 {% endblock %}

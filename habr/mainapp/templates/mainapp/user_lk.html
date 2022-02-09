@@ -63,10 +63,10 @@
                         </div>
                     </div>
                 </div>
-                {% endif  %}
+                {% endif %}
                 {% endfor %}
             </div>
-            {% if user.get_count_notifications_on_moderation  %}
+            {% if user.get_count_notifications_on_moderation %}
             <div class="new_requests my_request">
                 <div class="requests_title">
                     Взятые в работу запросы на модерацию
@@ -83,9 +83,6 @@
                         </div>
                     </div>
                     <div class="buttons">
-                        <div class="take">
-                            <a href="#">Приступить к модерации</a>
-                        </div>
                         <div class="watch">
                             <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}">
                                 Просмотреть статью
@@ -93,17 +90,31 @@
                         </div>
                     </div>
                 </div>
-                {% endif  %}
+                {% endif %}
                 {% endfor %}
             </div>
-             {% endif  %}
+            {% endif %}
             {% else %}
+            {% if user.userprofile.name %}
             <div class="infoLK">
                 <div class="infoTextLeftLK">
                     Данная страница предназначена для создания и редактирования статей,
                     а так же для внесения и изменения информации о себе.
                 </div>
             </div>
+            {% else %}
+            <div class="infoLK">
+                <div class="infoTextLeftLK">
+                    Что бы иметь возможность публиковать собственные статьи, необходимо заполнить информацию о
+                    себе.
+                    Для продолжения работы на сайте необходимо: нажать на кнопку <b>"Заполнить информацию о
+                    себе"</b>
+                    в блоке <b>"Информация о себе"</b> или перейти по ссылке <b>"ЗАПОЛНИТЬ ИНФОРМАЦИЮ О
+                    СЕБЕ"</b> в
+                    меню <b>"Личного кабинета"</b>.
+                </div>
+            </div>
+            {% endif %}
             {% endif %}
             <div class="profileLK">
                 <div class="blokPersonInfoLK">
@@ -151,12 +162,10 @@
                                 {% endif %}
                             </ul>
                         </div>
-                        <!--                        <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">-->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!--/Вставка кода для кабинета-->
 {% endblock %}
