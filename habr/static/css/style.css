@@ -1432,7 +1432,7 @@ body {
 .content .main .contentLK .mainLK .moderator .requests .text .info {
     margin-left: 40px;
     font-weight: 550;
-    font-size: 28px;
+    font-size: 24px;
     line-height: 120%;
 }
 
@@ -1449,7 +1449,7 @@ body {
     align-items: center;
     margin-right: 40px;
     font-weight: 700;
-    font-size: 30px;
+    font-size: 24px;
     line-height: 120%;
     border: 3px solid #000000;
     border-radius: 50px;
@@ -1479,7 +1479,8 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    font-size: 46px;
+    font-size: 24px;
+    font-weight: bold;
     line-height: 130%;
     text-align: center;
     color: #1E212C;

@@ -223,10 +223,14 @@ class ModeratorNotification(BaseModel):
         default='N'
     )
 
-    # TODO добавить для информативности статус заявки, иначе в админке тяжко ориентироваться
     def __str__(self):
-        return f'Запрос на проверку статьи "{self.comment_initiator.article_comment}" ' \
-               f'от "{self.comment_initiator.user}"'
+        status_verbose_names = {'N': 'Новая',
+                                'A': 'Назначена',
+                                'U': 'На рассмотрении',
+                                'R': 'Рассмотрена'}
+        return f'Запрос на проверку статьи "{self.comment_initiator.article_comment}"; ' \
+               f'от "{self.comment_initiator.user}"; ' \
+               f'статус заявки: {status_verbose_names[self.status]}.'
 
     class Meta:
         db_table = 'moderator_notification'

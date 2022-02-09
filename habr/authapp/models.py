@@ -46,7 +46,7 @@ class User(AbstractUser, BaseModel):
         return reverse("user_article", kwargs={"pk": self.id})
 
     def get_count_notifications_on_moderation(self):
-        return mainapp_models.ModeratorNotification.objects.filter(responsible_moderator=self).count()
+        return mainapp_models.ModeratorNotification.objects.filter(responsible_moderator=self).exclude(status='R').count()
 
 
 class UserProfile(models.Model):

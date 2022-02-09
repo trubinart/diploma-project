@@ -66,14 +66,14 @@
                 {% endif %}
                 {% endfor %}
             </div>
-{#            TODO добавить проверку на статус "R", если через админку заявку перевести в закрытую, в лк ее быть не должно #}
+{# Возможно, вместо проверки notification.status != 'R', лучше фильтровать в контроллере и не отдавать на страницу вообще #}
             {% if user.get_count_notifications_on_moderation %}
             <div class="new_requests my_request">
                 <div class="requests_title">
                     Взятые в работу запросы на модерацию
                 </div>
                 {% for notification in object_list %}
-                {% if notification.responsible_moderator == user %}
+                {% if notification.responsible_moderator == user and notification.status != 'R' %}
                 <div class="request_wrapper">
                     <div class="info">
                         <div class="article">
