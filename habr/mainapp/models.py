@@ -223,6 +223,7 @@ class ModeratorNotification(BaseModel):
         default='N'
     )
 
+    # TODO добавить для информативности статус заявки, иначе в админке тяжко ориентироваться
     def __str__(self):
         return f'Запрос на проверку статьи "{self.comment_initiator.article_comment}" ' \
                f'от "{self.comment_initiator.user}"'
