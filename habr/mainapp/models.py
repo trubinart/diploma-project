@@ -9,9 +9,19 @@ from django.urls import reverse
 from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 from django.db.models import Avg
+from taggit.managers import TaggableManager
+from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase, Tag
 
 from authapp.models import User, UserProfile
 from mainapp.manager import ArticleManager
+
+
+class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
+    tag = models.ForeignKey(Tag, related_name="uuid_tagged_items", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
 
 
 class BaseModel(models.Model):
@@ -52,6 +62,7 @@ class Article(BaseModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Author article',
                              related_name='article_author')
     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
+    tags = TaggableManager(through=UUIDTaggedItem)
 
     def __str__(self):
         return self.title
