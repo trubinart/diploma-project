@@ -1048,19 +1048,6 @@ body {
     padding: 5px;
 }
 
-.article .tags_habr a:hover {
-    background: #FF3F3A;
-    text-decoration: none;
-    margin-left: 20px;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 150%;
-    color: #787A80;
-    border: 1px dotted;
-    border-radius: 5px;
-    padding: 5px;
-}
-
 .article .text_bold {
     font-weight: bold;
     font-size: 20px;
@@ -1285,7 +1272,7 @@ body {
     display: inline;
 }
 
-.sidebar .tags a {
+.sidebar .tags p {
     text-decoration: none;
     display: inline-block;
     margin-top: 15px;

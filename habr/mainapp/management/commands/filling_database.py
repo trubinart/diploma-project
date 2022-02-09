@@ -109,6 +109,7 @@ class Command(BaseCommand):
 
             # save article
             new_article.save()
+            new_article.tags.add(*[text.word() for i in range(4)])
 
         # CREATE COMMENTS
         print('Заполняю таблицу COMMENTS')
