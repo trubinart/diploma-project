@@ -218,13 +218,9 @@
                 {% endif %}
             </div>
             <div class="tags_trending">
-{#                #TODO вывести теги на страницу статьи#}
                 <h6 class="trending_articles_title">Tags:</h6>
                 <div class="tags">
-                    <a href="#">#дизайн</a>
-                    <a href="#">#веб-разработка</a>
-                    <a href="#">#маркетинг</a>
-                    <a href="#">#мобильная разработка</a>
+                    <p>{{ article.tags.all|join:", " }}</p>
                 </div>
             </div>
         </div>

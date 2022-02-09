@@ -9,11 +9,6 @@ from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase, Tag
 
 from authapp.models import User
-
-#TODO удалить, так как не используем
-#TODO обновить файл requirements.txt
-from ckeditor.fields import RichTextField
-
 from mainapp.manager import ArticleManager
 
 
