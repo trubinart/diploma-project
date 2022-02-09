@@ -86,10 +86,6 @@ class Command(BaseCommand):
             new_article.subtitle = f'Падзаголовок статьи #{i} автора {new_article.user.username}'
             new_article.text = text.text(quantity=15)
 
-            new_article.tags.add(*[text.word() for i in range(4)])
-
-            new_article.tatags.add('')
-
             # create and set article images
             img_url = Internet().stock_image(width=390, height=300, keywords=['природа'])
             img_file = requests.get(img_url)
@@ -113,6 +109,7 @@ class Command(BaseCommand):
 
             # save article
             new_article.save()
+            new_article.tags.add(*[text.word() for i in range(4)])
 
         # CREATE COMMENTS
         print('Заполняю таблицу COMMENTS')
