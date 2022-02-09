@@ -51,14 +51,14 @@
                 </p>
             </div>
             <div class="tags_and_share">
-                {% if article.tags.all %}
-                    <div class="tags_habr">
-                        <p>Tags:</p>
-                        {% for tag in article.tags.all %}
-                            <a>#{{ tag }}</a>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+{#                {% if article.tags.all %}#}
+{#                    <div class="tags_habr">#}
+{#                        <p>Tags:</p>#}
+{#                        {% for tag in article.tags.all %}#}
+{#                            <a>#{{ tag }}</a>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                {% endif %}#}
                 <div class="habr_info">
                     <p class="info">Likes and comments:</p>
                     <div class="info_img">
@@ -184,13 +184,13 @@
                 <h6 class="author_title">автор</h6>
                 {% if user.is_staff %}
                     <div class="block_author_article">
-                    {% if article.user.is_banned is True %}
-                        <p class="blocked_author_article">заблокирован</p>
-                    {% else %}
-                        <a title="Заблокировать автора статьи на 2 недели!"
-                           href="{% url 'banned_author_article_toggle' article.pk %}">заблокировать
-                        </a>
-                    {% endif %}
+                        {% if article.user.is_banned is True %}
+                            <p class="blocked_author_article">заблокирован</p>
+                        {% else %}
+                            <a title="Заблокировать автора статьи на 2 недели!"
+                               href="{% url 'banned_author_article_toggle' article.pk %}">заблокировать
+                            </a>
+                        {% endif %}
                     </div>
                 {% endif %}
                 <div class="avatar_and_info">

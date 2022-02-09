@@ -53,7 +53,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True, null=False, db_index=True, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Имя Фамилия', max_length=100, blank=False)
     birthday = models.DateField(verbose_name='День рождения', null=True, blank=True)
-    bio = models.TextField(verbose_name='Краткое описание', max_length=250, blank=False)
+    bio = models.TextField(verbose_name='Краткое описание', max_length=120, blank=False)
     avatar = models.ImageField(verbose_name='Аватар', upload_to='user_avatars')
     stars = models.ManyToManyField(User, blank=True, related_name='author_stars')
     rating = models.PositiveIntegerField(default=0, verbose_name='author_rating')
