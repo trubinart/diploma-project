@@ -9,7 +9,7 @@ from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
 from uuid import UUID
 
 from authapp.forms import UserRegisterForm
-from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm
+from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, ArticleStatusEditForm
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification
@@ -431,6 +431,21 @@ class ModeratorNotificationUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Вы действительно хотите взять на модерацию статью?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class ArticleStatusUpdate(UpdateView):
+    template_name = 'mainapp/myArticles.html'
+    paginate_by = 9
+    model = Article
+    form_class = ArticleStatusEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Изменение статуса статьи'
         context['title'] = title
         context['categories_list'] = category_list
         return context

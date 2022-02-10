@@ -78,7 +78,6 @@ class SearchForm(forms.Form):
         self.fields['query'].widget.attrs['class'] = 'search'
 
 
-# --_--
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -165,6 +164,21 @@ class ModeratorNotificationEditForm(forms.ModelForm):
         self.fields['responsible_moderator'].widget = forms.HiddenInput()
         self.fields['status'].widget = forms.HiddenInput()
         # self.fields['status'].label = 'Установите статус'
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = f'form-control {field_name}'
+            field.help_text = ''
+
+
+class ArticleStatusEditForm(forms.ModelForm):
+    """Форма статуса статьи"""
+
+    class Meta:
+        model = Article
+        fields = ('status', )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['status'].widget = forms.HiddenInput()
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = f'form-control {field_name}'
             field.help_text = ''
