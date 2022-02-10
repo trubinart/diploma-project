@@ -5,7 +5,11 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
+from django.db.models.signals import post_save
 from django.urls import reverse
+
+from django.dispatch import receiver
+
 from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 from django.db.models import Avg
@@ -179,6 +183,67 @@ class ArticleComment(BaseModel):
     class Meta:
         db_table = 'article_comments'
         ordering = ['-created_timestamp']
+
+
+class ModeratorNotification(BaseModel):
+    """
+    Модель для хранения  и уведомления модератора о наличии жалобы на статью
+    """
+
+    NEW = 'N'
+    ASSIGNED = 'A'
+    UNDER_CONSIDERATION = 'U'
+    REVIEWED = 'R'
+
+    STATUS_CHOICES = (
+        (NEW, 'Новая'),
+        (ASSIGNED, 'Назначена'),
+        (UNDER_CONSIDERATION, 'На рассмотрении'),
+        (REVIEWED, 'Рассмотрена'),
+    )
+
+    comment_initiator = models.ForeignKey(
+        ArticleComment,
+        on_delete=models.DO_NOTHING,
+        verbose_name='Comment initiator',
+        related_name='comment_initiator'
+    )
+    responsible_moderator = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        verbose_name='Responsible moderator',
+        related_name='responsible_moderator',
+        blank=True,
+        null=True
+    )
+    status = models.CharField(
+        max_length=1,
+        choices=STATUS_CHOICES,
+        verbose_name='Статус',
+        default='N'
+    )
+
+    def __str__(self):
+        status_verbose_names = {'N': 'Новая',
+                                'A': 'Назначена',
+                                'U': 'На рассмотрении',
+                                'R': 'Рассмотрена'}
+        return f'Запрос на проверку статьи "{self.comment_initiator.article_comment}"; ' \
+               f'от "{self.comment_initiator.user}"; ' \
+               f'статус заявки: {status_verbose_names[self.status]}.'
+
+    class Meta:
+        db_table = 'moderator_notification'
+        ordering = ['-created_timestamp']
+
+    @staticmethod
+    def get_count_new_requests_moderation():
+        return ModeratorNotification.objects.filter(status='N').count()
+
+    @receiver(post_save, sender=ArticleComment)
+    def create_moderator_notification(sender, instance, **kwargs):
+        if '@moderator' in instance.text:
+            ModeratorNotification.objects.create(comment_initiator=instance, )
 
 
 class ArticleRating(BaseModel):
