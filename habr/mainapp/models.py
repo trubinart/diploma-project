@@ -54,6 +54,16 @@ class Article(BaseModel):
     # добавили менеджер для изменения логики поиска в модели
     objects = ArticleManager()
 
+    DRAFT = 'D'
+    ACTIVE = 'A'
+    ARCHIVE = 'H'
+
+    STATUS_CHOICES = (
+        (DRAFT, 'Черновик'),
+        (ACTIVE, 'Активная'),
+        (ARCHIVE, 'Архивная'),
+    )
+
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE, verbose_name='categories')
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
@@ -63,6 +73,7 @@ class Article(BaseModel):
                              related_name='article_author')
     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
     tags = TaggableManager(through=UUIDTaggedItem)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Статус', default='D')
 
     def __str__(self):
         return self.title
