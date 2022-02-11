@@ -135,6 +135,20 @@ class LkListView(ListView):
         return
 
     def get_context_data(self, **kwargs):
+        # проверка блокировки пользователя
+        user = self.request.user
+        if user.is_banned is True:
+            if user.date_end_banned is None:
+                pass
+            elif user.date_end_banned <= timezone.now():
+                user.is_banned = False
+                user.date_end_banned = None
+                user.save()
+            else:
+                pass
+        else:
+            pass
+
         context = super().get_context_data(**kwargs)
         title = 'Личный кабинет'
         context['title'] = title

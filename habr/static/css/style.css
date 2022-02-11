@@ -901,10 +901,14 @@ body {
 
 .article .habr_info {
     display: flex;
-    justify-content: right;
-    flex-direction: row;
     align-items: center;
-    margin-right: 0;
+
+}
+
+.article .article_likes_and_comments {
+    display: flex;
+    justify-content: right;
+    align-items: center;
     width: 100%;
 }
 

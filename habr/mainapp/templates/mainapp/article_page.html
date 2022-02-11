@@ -51,21 +51,21 @@
                 </p>
             </div>
             <div class="tags_and_share">
-{#                {% if article.tags.all %}#}
-{#                    <div class="tags_habr">#}
-{#                        <p>Tags:</p>#}
-{#                        {% for tag in article.tags.all %}#}
-{#                            <a>#{{ tag }}</a>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
-{#                {% endif %}#}
-                <div class="habr_info">
+                {#                {% if article.tags.all %}#}
+                {#                    <div class="tags_habr">#}
+                {#                        <p>Tags:</p>#}
+                {#                        {% for tag in article.tags.all %}#}
+                {#                            <a>#{{ tag }}</a>#}
+                {#                        {% endfor %}#}
+                {#                    </div>#}
+                {#                {% endif %}#}
+                <div class="article_likes_and_comments">
                     <p class="info">Likes and comments:</p>
                     <div class="info_img">
                         {% if user.is_authenticated %}
                             {% if request.user in article.likes.all %}
                                 <a {% if user.is_banned is True %}
-                                    title="Нельзя убрать лайк, аккаунт заблокирован"
+                                    style="opacity: .2" title="Нельзя убрать лайк, Ваш аккаунт заблокирован"
                                 {% else %}
                                     title="Убрать лайк со статьи"
                                 {% endif %} class="like" href="{{ article.get_like_url }}">
@@ -73,7 +73,7 @@
                                 </a>
                             {% else %}
                                 <a {% if user.is_banned is True %}
-                                    title="Нельзя поставить лайк, аккаунт заблокирован"
+                                    style="opacity: .2" title="Нельзя поставить лайк, Ваш аккаунт заблокирован"
                                 {% else %}
                                     title="Поставить лайк статье"
                                 {% endif %} href="{{ article.get_like_url }}">
@@ -133,7 +133,7 @@
                                 {% if user.is_authenticated %}
                                     {% if request.user in comment.likes.all %}
                                         <a {% if user.is_banned is True %}
-                                            title="Нельзя убрать лайк, аккаунт заблокирован"
+                                            style="opacity: .2" title="Нельзя убрать лайк, Ваш аккаунт заблокирован"
                                         {% else %}
                                             title="Убрать лайк с комментария"
                                         {% endif %}
@@ -142,7 +142,7 @@
                                         </a>
                                     {% else %}
                                         <a {% if user.is_banned is True %}
-                                            title="Нельзя поставить лайк, аккаунт заблокирован"
+                                            style="opacity: .2" title="Нельзя поставить лайк, Ваш аккаунт заблокирован"
                                         {% else %}
                                             title="Поставить лайк комментарию"
                                         {% endif %}
@@ -180,7 +180,7 @@
                 <button type="submit"><a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
                 </button>
             </form>
-            <div class="author" {% if article.user.is_banned is True %} style="opacity: .5" {% endif %}>
+            <div class="author" {% if article.user.is_banned is True and user.is_staff %} style="opacity: .5" {% endif %}>
                 <h6 class="author_title">автор</h6>
                 {% if user.is_staff %}
                     <div class="block_author_article">
@@ -213,7 +213,7 @@
                         {% if user.is_authenticated %}
                             {% if request.user in article.user.userprofile.stars.all %}
                                 <a {% if user.is_banned is True %}
-                                    title="Нельзя понизить ранг, аккаунт заблокирован"
+                                    style="opacity: .2" title="Нельзя понизить ранг, Ваш аккаунт заблокирован"
                                 {% else %}
                                     title="Понизить ранг автора"
                                 {% endif %}
@@ -222,7 +222,7 @@
                                 </a>
                             {% else %}
                                 <a {% if user.is_banned is True %}
-                                    title="Нельзя повысить ранг, аккаунт заблокирован"
+                                    style="opacity: .2" title="Нельзя повысить ранг, Ваш аккаунт заблокирован"
                                 {% else %}
                                     title="Повысить ранг автора"
                                 {% endif %}
