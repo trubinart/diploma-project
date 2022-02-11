@@ -1126,7 +1126,6 @@ body {
 
 .sidebar .avatar {
     margin-top: 24px;
-    /* flex-direction: column; */
     width: 100px;
     height: 100px;
     border-radius: 4px;
