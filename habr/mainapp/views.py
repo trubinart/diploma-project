@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, UpdateView, TemplateView
 from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
 
 from uuid import UUID
@@ -178,6 +178,10 @@ class UpdateArticle(UpdateView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
+        article_id = self.kwargs['pk']
+        user_id = Article.objects.get(id=article_id).user.id
+        if user_id != self.request.user.id:
+            self.template_name = 'mainapp/404.html'
         return super(UpdateArticle, self).dispatch(*args, **kwargs)
 
 
@@ -454,5 +458,14 @@ class ArticleStatusUpdate(UpdateView):
         context = super().get_context_data(**kwargs)
         title = 'Изменение статуса статьи'
         context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+class PageNotFountView(TemplateView):
+    template_name = "mainapp/404.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Страница не найдена'
         context['categories_list'] = category_list
         return context
