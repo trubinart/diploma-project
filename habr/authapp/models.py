@@ -5,6 +5,8 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse
 
+import mainapp.models as mainapp_models
+
 
 class BaseModel(models.Model):
     """
@@ -24,7 +26,7 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
     """
     username = models.CharField(verbose_name='user_name', unique=True, max_length=25, blank=False)
     email = models.EmailField(verbose_name='email', unique=True, blank=False)
-    password = models.CharField(verbose_name='password', max_length=100, blank=False)
+    password = models.CharField(verbose_name='password', max_length=250, blank=False)
     first_name = None
     last_name = None
     is_banned = models.BooleanField(default=False, verbose_name='Заблокирован')
@@ -44,6 +46,9 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
         Метод отдает абсолютную ссылку на страницу статей автора
         """
         return reverse("user_article", kwargs={"pk": self.id})
+
+    def get_count_notifications_on_moderation(self):
+        return mainapp_models.ModeratorNotification.objects.filter(responsible_moderator=self).exclude(status='R').count()
 
 
 class UserProfile(models.Model):
