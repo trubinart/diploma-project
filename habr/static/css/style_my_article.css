@@ -113,18 +113,20 @@
 }
 
 .article-box .category {
-    height: 28px;
+    height: 26px;
     border-radius: 4px;
+    border: 1px solid rgba(120, 122, 128, 1);
+
 
     font-size: 16px;
     font-style: normal;
     line-height: 26px;
     margin-left: 24px;
     margin-top: 20px;
-    color: rgba(255, 255, 255, 1);
-    background: rgba(245, 47, 110, 1);
+    color: rgba(120, 122, 128, 1);
+    background: white;
     text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 9px;
+    padding-right: 9px;
 
 }
