@@ -131,7 +131,7 @@ class Article(BaseModel):
         """
         Метод выводит последние по дате 3 статьи автора исключая текущую статью
           """
-        return Article.objects.filter(user=self.user).exclude(id=self.id).order_by('-created_timestamp')[:3]
+        return Article.objects.filter(user=self.user, status='A').exclude(id=self.id).order_by('-created_timestamp')[:3]
 
     def get_absolute_url(self):
         """

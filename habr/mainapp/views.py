@@ -44,13 +44,13 @@ class MainListView(ListView):
         sort = self.get_sort_from_request()
 
         if sort == 'date_reverse':
-            return Article.objects.all().reverse()
+            return Article.objects.filter(status='A').reverse()
         elif sort == 'rating':
-            return Article.objects.order_by('article_rating__rating').reverse()
+            return Article.objects.filter(status='A').order_by('article_rating__rating').reverse()
         elif sort == 'rating_reverse':
-            return Article.objects.order_by('article_rating__rating')
+            return Article.objects.filter(status='A').order_by('article_rating__rating')
         else:
-            return Article.objects.all()
+            return Article.objects.filter(status='A')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -81,6 +81,12 @@ class ArticleDetailView(DetailView):
         context['search_form'] = search_form
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        article_id = self.kwargs['pk']
+        article_status = Article.objects.get(id=article_id).status
+        if article_status != 'A':
+            self.template_name = 'mainapp/404.html'
+        return super().dispatch(request, *args, **kwargs)
 
 class CategoriesListView(ListView):
     """Класс для вывода списка категорий """
@@ -97,13 +103,13 @@ class CategoriesListView(ListView):
         categories = self.kwargs['pk']
 
         if sort == 'date_reverse':
-            return Article.objects.filter(categories_id=categories).reverse()
+            return Article.objects.filter(categories_id=categories, status='A').reverse()
         elif sort == 'rating':
-            return Article.objects.filter(categories_id=categories).order_by('article_rating__rating').reverse()
+            return Article.objects.filter(categories_id=categories, status='A').order_by('article_rating__rating').reverse()
         elif sort == 'rating_reverse':
-            return Article.objects.filter(categories_id=categories).order_by('article_rating__rating')
+            return Article.objects.filter(categories_id=categories, status='A').order_by('article_rating__rating')
         else:
-            return Article.objects.filter(categories_id=categories)
+            return Article.objects.filter(categories_id=categories, status='A')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -264,13 +270,13 @@ class UserArticleListView(ListView):
         user_id = self.kwargs['pk']
 
         if sort == 'date_reverse':
-            return Article.objects.filter(user=user_id).reverse()
+            return Article.objects.filter(user=user_id, status='A').reverse()
         elif sort == 'rating':
-            return Article.objects.filter(user=user_id).order_by('article_rating__rating').reverse()
+            return Article.objects.filter(user=user_id, status='A').order_by('article_rating__rating').reverse()
         elif sort == 'rating_reverse':
-            return Article.objects.filter(user=user_id).order_by('article_rating__rating')
+            return Article.objects.filter(user=user_id, status='A').order_by('article_rating__rating')
         else:
-            return Article.objects.filter(user=user_id)
+            return Article.objects.filter(user=user_id, status='A')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -299,7 +305,7 @@ class MyArticleListView(ListView):
     def get_queryset(self):
         # Объявляем переменную user и записываем ссылку на id автора
         user_id = self.kwargs['pk']
-        new_context = Article.objects.filter(user=user_id)
+        new_context = Article.objects.filter(user=user_id).exclude(status='H')
         return new_context
 
     def get_context_data(self, **kwargs):
@@ -326,13 +332,13 @@ class SearchView(ListView):
             query_string = form.cleaned_data['query']
 
             if sort == 'date_reverse':
-                return Article.objects.search(query=query_string).reverse()
+                return Article.objects.search(query=query_string).filter(status='A').reverse()
             elif sort == 'rating':
-                return Article.objects.search(query=query_string).order_by('article_rating__rating').reverse()
+                return Article.objects.search(query=query_string).filter(status='A').order_by('article_rating__rating').reverse()
             elif sort == 'rating_reverse':
-                return Article.objects.search(query=query_string).order_by('article_rating__rating')
+                return Article.objects.search(query=query_string).filter(status='A').order_by('article_rating__rating')
             else:
-                return Article.objects.search(query=query_string)
+                return Article.objects.search(query=query_string).filter(status='A')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
