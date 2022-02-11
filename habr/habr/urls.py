@@ -10,8 +10,7 @@ from mainapp.views import MainListView, ArticleDetailView, \
     CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, SearchView, \
     ArticleLikeRedirectView, CommentLikeRedirectView, \
     AuthorStarRedirectView, AuthorArticleStarRedirectView, UpdateArticle, ProfileCreateView, \
-    ProfileEditView, LkListView, MyArticleListView, ModeratorNotificationUpdate, StatusArticleUpdate, \
-    ArticleStatusUpdate
+    ProfileEditView, LkListView, MyArticleListView, ModeratorNotificationUpdate
 
 from authapp.views import UserEditView
 from ckeditor_uploader import views
@@ -46,7 +45,6 @@ urlpatterns = [
     path('article/<str:pk>/star/', AuthorStarRedirectView.as_view(), name='star_toggle'),
     path('article/<str:pk>/like/<str:id>', CommentLikeRedirectView.as_view(), name='like_comment_toggle'),
     path('user-article/<str:pk>/star/', AuthorArticleStarRedirectView.as_view(), name='user_article_star_toggle'),
-    path('status-update/<str:pk>/', ArticleStatusUpdate.as_view(), name='article_status_update'),
 ]
 
 if settings.DEBUG:

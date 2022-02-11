@@ -307,6 +307,7 @@ class MyArticleListView(ListView):
         context = super().get_context_data(**kwargs)
         context['categories_list'] = category_list
         context['title'] = f'Мои статьи'
+        context['num'] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         return context
 
 
