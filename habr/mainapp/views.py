@@ -441,7 +441,7 @@ class ArticleStatusUpdate(UpdateView):
     paginate_by = 9
     model = Article
     form_class = ArticleStatusEditForm
-    success_url = reverse_lazy('lk')
+    success_url = reverse_lazy('my_articles')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -449,3 +449,7 @@ class ArticleStatusUpdate(UpdateView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ArticleStatusUpdate, self).dispatch(*args, **kwargs)

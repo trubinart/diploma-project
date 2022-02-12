@@ -10,7 +10,7 @@ from mainapp.views import MainListView, ArticleDetailView, \
     CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, SearchView, \
     ArticleLikeRedirectView, CommentLikeRedirectView, \
     AuthorStarRedirectView, AuthorArticleStarRedirectView, UpdateArticle, ProfileCreateView, \
-    ProfileEditView, LkListView, MyArticleListView, ModeratorNotificationUpdate, StatusArticleUpdate, \
+    ProfileEditView, LkListView, MyArticleListView, ModeratorNotificationUpdate, \
     ArticleStatusUpdate
 
 from authapp.views import UserEditView
