@@ -85,7 +85,7 @@
 
 .article-search-box .author {
     width: 130px;
-    height: 46px;
+    /*height: 46px;*/
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
