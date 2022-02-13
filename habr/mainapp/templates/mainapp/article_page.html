@@ -64,7 +64,7 @@
                     <div class="info_img">
                         {% if user.is_authenticated %}
                             {% if request.user in article.likes.all %}
-                                <a {% if user.is_banned is True %}
+                                <a {% if user.is_now_banned %}
                                     style="opacity: .2" title="Нельзя убрать лайк, Ваш аккаунт заблокирован"
                                 {% else %}
                                     title="Убрать лайк со статьи"
@@ -72,7 +72,7 @@
                                     <img src={% static "img/black_like.png" %}>
                                 </a>
                             {% else %}
-                                <a {% if user.is_banned is True %}
+                                <a {% if user.is_now_banned %}
                                     style="opacity: .2" title="Нельзя поставить лайк, Ваш аккаунт заблокирован"
                                 {% else %}
                                     title="Поставить лайк статье"
@@ -93,7 +93,7 @@
             {#            ----- ДОБАВЛЕНИЕ КОММЕНТАРИЯ ----  #}
             <div class="form_add_comment">
                 {% if user.is_authenticated %}
-                    {% if user.is_banned is True %}
+                    {% if user.is_now_banned %}
                         <div class="text-under-button">
                             Аккаунт заблокирован! Вы не можете оставлять лайки и комментарии! <br>
                             Дата окончания блокировки - {{ user.date_end_banned }}
@@ -132,7 +132,7 @@
                             <div class="info_img">
                                 {% if user.is_authenticated %}
                                     {% if request.user in comment.likes.all %}
-                                        <a {% if user.is_banned is True %}
+                                        <a {% if user.is_now_banned %}
                                             style="opacity: .2" title="Нельзя убрать лайк, Ваш аккаунт заблокирован"
                                         {% else %}
                                             title="Убрать лайк с комментария"
@@ -141,7 +141,7 @@
                                             <img src={% static "img/black_like.png" %}>
                                         </a>
                                     {% else %}
-                                        <a {% if user.is_banned is True %}
+                                        <a {% if user.is_now_banned %}
                                             style="opacity: .2" title="Нельзя поставить лайк, Ваш аккаунт заблокирован"
                                         {% else %}
                                             title="Поставить лайк комментарию"
@@ -158,7 +158,7 @@
                             <p class="info">{{ comment.likes.count }}</p>
                             {% if user.is_staff %}
                                 <div class="block_author_comment">
-                                    {% if comment.user.is_banned is True %}
+                                    {% if comment.user.is_now_banned %}
                                         <p class="blocked_author_comment">заблокирован</p>
                                     {% else %}
                                         <a title="Заблокировать автора комментария на 2 недели!"
@@ -180,11 +180,11 @@
                 <button type="submit"><a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
                 </button>
             </form>
-            <div class="author" {% if article.user.is_banned is True and user.is_staff %} style="opacity: .5" {% endif %}>
+            <div class="author" {% if article.user.is_now_banned and user.is_staff %} style="opacity: .5" {% endif %}>
                 <h6 class="author_title">автор</h6>
                 {% if user.is_staff %}
                     <div class="block_author_article">
-                        {% if article.user.is_banned is True %}
+                        {% if article.user.is_now_banned is True %}
                             <p class="blocked_author_article">заблокирован</p>
                         {% else %}
                             <a title="Заблокировать автора статьи на 2 недели!"
@@ -212,7 +212,7 @@
                     <div class="share_author">
                         {% if user.is_authenticated %}
                             {% if request.user in article.user.userprofile.stars.all %}
-                                <a {% if user.is_banned is True %}
+                                <a {% if user.is_now_banned %}
                                     style="opacity: .2" title="Нельзя понизить ранг, Ваш аккаунт заблокирован"
                                 {% else %}
                                     title="Понизить ранг автора"
@@ -221,7 +221,7 @@
                                     <img src={% static "img/chevron_blue.png" %}>
                                 </a>
                             {% else %}
-                                <a {% if user.is_banned is True %}
+                                <a {% if user.is_now_banned %}
                                     style="opacity: .2" title="Нельзя повысить ранг, Ваш аккаунт заблокирован"
                                 {% else %}
                                     title="Повысить ранг автора"

@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils import timezone
 
 import mainapp.models as mainapp_models
 
@@ -33,7 +34,7 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
     date_end_banned = models.DateTimeField(null=True, blank=True, default=None)
 
     def __str__(self):
-        return self.username
+        return f"{self.username} - {self.userprofile.name}"
 
     def get_profile(self):
         """
@@ -48,7 +49,18 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
         return reverse("user_article", kwargs={"pk": self.id})
 
     def get_count_notifications_on_moderation(self):
-        return mainapp_models.ModeratorNotification.objects.filter(responsible_moderator=self).exclude(status='R').count()
+        return mainapp_models.ModeratorNotification.objects.filter(
+            responsible_moderator=self
+        ).exclude(
+            status='R'
+        ).count()
+
+    def is_now_banned(self) -> bool:
+        if self.is_banned:
+            return True
+        if self.date_end_banned and self.date_end_banned > timezone.now():
+            return True
+        return False
 
 
 class UserProfile(models.Model):
@@ -89,3 +101,29 @@ def change_author_rating_by_author_likes(sender, instance, action, **kwargs):
     if action == 'post_remove' and instance.rating != 0:
         instance.rating -= 1
         instance.save()
+
+
+class NotificationUsersAboutBlocking(BaseModel):
+    """
+    Уведомление пользователей о блокировке
+    """
+    blocked_user = models.ForeignKey(
+        User,
+        unique=True,
+        null=False,
+        db_index=True,
+        on_delete=models.CASCADE,
+        verbose_name='кто заблокирован'
+    )
+    moderator_who_blocked = models.ForeignKey(
+        User,
+        unique=True,
+        null=False,
+        db_index=True,
+        on_delete=models.CASCADE,
+        verbose_name='кем заблокирован'
+    )
+    is_read = models.BooleanField(
+        default=False,
+        verbose_name='прочитано'
+    )

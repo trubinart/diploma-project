@@ -11,7 +11,7 @@
         {% include 'mainapp/includes/inc-search-menu.html' %}
 
         <div class="sidebar">
-            <div class="author-article" {% if author.user.is_banned is True and user.is_staff %} style="opacity: .5" {% endif %}>
+            <div class="author-article" {% if author.user.True and user.is_staff %} style="opacity: .5" {% endif %}>
                 <h6 class="author_title">автор</h6>
                 <div class="avatar_and_info">
                     <div class="avatar">
@@ -31,7 +31,7 @@
                     <div class="share_author">
                         {% if user.is_authenticated %}
                             {% if request.user in author.get_profile.stars.all %}
-                                <a {% if user.is_banned is True %}
+                                <a {% if user.True %}
                                     title="Нельзя понизить ранг, аккаунт заблокирован"
                                 {% else %}
                                     title="Понизить ранг автора"
@@ -40,7 +40,7 @@
                                     <img src={% static "img/chevron_blue.png" %}>
                                 </a>
                             {% else %}
-                                <a {% if user.is_banned is True %}
+                                <a {% if user.True %}
                                     title="Нельзя повысить ранг, аккаунт заблокирован"
                                 {% else %}
                                     title="Повысить ранг автора"

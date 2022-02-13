@@ -131,18 +131,18 @@ class LkListView(ListView):
 
     def get_context_data(self, **kwargs):
         # проверка блокировки пользователя
-        user = self.request.user
-        if user.is_banned is True:
-            if user.date_end_banned is None:
-                pass
-            elif user.date_end_banned <= timezone.now():
-                user.is_banned = False
-                user.date_end_banned = None
-                user.save()
-            else:
-                pass
-        else:
-            pass
+        # user = self.request.user
+        # if user.is_banned is True:
+        #     if user.date_end_banned is None:
+        #         pass
+        #     elif user.date_end_banned <= timezone.now():
+        #         user.is_banned = False
+        #         user.date_end_banned = None
+        #         user.save()
+        #     else:
+        #         pass
+        # else:
+        #     pass
 
         context = super().get_context_data(**kwargs)
         title = 'Личный кабинет'
@@ -371,7 +371,7 @@ class ArticleLikeRedirectView(RedirectView):
         url_article = obj_article.get_absolute_url()
         user = self.request.user
 
-        if user.is_authenticated and user.is_banned is False:
+        if user.is_authenticated and not user.is_now_banned:
             if user in obj_article.likes.all():
                 obj_article.likes.remove(user)
             else:
@@ -390,7 +390,7 @@ class CommentLikeRedirectView(RedirectView):
         user = self.request.user
 
         obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
-        if user.is_authenticated and user.is_banned is False:
+        if user.is_authenticated and not user.is_now_banned:
             if user in obj_comment.likes.all():
                 obj_comment.likes.remove(user)
             else:
@@ -409,7 +409,7 @@ class AuthorStarRedirectView(RedirectView):
         user = self.request.user
 
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
-        if user.is_authenticated and user.is_banned is False:
+        if user.is_authenticated and not user.is_now_banned:
             if user in obj_userprofile.stars.all():
                 obj_userprofile.stars.remove(user)
             else:
@@ -429,7 +429,7 @@ class AuthorArticleStarRedirectView(RedirectView):
         user = self.request.user
 
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_author.id)
-        if user.is_authenticated and user.is_banned is False:
+        if user.is_authenticated and not user.is_now_banned:
             if user in obj_userprofile.stars.all():
                 obj_userprofile.stars.remove(user)
             else:
@@ -464,7 +464,7 @@ class BannedAuthorCommentView(RedirectView):
         obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
         if user.is_authenticated and user.is_staff is True:
             banned_date = timezone.now() + timedelta(days=14)
-            obj_comment.user.is_banned = True
+            # obj_comment.user.is_banned = True
             obj_comment.user.date_end_banned = banned_date
             obj_comment.user.save()
         else:
@@ -483,7 +483,7 @@ class BannedAuthorArticleView(RedirectView):
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
         if user.is_authenticated and user.is_staff is True:
             banned_date = timezone.now() + timedelta(days=14)
-            obj_userprofile.user.is_banned = True
+            # obj_userprofile.user.is_banned = True
             obj_userprofile.user.date_end_banned = banned_date
             obj_userprofile.user.save()
         else:
