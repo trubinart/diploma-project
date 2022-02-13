@@ -77,7 +77,7 @@ class Article(BaseModel):
                              related_name='article_author')
     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
     tags = TaggableManager(through=UUIDTaggedItem)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Статус', default='A')
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Статус', default='D')
 
     def __str__(self):
         return self.title

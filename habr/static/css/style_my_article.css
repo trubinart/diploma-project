@@ -74,6 +74,7 @@
     font-size: 14px;
     background-color: white;
     color: #FF3F3A;
+    text-decoration: none;
 }
 
 .article-box .article-button:hover {

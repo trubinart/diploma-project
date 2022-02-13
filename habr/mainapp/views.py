@@ -149,7 +149,7 @@ class CreateArticle(CreateView):
     model = Article
     template_name = 'mainapp/updateArticle.html'
     form_class = ArticleEditForm
-    success_url = reverse_lazy('main')
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -158,6 +158,8 @@ class CreateArticle(CreateView):
         context['categories_list'] = category_list
         return context
 
+    def get_success_url(self):
+         return reverse_lazy('my_articles', args = [self.request.user.id])
 
 class UpdateArticle(UpdateView):
     """Класс для создания статьи"""
