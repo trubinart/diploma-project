@@ -24,10 +24,11 @@ class Command(BaseCommand):
         birthday = Datetime()
 
         print('Заполняю таблицу USERS')
+
         for _ in range(10):
             user = User(
                 username=person.username(mask='C'),
-                email=person.email(domains=None, unique=True),
+                email=person.username(mask='C'),
                 password=person.password(length=8))
 
             user.save()
@@ -85,6 +86,7 @@ class Command(BaseCommand):
             new_article.title = f'Заголовок статьи #{i} автора {new_article.user.username}'
             new_article.subtitle = f'Падзаголовок статьи #{i} автора {new_article.user.username}'
             new_article.text = text.text(quantity=15)
+            new_article.status = 'A'
 
             # create and set article images
             img_url = Internet().stock_image(width=390, height=300, keywords=['природа'])
