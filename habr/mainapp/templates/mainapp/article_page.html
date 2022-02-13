@@ -35,6 +35,16 @@
                             {% endif %}
                             рейтинг статьи
                         </div>
+
+                        {% if user.is_staff %}
+                            <form method="post" action="{% url 'article_status_update' article.pk %}"
+                                  class="delete_article">
+                                {% csrf_token %}
+                                <input hidden="true" name="status" value="D">
+                                <input hidden="true" name="blocked" value="True">
+                                <button type="submit">Вернуть статью на редактирование</button>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>

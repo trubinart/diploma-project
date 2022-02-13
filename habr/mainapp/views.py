@@ -159,7 +159,7 @@ class CreateArticle(CreateView):
         return context
 
     def get_success_url(self):
-         return reverse_lazy('my_articles', args = [self.request.user.id])
+        return reverse_lazy('my_articles', args = [self.request.user.id])
 
 class UpdateArticle(UpdateView):
     """Класс для создания статьи"""
@@ -461,7 +461,10 @@ class ArticleStatusUpdate(UpdateView):
         return context
 
     def get_success_url(self):
-         return reverse_lazy('my_articles', args = [self.request.user.id])
+        if not self.request.user.is_staff:
+            return reverse_lazy('my_articles', args = [self.request.user.id])
+        else:
+            return reverse_lazy('main')
 
 class PageNotFountView(TemplateView):
     template_name = "mainapp/404.html"

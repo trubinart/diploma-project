@@ -51,13 +51,19 @@
                                                 <a class="article-button"
                                                    href="{% url 'article_update' instance_article.pk %}">Редактировать</a>
 
+                                                {% if instance_article.status == 'D' %}
+                                                <form method="post"
+                                                      action="{% url 'article_status_update' instance_article.pk %}">
+                                                    {% csrf_token %}
+                                                    <input hidden="true" name="status" value="A">
+                                                    <button type="submit" class="article-button">Опубликовать</button>
+                                                </form>
+                                                {% endif %}
+
                                                 <form method="post" enctype="multipart/form-data"
                                                       action="{% url 'article_status_update' instance_article.pk %}">
                                                     {% csrf_token %}
-
-                                                    <input hidden="true" name="id" value="{{ instance_article.id }}">
-                                                    <input hidden="true" name="status"
-                                                           value="H">
+                                                    <input hidden="true" name="status" value="H">
                                                     <button class="article-button"> Удалить</button>
                                                 </form>
 

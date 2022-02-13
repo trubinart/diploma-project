@@ -11,7 +11,7 @@ from mainapp.models import ArticleComment
 class ArticleEditForm(forms.ModelForm):
     class Meta:
         model = Article
-        exclude = ('likes', 'status')
+        exclude = ('likes', 'status', 'blocked')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -174,4 +174,4 @@ class ArticleStatusEditForm(forms.ModelForm):
 
     class Meta:
         model = Article
-        fields = ('status',)
+        fields = ('status', 'blocked')
