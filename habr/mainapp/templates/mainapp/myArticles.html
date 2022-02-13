@@ -50,7 +50,18 @@
                                             <div class="button-box">
                                                 <a class="article-button"
                                                    href="{% url 'article_update' instance_article.pk %}">Редактировать</a>
-                                                <a class="article-button">Удалить</a>
+
+                                                <form method="post" enctype="multipart/form-data"
+                                                      action="{% url 'article_status_update' instance_article.pk %}">
+                                                    {% csrf_token %}
+
+                                                    <input hidden="true" name="id" value="{{ instance_article.id }}">
+                                                    <input hidden="true" name="status"
+                                                           value="H">
+                                                    <button class="article-button"> Удалить</button>
+                                                </form>
+
+
                                             </div>
                                         </div>
                                     {% endfor %}

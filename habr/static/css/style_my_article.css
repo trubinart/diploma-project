@@ -61,7 +61,6 @@
 }
 
 .article-box .article-button {
-    height: 30px;
     width: 136px;
     left: 1054px;
     top: 32px;
@@ -75,6 +74,8 @@
     background-color: white;
     color: #FF3F3A;
     text-decoration: none;
+    border: none;
+
 }
 
 .article-box .article-button:hover {

@@ -174,11 +174,4 @@ class ArticleStatusEditForm(forms.ModelForm):
 
     class Meta:
         model = Article
-        fields = ('status', )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['status'].widget = forms.HiddenInput()
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = f'form-control {field_name}'
-            field.help_text = ''
+        fields = ('status',)

@@ -453,14 +453,15 @@ class ArticleStatusUpdate(UpdateView):
     paginate_by = 9
     model = Article
     form_class = ArticleStatusEditForm
-    success_url = reverse_lazy('lk')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Изменение статуса статьи'
-        context['title'] = title
+        context['title'] = 'Мои статьи'
         context['categories_list'] = category_list
         return context
+
+    def get_success_url(self):
+         return reverse_lazy('my_articles', args = [self.request.user.id])
 
 class PageNotFountView(TemplateView):
     template_name = "mainapp/404.html"
