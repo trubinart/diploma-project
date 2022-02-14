@@ -1,3 +1,6 @@
+from datetime import timedelta
+from django.utils import timezone
+
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
@@ -9,10 +12,10 @@ from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
 from uuid import UUID
 
 from authapp.forms import UserRegisterForm
-from mainapp.forms import UserProfileEditForm, UserProfileForm
+from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
-from mainapp.models import Article, ArticleCategories, ArticleComment
+from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -122,16 +125,25 @@ class CategoriesListView(ListView):
 
 
 class LkListView(ListView):
-    # class LkEditView(UserChan):
     """Класс для вывода страницы ЛК """
     template_name = 'mainapp/user_lk.html'
-    LOGIN_URL = 'main'
-
-    def get_queryset(self):
-        # Заглушка на время отсутствия модели...
-        return
+    model = ModeratorNotification
 
     def get_context_data(self, **kwargs):
+        # проверка блокировки пользователя
+        user = self.request.user
+        if user.is_banned is True:
+            if user.date_end_banned is None:
+                pass
+            elif user.date_end_banned <= timezone.now():
+                user.is_banned = False
+                user.date_end_banned = None
+                user.save()
+            else:
+                pass
+        else:
+            pass
+
         context = super().get_context_data(**kwargs)
         title = 'Личный кабинет'
         context['title'] = title
@@ -222,7 +234,7 @@ class LkEditView(UpdateView):
     template_name = 'mainapp/user_lk_update.html'
 
     @staticmethod
-    def post(request):
+    def post(request, **kwargs):
         title = 'Редактирование ЛК'
         if request.POST:
             edit_user_form = UserRegisterForm(request.POST, request.FILES, instance=request.user)
@@ -359,7 +371,7 @@ class ArticleLikeRedirectView(RedirectView):
         url_article = obj_article.get_absolute_url()
         user = self.request.user
 
-        if user.is_authenticated:
+        if user.is_authenticated and user.is_banned is False:
             if user in obj_article.likes.all():
                 obj_article.likes.remove(user)
             else:
@@ -378,7 +390,7 @@ class CommentLikeRedirectView(RedirectView):
         user = self.request.user
 
         obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
-        if user.is_authenticated:
+        if user.is_authenticated and user.is_banned is False:
             if user in obj_comment.likes.all():
                 obj_comment.likes.remove(user)
             else:
@@ -397,7 +409,7 @@ class AuthorStarRedirectView(RedirectView):
         user = self.request.user
 
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
-        if user.is_authenticated:
+        if user.is_authenticated and user.is_banned is False:
             if user in obj_userprofile.stars.all():
                 obj_userprofile.stars.remove(user)
             else:
@@ -417,7 +429,7 @@ class AuthorArticleStarRedirectView(RedirectView):
         user = self.request.user
 
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_author.id)
-        if user.is_authenticated:
+        if user.is_authenticated and user.is_banned is False:
             if user in obj_userprofile.stars.all():
                 obj_userprofile.stars.remove(user)
             else:
@@ -425,6 +437,58 @@ class AuthorArticleStarRedirectView(RedirectView):
         else:
             pass
         return url_author_article
+
+
+class ModeratorNotificationUpdate(UpdateView):
+    model = ModeratorNotification
+    template_name = 'mainapp/updateModerNotif.html'
+    form_class = ModeratorNotificationEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Вы действительно хотите взять на модерацию статью?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class BannedAuthorCommentView(RedirectView):
+    """Класс для блокировки пользователя (автора комментария) на 2 недели"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
+        if user.is_authenticated and user.is_staff is True:
+            banned_date = timezone.now() + timedelta(days=14)
+            obj_comment.user.is_banned = True
+            obj_comment.user.date_end_banned = banned_date
+            obj_comment.user.save()
+        else:
+            pass
+        return url_article
+
+
+class BannedAuthorArticleView(RedirectView):
+    """Класс для блокировки пользователя (автора статьи) на 2 недели"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
+        if user.is_authenticated and user.is_staff is True:
+            banned_date = timezone.now() + timedelta(days=14)
+            obj_userprofile.user.is_banned = True
+            obj_userprofile.user.date_end_banned = banned_date
+            obj_userprofile.user.save()
+        else:
+            pass
+        return url_article
 
 
 class UserCommentDeleteView(DeleteView):

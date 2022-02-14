@@ -1,9 +1,11 @@
 import uuid
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse
+
+import mainapp.models as mainapp_models
 
 
 class BaseModel(models.Model):
@@ -18,15 +20,17 @@ class BaseModel(models.Model):
         return cls.objects.filter(id=search_id)
 
 
-class User(AbstractUser, BaseModel):
+class User(AbstractUser, BaseModel, PermissionsMixin):
     """
     Model for user`s registration
     """
     username = models.CharField(verbose_name='user_name', unique=True, max_length=25, blank=False)
     email = models.EmailField(verbose_name='email', unique=True, blank=False)
-    password = models.CharField(verbose_name='password', max_length=25, blank=False)
+    password = models.CharField(verbose_name='password', max_length=250, blank=False)
     first_name = None
     last_name = None
+    is_banned = models.BooleanField(default=False, verbose_name='Заблокирован')
+    date_end_banned = models.DateTimeField(null=True, blank=True, default=None)
 
     def __str__(self):
         return self.username
@@ -43,6 +47,9 @@ class User(AbstractUser, BaseModel):
         """
         return reverse("user_article", kwargs={"pk": self.id})
 
+    def get_count_notifications_on_moderation(self):
+        return mainapp_models.ModeratorNotification.objects.filter(responsible_moderator=self).exclude(status='R').count()
+
 
 class UserProfile(models.Model):
     """
@@ -51,7 +58,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True, null=False, db_index=True, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Имя Фамилия', max_length=100, blank=False)
     birthday = models.DateField(verbose_name='День рождения', null=True, blank=True)
-    bio = models.TextField(verbose_name='Краткое описание', max_length=250, blank=False)
+    bio = models.TextField(verbose_name='Краткое описание', max_length=120, blank=False)
     avatar = models.ImageField(verbose_name='Аватар', upload_to='user_avatars')
     stars = models.ManyToManyField(User, blank=True, related_name='author_stars')
     rating = models.PositiveIntegerField(default=0, verbose_name='author_rating')

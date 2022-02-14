@@ -1,6 +1,9 @@
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView
 
@@ -49,6 +52,24 @@ class UserLoginView(LoginView):
     template_name = 'authapp/authorization.html'
     form_class = UserLoginForm
     next_page = reverse_lazy('main')
+
+    def form_valid(self, form):
+        user = form.get_user()
+        login(self.request, user)
+
+        if user.is_banned is True:
+            if user.date_end_banned is None:
+                pass
+            elif user.date_end_banned <= timezone.now():
+                user.is_banned = False
+                user.date_end_banned = None
+                user.save()
+            else:
+                pass
+        else:
+            pass
+
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

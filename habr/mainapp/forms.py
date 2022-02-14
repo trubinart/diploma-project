@@ -2,7 +2,7 @@ from datetime import date, timedelta
 
 from django import forms
 
-from mainapp.models import Article, ArticleComment
+from mainapp.models import Article, ArticleComment, ModeratorNotification
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from authapp.models import UserProfile, User
 from mainapp.models import ArticleComment
@@ -43,7 +43,7 @@ class ArticleEditForm(forms.ModelForm):
                 raise forms.ValidationError("Максимальная длинна слова в описании не должна превышать 48 символов")
         return data
 
-    """ временно спрятал, не удаляйте пжлст"""
+    # """ временно спрятал, не удаляйте пжлст"""
     # def clean_text(self):
     #     data = self.cleaned_data['text']
     #     split_data = data.split()
@@ -153,3 +153,18 @@ class UserProfileEditForm(forms.ModelForm):
         if data > dates:
             raise forms.ValidationError("Вы слишком молоды!")
         return data
+
+
+class ModeratorNotificationEditForm(forms.ModelForm):
+    class Meta:
+        model = ModeratorNotification
+        fields = ('responsible_moderator', 'status')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['responsible_moderator'].widget = forms.HiddenInput()
+        self.fields['status'].widget = forms.HiddenInput()
+        # self.fields['status'].label = 'Установите статус'
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = f'form-control {field_name}'
+            field.help_text = ''
