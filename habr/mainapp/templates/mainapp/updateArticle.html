@@ -17,6 +17,7 @@
             {% else %}
                 {% if user.is_authenticated %}
                 {% if user.userprofile.name %}
+                {% if user == object.user %}
                 <div class="titleArticleAdd">
                     {{title}}
                 </div>
@@ -36,6 +37,11 @@
                     });
 
                 </script>
+                {% else %}
+                <div class="titleArticleAdd">
+                    Для редактирования статьи, необходимо авторизоваться как автор статьи
+                </div>
+                {% endif %}
                 {% else %}
                 <div class="titleArticleAdd">
                     Для добавления статьи необходимо заполнить информацию о себе

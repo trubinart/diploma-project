@@ -66,8 +66,8 @@
                 {% endif %}
                 {% endfor %}
             </div>
-            {# Возможно, вместо проверки notification.status != 'R', лучше фильтровать в контроллере и не отдавать на
-            страницу вообще #}
+            {# Возможно, вместо проверки notification.status != 'R',  #}
+            {# лучше фильтровать в контроллере и не отдавать на страницу вообще #}
             {% if user.get_count_notifications_on_moderation %}
             <div class="new_requests my_request">
                 <div class="requests_title">
