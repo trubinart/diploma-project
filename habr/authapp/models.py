@@ -175,7 +175,7 @@ class NotificationUsersAboutBlocking(BaseModel):
         if part_1 and part_2:
             return f'<p>{part_1}</p><p>{part_2}</p>'
         if part_1:
-            return part_1
+            return f'<p>{part_1}</p>'
 
     @receiver(post_save, sender=User)
     def create_moderator_notification(sender, instance, **kwargs):
