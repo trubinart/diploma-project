@@ -160,6 +160,9 @@ class NotificationUsersAboutBlocking(BaseModel):
         null=True,
     )
 
+    def __str__(self):
+        return f'уведомление о блокировке пользователя "{self.blocked_user.username}"'
+
     @staticmethod
     def get_moderator(inspect_stack):
         """получаем модератора из request"""
