@@ -40,7 +40,8 @@
                     </div>
                     {% if user.is_authenticated %}
                         <div class="personalAccount">
-                            <a href="{% url 'lk' %}">{{ user.username }}</a>
+                            <a href="{% url 'lk' %}"> {% if user.userprofile.name %}{{ user.userprofile.name }}
+                            {% else %}{{ user.username }}{% endif %}</a>
                             /&nbsp;&nbsp;
                             <a href="{% url 'auth:logout' %}">Exit</a>
                         </div>

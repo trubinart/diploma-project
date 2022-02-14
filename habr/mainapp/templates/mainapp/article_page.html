@@ -51,14 +51,6 @@
                 </p>
             </div>
             <div class="tags_and_share">
-                {#                {% if article.tags.all %}#}
-                {#                    <div class="tags_habr">#}
-                {#                        <p>Tags:</p>#}
-                {#                        {% for tag in article.tags.all %}#}
-                {#                            <a>#{{ tag }}</a>#}
-                {#                        {% endfor %}#}
-                {#                    </div>#}
-                {#                {% endif %}#}
                 <div class="article_likes_and_comments">
                     <p class="info">Likes and comments:</p>
                     <div class="info_img">
@@ -123,7 +115,7 @@
                 {% for comment in article.get_comments_by_article_id %}
                     <div class="comment_views">
                         <div class="comment_attribute">
-                            <div class="comment_author">{{ comment.user.username }}</div>
+                            <div class="comment_author">{{ comment.user.get_profile.name }}</div>
                             <div class="comment_author">{{ comment.created_timestamp | date:"d.m.Y г. H:m" }}</div>
                         </div>
                         <div class="comment_text">{{ comment.text }}</div>
@@ -162,16 +154,17 @@
                                     {% csrf_token %}
                                     <button type="submit">Удалить комментарий</button>
                                 </form>
-                            {% endif %}
-                            {% if user.is_staff %}
                                 <div class="block_author_comment">
                                     {% if comment.user.is_banned is True %}
                                         <p class="blocked_author_comment">заблокирован</p>
-                                    {% else %}
-                                        <a title="Заблокировать автора комментария на 2 недели!"
-                                           href="{% url 'banned_user_toggle' article.pk comment.id %}">заблокировать
+                                    {% elif article.user.is_banned is not True and user.id != article.user.id %}
+                                        <form method="post"
+                                              action="{% url 'banned_user_toggle' article.pk comment.id %}"
+                                              class="block_author_comment">
+                                            {% csrf_token %}
+                                            <button type="submit">Заблокировать автора</button>
+                                        </form>
                                     {% endif %}
-                                    </a>
                                 </div>
                             {% endif %}
                         </div>
@@ -187,16 +180,19 @@
                 <button type="submit"><a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
                 </button>
             </form>
-            <div class="author" {% if article.user.is_banned is True and user.is_staff %} style="opacity: .5" {% endif %}>
+            <div class="author" {% if article.user.is_banned is True and user.is_staff %}
+                 style="opacity: .5" {% endif %}>
                 <h6 class="author_title">автор</h6>
                 {% if user.is_staff %}
                     <div class="block_author_article">
                         {% if article.user.is_banned is True %}
                             <p class="blocked_author_article">заблокирован</p>
-                        {% else %}
-                            <a title="Заблокировать автора статьи на 2 недели!"
-                               href="{% url 'banned_author_article_toggle' article.pk %}">заблокировать
-                            </a>
+                        {% elif article.user.is_banned is not True and user.id != article.user.id %}
+                            <form method="post" action="{% url 'banned_author_article_toggle' article.pk %}"
+                                  class="block_author_article">
+                                {% csrf_token %}
+                                <button type="submit">Заблокировать автора</button>
+                            </form>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -273,7 +269,6 @@
                             </div>
                         </div>
                     {% endfor %}
-                    <!--            вот здесь надо добавить ссылку-->
                     <div class="article_by_author">
                         <a href="{% url 'user_article' article.user.id %}"> Все статьи автора</a>
                     </div>
