@@ -19,7 +19,8 @@
                     </div>
 
                     <div class="name_and_share">
-                        <h3>{{ author.get_profile.name }}</h3>
+                        <h3>{% if author.userprofile.name %}{{ author.userprofile.name }}
+                            {% else %}{{ author.username }}{% endif %}</h3>
                         <p>{{ author.get_profile.bio }}</p>
                     </div>
                 </div>

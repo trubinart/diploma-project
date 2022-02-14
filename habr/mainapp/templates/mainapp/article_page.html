@@ -115,7 +115,8 @@
                 {% for comment in article.get_comments_by_article_id %}
                     <div class="comment_views">
                         <div class="comment_attribute">
-                            <div class="comment_author">{{ comment.user.get_profile.name }}</div>
+                            <div class="comment_author">{% if comment.user.userprofile.name %}{{ comment.user.userprofile.name }}
+                            {% else %}{{ comment.user.username }}{% endif %}</div>
                             <div class="comment_author">{{ comment.created_timestamp | date:"d.m.Y г. H:m" }}</div>
                         </div>
                         <div class="comment_text">{{ comment.text }}</div>
@@ -201,7 +202,8 @@
                         <img src="/media/{{ article.user.get_profile.avatar }}">
                     </div>
                     <div class="name_and_share">
-                        <h3>{{ article.user.get_profile.name }}</h3>
+                        <h3>{% if article.user.userprofile.name %}{{ article.user.userprofile.name }}
+                            {% else %}{{ article.user.username }}{% endif %}</h3>
                         <p>{{ article.user.get_profile.bio }}</p>
                     </div>
                 </div>
