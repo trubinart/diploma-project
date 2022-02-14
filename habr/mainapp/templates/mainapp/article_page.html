@@ -23,7 +23,7 @@
                 <div class="habr_information">
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %}>
-                        <p class="date">{{ article.created_timestamp|date:"H:m d.m.Y " }}</p>
+                        <p class="date">{{ article.created_timestamp|date:"d.m.Y г. H:m" }}</p>
                         <div style="margin-right: 10px">
                             <img src={% static 'img/rating.png' %} alt="like">
                         </div>
@@ -61,24 +61,32 @@
                 </p>
             </div>
             <div class="tags_and_share">
-                {% if article.tags.all %}
-                    <div class="tags_habr">
-                        <p>Tags:</p>
-                        {% for tag in article.tags.all %}
-                            <a>#{{ tag }}</a>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <div class="habr_info">
+                {#                {% if article.tags.all %}#}
+                {#                    <div class="tags_habr">#}
+                {#                        <p>Tags:</p>#}
+                {#                        {% for tag in article.tags.all %}#}
+                {#                            <a>#{{ tag }}</a>#}
+                {#                        {% endfor %}#}
+                {#                    </div>#}
+                {#                {% endif %}#}
+                <div class="article_likes_and_comments">
                     <p class="info">Likes and comments:</p>
                     <div class="info_img">
                         {% if user.is_authenticated %}
                             {% if request.user in article.likes.all %}
-                                <a title="Убрать лайк со статьи" class="like" href="{{ article.get_like_url }}">
+                                <a {% if user.is_banned is True %}
+                                    style="opacity: .2" title="Нельзя убрать лайк, Ваш аккаунт заблокирован"
+                                {% else %}
+                                    title="Убрать лайк со статьи"
+                                {% endif %} class="like" href="{{ article.get_like_url }}">
                                     <img src={% static "img/black_like.png" %}>
                                 </a>
                             {% else %}
-                                <a title="Поставить лайк статье" href="{{ article.get_like_url }}">
+                                <a {% if user.is_banned is True %}
+                                    style="opacity: .2" title="Нельзя поставить лайк, Ваш аккаунт заблокирован"
+                                {% else %}
+                                    title="Поставить лайк статье"
+                                {% endif %} href="{{ article.get_like_url }}">
                                     <img src={% static "img/like.png" %}>
                                 </a>
                             {% endif %}
@@ -95,13 +103,20 @@
             {#            ----- ДОБАВЛЕНИЕ КОММЕНТАРИЯ ----  #}
             <div class="form_add_comment">
                 {% if user.is_authenticated %}
-                    <form method="post" enctype="multipart/form-data" action="{% url 'add-comment' %}">
-                        {% csrf_token %}
-                        {{ form.text }}
-                        <input hidden="true" name="user" value="{{ user.id }}">
-                        <input hidden="true" name="article_comment" value="{{ article.id }}">
-                        <button type="submit" class="add_comment_button"> Оставить комментарий</button>
-                    </form>
+                    {% if user.is_banned is True %}
+                        <div class="text-under-button">
+                            Аккаунт заблокирован! Вы не можете оставлять лайки и комментарии! <br>
+                            Дата окончания блокировки - {{ user.date_end_banned }}
+                        </div>
+                    {% else %}
+                        <form method="post" enctype="multipart/form-data" action="{% url 'add-comment' %}">
+                            {% csrf_token %}
+                            {{ form.text }}
+                            <input hidden="true" name="user" value="{{ user.id }}">
+                            <input hidden="true" name="article_comment" value="{{ article.id }}">
+                            <button type="submit" class="add_comment_button"> Оставить комментарий</button>
+                        </form>
+                    {% endif %}
                 {% else %}
 
                     <div class="text-under-button">
@@ -119,7 +134,7 @@
                     <div class="comment_views">
                         <div class="comment_attribute">
                             <div class="comment_author">{{ comment.user.username }}</div>
-                            <div class="comment_author">{{ comment.created_timestamp | date:"d.m.Y" }}</div>
+                            <div class="comment_author">{{ comment.created_timestamp | date:"d.m.Y г. H:m" }}</div>
                         </div>
                         <div class="comment_text">{{ comment.text }}</div>
                         <div class="habr_info">
@@ -127,13 +142,21 @@
                             <div class="info_img">
                                 {% if user.is_authenticated %}
                                     {% if request.user in comment.likes.all %}
-                                        <a title="Убрать лайк с комментария"
-                                           href="{% url 'like_comment_toggle' article.pk comment.id %}">
+                                        <a {% if user.is_banned is True %}
+                                            style="opacity: .2" title="Нельзя убрать лайк, Ваш аккаунт заблокирован"
+                                        {% else %}
+                                            title="Убрать лайк с комментария"
+                                        {% endif %}
+                                            href="{% url 'like_comment_toggle' article.pk comment.id %}">
                                             <img src={% static "img/black_like.png" %}>
                                         </a>
                                     {% else %}
-                                        <a title="Поставить лайк комментарию"
-                                           href="{% url 'like_comment_toggle' article.pk comment.id %}">
+                                        <a {% if user.is_banned is True %}
+                                            style="opacity: .2" title="Нельзя поставить лайк, Ваш аккаунт заблокирован"
+                                        {% else %}
+                                            title="Поставить лайк комментарию"
+                                        {% endif %}
+                                            href="{% url 'like_comment_toggle' article.pk comment.id %}">
                                             <img src={% static "img/like.png" %}>
                                         </a>
                                     {% endif %}
@@ -143,7 +166,17 @@
                                 {% endif %}
                             </div>
                             <p class="info">{{ comment.likes.count }}</p>
-
+                            {% if user.is_staff %}
+                                <div class="block_author_comment">
+                                    {% if comment.user.is_banned is True %}
+                                        <p class="blocked_author_comment">заблокирован</p>
+                                    {% else %}
+                                        <a title="Заблокировать автора комментария на 2 недели!"
+                                           href="{% url 'banned_user_toggle' article.pk comment.id %}">заблокировать
+                                    {% endif %}
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}
@@ -157,8 +190,19 @@
                 <button type="submit"><a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
                 </button>
             </form>
-            <div class="author">
+            <div class="author" {% if article.user.is_banned is True and user.is_staff %} style="opacity: .5" {% endif %}>
                 <h6 class="author_title">автор</h6>
+                {% if user.is_staff %}
+                    <div class="block_author_article">
+                        {% if article.user.is_banned is True %}
+                            <p class="blocked_author_article">заблокирован</p>
+                        {% else %}
+                            <a title="Заблокировать автора статьи на 2 недели!"
+                               href="{% url 'banned_author_article_toggle' article.pk %}">заблокировать
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
                 <div class="avatar_and_info">
                     <div class="avatar">
                         <img src="/media/{{ article.user.get_profile.avatar }}">
@@ -178,11 +222,21 @@
                     <div class="share_author">
                         {% if user.is_authenticated %}
                             {% if request.user in article.user.userprofile.stars.all %}
-                                <a title="Понизить ранг автора" href="{% url 'star_toggle' article.pk %}">
+                                <a {% if user.is_banned is True %}
+                                    style="opacity: .2" title="Нельзя понизить ранг, Ваш аккаунт заблокирован"
+                                {% else %}
+                                    title="Понизить ранг автора"
+                                {% endif %}
+                                    href="{% url 'star_toggle' article.pk %}">
                                     <img src={% static "img/chevron_blue.png" %}>
                                 </a>
                             {% else %}
-                                <a title="Повысить ранг автора" href="{% url 'star_toggle' article.pk %}">
+                                <a {% if user.is_banned is True %}
+                                    style="opacity: .2" title="Нельзя повысить ранг, Ваш аккаунт заблокирован"
+                                {% else %}
+                                    title="Повысить ранг автора"
+                                {% endif %}
+                                    href="{% url 'star_toggle' article.pk %}">
                                     <img src={% static "img/chevron_red.png" %}>
                                 </a>
                             {% endif %}
@@ -216,7 +270,7 @@
                             <div class="info_habr">
                                 <div class="habr_date_creat">
                                     <img src={% static "img/Calendar.png" %}>
-                                    <p class="date">{{ other_article.created_timestamp | date:"d.m.Y" }}</p>
+                                    <p class="date">{{ other_article.created_timestamp | date:"d.m.Y г. H:m" }}</p>
                                 </div>
                                 <a href="{% url 'article' other_article.pk %}">{{ other_article.title }}</a>
                             </div>
