@@ -48,7 +48,7 @@ urlpatterns = [
     path('user-article/<str:pk>/star/', AuthorArticleStarRedirectView.as_view(), name='user_article_star_toggle'),
 
     path('article/<str:pk>/banned/<str:id>', BannedAuthorCommentView.as_view(), name='banned_user_toggle'),
-    path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle')
+    path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle'),
     path('status-update/<str:pk>/', ArticleStatusUpdate.as_view(), name='article_status_update'),
 ]
 
