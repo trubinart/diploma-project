@@ -17,7 +17,7 @@
             {% else %}
                 {% if user.is_authenticated %}
                 {% if user.userprofile.name %}
-                {% if user == object.user %}
+                {% if user == object.user or not object %}
                 <div class="titleArticleAdd">
                     {{title}}
                 </div>
