@@ -26,11 +26,16 @@ class Command(BaseCommand):
         print('Заполняю таблицу USERS')
 
         for _ in range(10):
-            user = User(
-                username=person.username(mask='C'),
-                email=person.username(mask='C'),
-                password=person.password(length=8))
+            username_ = person.username(mask='C')
+            password_ = person.password(length=8)
 
+            print(f'Логин: {username_} / Пароль: {password_}')
+
+            user = User(
+                username=username_,
+                email=person.email())
+
+            user.set_password(password_)
             user.save()
 
         print('Заполняю таблицу USERS PROFILE')
@@ -76,7 +81,7 @@ class Command(BaseCommand):
 
         # CREATE ARTICLES
         print('Заполняю таблицу ARTICLES')
-        for i in range(10):
+        for i in range(20):
             # create article
             new_article = Article()
             # set categories
