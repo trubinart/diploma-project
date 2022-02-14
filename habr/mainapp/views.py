@@ -12,9 +12,9 @@ from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
 from uuid import UUID
 
 from authapp.forms import UserRegisterForm
-from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm
+from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, MessageEditForm
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
-from authapp.models import User, UserProfile
+from authapp.models import User, UserProfile, NotificationUsersAboutBlocking
 from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification
 
 """обозначение списка категорий для вывода в меню во разных view"""
@@ -453,6 +453,20 @@ class ModeratorNotificationUpdate(UpdateView):
         return context
 
 
+class NotificationUsersAboutBlockingUpdate(UpdateView):
+    model = NotificationUsersAboutBlocking
+    template_name = 'mainapp/updateMessage.html'
+    form_class = MessageEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Вы действительно хотите скрыть сообщение?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
 class BannedAuthorCommentView(RedirectView):
     """Класс для блокировки пользователя (автора комментария) на 2 недели"""
 
@@ -464,6 +478,7 @@ class BannedAuthorCommentView(RedirectView):
         obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
         if user.is_authenticated and user.is_staff is True:
             banned_date = timezone.now() + timedelta(days=14)
+            print(timezone.localtime(timezone.now()))
             # obj_comment.user.is_banned = True
             obj_comment.user.date_end_banned = banned_date
             obj_comment.user.save()
@@ -482,7 +497,9 @@ class BannedAuthorArticleView(RedirectView):
 
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
         if user.is_authenticated and user.is_staff is True:
-            banned_date = timezone.now() + timedelta(days=14)
+            # banned_date = timezone.now() + timedelta(days=14)
+            banned_date = timezone.localtime(timezone.now()) + timedelta(days=14)
+            print(timezone.localtime(timezone.now()))
             # obj_userprofile.user.is_banned = True
             obj_userprofile.user.date_end_banned = banned_date
             obj_userprofile.user.save()

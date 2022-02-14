@@ -1921,6 +1921,110 @@ body {
 
 }
 
+.content .main .contentLK .mainLK .titleImportantNotifications {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #DBE7FF;
+    background-color: #fffeee;
+    height: 82px;
+    align-items: center;
+}
+
+.content .main .contentLK .mainLK .titleImportantNotifications .countNotifications {
+    margin: 40px;
+    font-size: 20px;
+    font-weight: 600;
+    color: darkred;
+}
+
+.content .main .contentLK .mainLK .titleImportantNotifications .showNotifications {
+    margin: 40px;
+}
+
+.content .main .contentLK .mainLK .titleImportantNotifications .showNotifications a {
+    text-decoration: none;
+    height: 46px;
+    border: 1px solid #FF3F3A;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    color: #FF3F3A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.content .main .contentLK .mainLK .titleImportantNotifications .showNotifications a:hover {
+    border: 1px solid #353030;
+    color: #221d1d;
+    background-color: #FF3F3A;
+    opacity: .7;
+}
+
+.content .main .contentLK .mainLK .importantNotifications {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #bc4e24;
+    background-color: #eef8ff;
+    align-items: center;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .messageWrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid #9fb4dc;
+    background-color: #eef8ff;
+    height: 82px;
+    align-items: center;
+    width: 1200px;
+    margin: 10px auto;
+    border-radius: 15px 15px 15px 0;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .messageWrapper .message,
+.content .main .contentLK .mainLK .importantNotifications .messageWrapper .readMessage {
+    margin: 0 40px
+}
+
+.content .main .contentLK .mainLK .importantNotifications .messageWrapper .message {
+    font-size: 18px;
+    font-weight: 600;
+    opacity: .8;
+    color: #0f1629;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .messageWrapper .readMessage a {
+    text-decoration: none;
+    height: 46px;
+    border: 1px solid #353030;
+    color: #221d1d;
+    background-color: #FF3F3A;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    opacity: .8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .messageWrapper .readMessage a:hover {
+
+    background-color: rgb(100%, 25%, 23%, .1);
+    border: 1px solid #FF3F3A;
+    color: #FF3F3A;
+}
+
+
 .article_by_author {
     text-decoration: none;
     font-weight: bold;
@@ -2317,6 +2421,26 @@ body {
     margin: 10px 40px;
 }
 
+.contentArticleAdd .mainArticleAdd .preview .text_message {
+    width: 1000px;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 40px 0;
+}
+
+.contentArticleAdd .mainArticleAdd .preview .text_message .message_text {
+    display: flex;
+    flex-direction: column;
+    width: 840px;
+    margin: 10px 40px;
+    font-size: 18px;
+    font-weight: 550;
+    color: #231957;
+}
+
+.contentArticleAdd .mainArticleAdd .preview .text_comment .comment_text
+
 .contentArticleAdd .mainArticleAdd .preview .name_habr,
 .contentArticleAdd .mainArticleAdd .preview .habr_information,
 .contentArticleAdd .mainArticleAdd .preview .image_habr_page,
@@ -2336,9 +2460,6 @@ body {
 
 .contentArticleAdd .mainArticleAdd .preview .habr_information .habr_date_creat img {
     margin-right: 10px;
-}
-
-.contentArticleAdd .mainArticleAdd .preview .text_habr_page .text_bold {
 }
 
 .errorlist {

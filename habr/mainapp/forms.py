@@ -4,7 +4,7 @@ from django import forms
 
 from mainapp.models import Article, ArticleComment, ModeratorNotification
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from authapp.models import UserProfile, User
+from authapp.models import UserProfile, User, NotificationUsersAboutBlocking
 from mainapp.models import ArticleComment
 
 
@@ -164,7 +164,19 @@ class ModeratorNotificationEditForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['responsible_moderator'].widget = forms.HiddenInput()
         self.fields['status'].widget = forms.HiddenInput()
-        # self.fields['status'].label = 'Установите статус'
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = f'form-control {field_name}'
+            field.help_text = ''
+
+
+class MessageEditForm(forms.ModelForm):
+    class Meta:
+        model = NotificationUsersAboutBlocking
+        fields = ('is_read',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['is_read'].widget = forms.HiddenInput()
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = f'form-control {field_name}'
             field.help_text = ''

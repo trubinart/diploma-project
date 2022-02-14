@@ -66,7 +66,8 @@
                 {% endif %}
                 {% endfor %}
             </div>
-{# Возможно, вместо проверки notification.status != 'R', лучше фильтровать в контроллере и не отдавать на страницу вообще #}
+            {# Возможно, вместо проверки notification.status != 'R', лучше фильтровать в контроллере и не отдавать на
+            страницу вообще #}
             {% if user.get_count_notifications_on_moderation %}
             <div class="new_requests my_request">
                 <div class="requests_title">
@@ -117,6 +118,29 @@
             </div>
             {% endif %}
             {% endif %}
+            {% if user.get_count_notifications_about_blocking %}
+            <div class="titleImportantNotifications">
+                <div class="countNotifications">
+                    У Вас есть важные непрочитанные уведомления в количестве
+                    {{ user.get_count_notifications_about_blocking }} шт.
+                </div>
+                <div class="showNotifications">
+                    <a class="content_toggle" href="#">Показать уведомления</a>
+                </div>
+            </div>
+            <div class="importantNotifications" style="display: none;">
+                {% for notification in user.get_notification_about_blocking %}
+                <div class="messageWrapper">
+                    <div class="message">
+                    {{ notification.message|safe}}
+                    </div>
+                    <div class="readMessage">
+                        <a href="{% url 'message_edit' notification.pk %}">скрыть сообщение</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             <div class="profileLK">
                 <div class="blokPersonInfoLK">
                     <div class="baseInfoBlokLK">
@@ -124,7 +148,7 @@
                             <ul class="userInfo">
                                 <li class="title_lk">Учетные данные</li>
                                 <li class="text">Логин:</li>
-                                <li> {{ user }}</li>
+                                <li> {{ user.username }}</li>
                                 <li class="text">Почта:</li>
                                 <li>{{ user.email }}</li>
 
@@ -152,14 +176,11 @@
                                         о
                                         себе</a>
                                 </div>
-
                                 {% else %}
-
                                 <div class="buttonInLk">
                                     <a href="{% url 'profile_edit' user.userprofile.id %}">Заполнить информацию о
                                         себе</a>
                                 </div>
-
                                 {% endif %}
                             </ul>
                         </div>
@@ -169,4 +190,22 @@
         </div>
     </div>
 </div>
+<script>
+
+$(document).ready(function(){
+	$('.content_toggle').click(function(){
+		$('.importantNotifications').slideToggle(300, function(){
+			if ($(this).is(':hidden')) {
+				$('.content_toggle').html('Показать уведомления');
+				$('.content_toggle').removeClass('open');
+			} else {
+				$('.content_toggle').html('Скрыть уведомления');
+				$('.content_toggle').addClass('open');
+			}
+		});
+		return false;
+	});
+});
+
+</script>
 {% endblock %}

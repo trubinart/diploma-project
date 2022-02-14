@@ -11,8 +11,7 @@ from mainapp.views import MainListView, ArticleDetailView, \
     ArticleLikeRedirectView, CommentLikeRedirectView, \
     AuthorStarRedirectView, AuthorArticleStarRedirectView, UpdateArticle, ProfileCreateView, \
     ProfileEditView, LkListView, MyArticleListView, BannedAuthorCommentView, BannedAuthorArticleView, \
-    ModeratorNotificationUpdate
-
+    ModeratorNotificationUpdate, NotificationUsersAboutBlockingUpdate
 
 from authapp.views import UserEditView
 from ckeditor_uploader import views
@@ -23,6 +22,7 @@ urlpatterns = [
     path('lk/', LkListView.as_view(), name='lk'),
     path('lk/add/', ProfileCreateView.as_view(), name='profile_add'),
     path('lk/edit/<str:pk>/', ProfileEditView.as_view(), name='profile_edit'),
+    path('lk/read-block-message/<str:pk>/', NotificationUsersAboutBlockingUpdate.as_view(), name='message_edit'),
     path('article/<str:pk>/', ArticleDetailView.as_view(), name='article'),
     path('user-edit/<str:pk>/', UserEditView.as_view(), name='user_edit'),
     path('article-add/', CreateArticle.as_view(), name='article_create'),
