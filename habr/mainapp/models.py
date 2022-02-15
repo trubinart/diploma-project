@@ -212,7 +212,7 @@ class ModeratorNotification(BaseModel):
 
     comment_initiator = models.ForeignKey(
         ArticleComment,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
         verbose_name='Comment initiator',
         related_name='comment_initiator'
     )

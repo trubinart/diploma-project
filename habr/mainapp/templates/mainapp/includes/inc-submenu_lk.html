@@ -13,7 +13,8 @@
                     </a>
                 {% endif %}
             </div>
-            <a href="{% url 'lk' %}">{{ user.userprofile.name }}</a>
+            <a href="{% url 'lk' %}">{% if user.userprofile.name %}{{ user.userprofile.name }}
+            {% else %}{{ user.username }}{% endif %}</a>
         </div>
         {% if user.userprofile.name %}
             <div class="configLK">

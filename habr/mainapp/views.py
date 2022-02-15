@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, UpdateView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, \
+    UpdateView, TemplateView, DeleteView
 from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
 
 from uuid import UUID
@@ -534,3 +535,15 @@ class PageNotFountView(TemplateView):
         context['title'] = 'Страница не найдена'
         context['categories_list'] = category_list
         return context
+
+
+class UserCommentDeleteView(DeleteView):
+    model = ArticleComment
+
+    def get_success_url(self):
+        article_id = self.request.META['HTTP_REFERER'].split('/')[-2]
+        return reverse_lazy('article', kwargs={'pk': article_id})
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
