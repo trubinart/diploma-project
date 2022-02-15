@@ -11,7 +11,7 @@ from mainapp.models import ArticleComment
 class ArticleEditForm(forms.ModelForm):
     class Meta:
         model = Article
-        exclude = ('likes',)
+        exclude = ('likes', 'status', 'blocked')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -78,7 +78,6 @@ class SearchForm(forms.Form):
         self.fields['query'].widget.attrs['class'] = 'search'
 
 
-# --_--
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -180,3 +179,11 @@ class MessageEditForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = f'form-control {field_name}'
             field.help_text = ''
+
+
+class ArticleStatusEditForm(forms.ModelForm):
+    """Форма статуса статьи"""
+
+    class Meta:
+        model = Article
+        fields = ('status', 'blocked')

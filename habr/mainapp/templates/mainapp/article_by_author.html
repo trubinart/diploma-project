@@ -19,7 +19,8 @@
                     </div>
 
                     <div class="name_and_share">
-                        <h3>{{ author.get_profile.name }}</h3>
+                        <h3>{% if author.userprofile.name %}{{ author.userprofile.name }}
+                            {% else %}{{ author.username }}{% endif %}</h3>
                         <p>{{ author.get_profile.bio }}</p>
                     </div>
                 </div>
@@ -114,8 +115,9 @@
                                 Читать далее
                             </div>
                             <div class="icon">
-                                <a href="{% url 'article' instance_article.pk %}"><img src={% static 'img/Right.png' %}
-                                                                                               alt="right"></a>
+                                <a href="{% url 'article' instance_article.pk %}">
+                                    <img src={% static 'img/Right.png' %} alt="right">
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -124,9 +126,9 @@
             <div class="paginator">
                 {% if page_obj.has_previous %}
                     <div class="pagLeft">
-                        <a href="?page={{ page_obj.previous_page_number }}{% if sort %}&sort={{ sort }}{% endif %}"><img
-                                src={% static 'img/pagLeft.png' %}
-                                        alt="left"></a>
+                        <a href="?page={{ page_obj.previous_page_number }}{% if sort %}&sort={{ sort }}{% endif %}">
+                            <img src={% static 'img/pagLeft.png' %} alt="left">
+                        </a>
                     </div>
                 {% endif %}
 

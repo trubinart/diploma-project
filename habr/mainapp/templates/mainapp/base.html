@@ -17,6 +17,8 @@
         <link rel="stylesheet" type="text/css" href={% static 'css/style.css' %}>
         <link rel="stylesheet" type="text/css" href={% static 'css/style_registration_page.css' %}>
         <link rel="stylesheet" type="text/css" href={% static 'css/style_search_page.css' %}>
+        <link rel="stylesheet" type="text/css" href={% static 'css/style_my_article.css' %}>
+        <link rel="stylesheet" type="text/css" href={% static 'css/style_404.css' %}>
     {% endblock %}
 
     {% block js %}
@@ -40,7 +42,8 @@
                     </div>
                     {% if user.is_authenticated %}
                         <div class="personalAccount">
-                            <a href="{% url 'lk' %}">{{ user.username }}</a>
+                            <a href="{% url 'lk' %}"> {% if user.userprofile.name %}{{ user.userprofile.name }}
+                            {% else %}{{ user.username }}{% endif %}</a>
                             /&nbsp;&nbsp;
                             <a href="{% url 'auth:logout' %}">Exit</a>
                         </div>

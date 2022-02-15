@@ -24,12 +24,18 @@ class Command(BaseCommand):
         birthday = Datetime()
 
         print('Заполняю таблицу USERS')
-        for _ in range(10):
-            user = User(
-                username=person.username(mask='C'),
-                email=person.email(domains=None, unique=True),
-                password=person.password(length=8))
 
+        for _ in range(10):
+            username_ = person.username(mask='C')
+            password_ = person.password(length=8)
+
+            print(f'Логин: {username_} / Пароль: {password_}')
+
+            user = User(
+                username=username_,
+                email=person.email())
+
+            user.set_password(password_)
             user.save()
 
         print('Заполняю таблицу USERS PROFILE')
@@ -75,7 +81,7 @@ class Command(BaseCommand):
 
         # CREATE ARTICLES
         print('Заполняю таблицу ARTICLES')
-        for i in range(10):
+        for i in range(20):
             # create article
             new_article = Article()
             # set categories
@@ -85,6 +91,7 @@ class Command(BaseCommand):
             new_article.title = f'Заголовок статьи #{i} автора {new_article.user.username}'
             new_article.subtitle = f'Падзаголовок статьи #{i} автора {new_article.user.username}'
             new_article.text = text.text(quantity=15)
+            new_article.status = 'A'
 
             # create and set article images
             img_url = Internet().stock_image(width=390, height=300, keywords=['природа'])
