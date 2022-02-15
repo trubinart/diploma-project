@@ -10,7 +10,7 @@ from mainapp.views import MainListView, ArticleDetailView, \
     CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, SearchView, \
     ArticleLikeRedirectView, CommentLikeRedirectView, \
     AuthorStarRedirectView, AuthorArticleStarRedirectView, UpdateArticle, ProfileCreateView, \
-    ProfileEditView, LkListView, MyArticleListView, BannedAuthorCommentView, BannedAuthorArticleView, \
+    ProfileEditView, LkListView, MyArticleListView, UserCommentDeleteView, BannedAuthorCommentView, BannedAuthorArticleView, \
     ModeratorNotificationUpdate
 
 
@@ -49,7 +49,8 @@ urlpatterns = [
     path('user-article/<str:pk>/star/', AuthorArticleStarRedirectView.as_view(), name='user_article_star_toggle'),
 
     path('article/<str:pk>/banned/<str:id>', BannedAuthorCommentView.as_view(), name='banned_user_toggle'),
-    path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle')
+    path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle'),
+    path('user-comment-delete/<str:pk>/', UserCommentDeleteView.as_view(), name='comment_delete'),
 ]
 
 if settings.DEBUG:
