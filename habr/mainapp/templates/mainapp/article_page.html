@@ -158,7 +158,7 @@
                                 <div class="block_author_comment">
                                     {% if comment.user.is_banned is True %}
                                         <p class="blocked_author_comment">заблокирован</p>
-                                    {% elif article.user.is_banned is not True and user.id != article.user.id %}
+                                    {% elif comment.user.is_banned is not True and user.id != comment.user.id %}
                                         <form method="post"
                                               action="{% url 'banned_user_toggle' article.pk comment.id %}"
                                               class="block_author_comment">
