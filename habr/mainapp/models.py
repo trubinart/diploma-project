@@ -5,11 +5,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
-from django.db.models.signals import post_save
 from django.urls import reverse
-
-from django.dispatch import receiver
-
 from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 from django.db.models import Avg

@@ -35,16 +35,6 @@
                             {% endif %}
                             рейтинг статьи
                         </div>
-
-                        {% if user.is_staff %}
-                            <form method="post" action="{% url 'article_status_update' article.pk %}"
-                                  class="delete_article">
-                                {% csrf_token %}
-                                <input hidden="true" name="status" value="D">
-                                <input hidden="true" name="blocked" value="True">
-                                <button type="submit">Вернуть статью на редактирование</button>
-                            </form>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -69,6 +59,20 @@
                 {#                        {% endfor %}#}
                 {#                    </div>#}
                 {#                {% endif %}#}
+
+
+                {% if user.is_staff %}
+                    <form method="post" action="{% url 'article_status_update' article.pk %}"
+                          class="delete_article">
+                        {% csrf_token %}
+                        <input hidden="true" name="status" value="D">
+                        <input hidden="true" name="blocked" value="True">
+                        <button type="submit">Вернуть статью на редактирование</button>
+                    </form>
+                {% endif %}
+
+
+
                 <div class="article_likes_and_comments">
                     <p class="info">Likes and comments:</p>
                     <div class="info_img">
@@ -190,7 +194,8 @@
                 <button type="submit"><a class="search_button" href="#"><img src={% static "img/search.png" %}></a>
                 </button>
             </form>
-            <div class="author" {% if article.user.is_banned is True and user.is_staff %} style="opacity: .5" {% endif %}>
+            <div class="author" {% if article.user.is_banned is True and user.is_staff %}
+                 style="opacity: .5" {% endif %}>
                 <h6 class="author_title">автор</h6>
                 {% if user.is_staff %}
                     <div class="block_author_article">

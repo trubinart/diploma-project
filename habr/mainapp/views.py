@@ -1,3 +1,5 @@
+import re
+
 from datetime import timedelta
 from django.utils import timezone
 
@@ -91,6 +93,7 @@ class ArticleDetailView(DetailView):
             self.template_name = 'mainapp/404.html'
         return super().dispatch(request, *args, **kwargs)
 
+
 class CategoriesListView(ListView):
     """Класс для вывода списка категорий """
     template_name = 'mainapp/categories.html'
@@ -108,7 +111,8 @@ class CategoriesListView(ListView):
         if sort == 'date_reverse':
             return Article.objects.filter(categories_id=categories, status='A').reverse()
         elif sort == 'rating':
-            return Article.objects.filter(categories_id=categories, status='A').order_by('article_rating__rating').reverse()
+            return Article.objects.filter(categories_id=categories, status='A').order_by(
+                'article_rating__rating').reverse()
         elif sort == 'rating_reverse':
             return Article.objects.filter(categories_id=categories, status='A').order_by('article_rating__rating')
         else:
@@ -167,7 +171,6 @@ class CreateArticle(CreateView):
     template_name = 'mainapp/updateArticle.html'
     form_class = ArticleEditForm
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Добавление статьи'
@@ -176,7 +179,8 @@ class CreateArticle(CreateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('my_articles', args = [self.request.user.id])
+        return reverse_lazy('my_articles', args=[self.request.user.id])
+
 
 class UpdateArticle(UpdateView):
     """Класс для создания статьи"""
@@ -192,8 +196,7 @@ class UpdateArticle(UpdateView):
         return context
 
     def get_success_url(self):
-        pk = self.object.pk
-        return reverse_lazy('article', args=[pk])
+        return reverse_lazy('my_articles', args=[self.request.user.id])
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -356,7 +359,8 @@ class SearchView(ListView):
             if sort == 'date_reverse':
                 return Article.objects.search(query=query_string).filter(status='A').reverse()
             elif sort == 'rating':
-                return Article.objects.search(query=query_string).filter(status='A').order_by('article_rating__rating').reverse()
+                return Article.objects.search(query=query_string).filter(status='A').order_by(
+                    'article_rating__rating').reverse()
             elif sort == 'rating_reverse':
                 return Article.objects.search(query=query_string).filter(status='A').order_by('article_rating__rating')
             else:
@@ -516,10 +520,11 @@ class ArticleStatusUpdate(UpdateView):
         return context
 
     def get_success_url(self):
-        if not self.request.user.is_staff:
-            return reverse_lazy('my_articles', args = [self.request.user.id])
-        else:
+        if re.search(r'\/article\/', self.request.META.get('HTTP_REFERER')):
             return reverse_lazy('main')
+        else:
+            return reverse_lazy('my_articles', args=[self.request.user.id])
+
 
 class PageNotFountView(TemplateView):
     template_name = "mainapp/404.html"

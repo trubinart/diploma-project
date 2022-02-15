@@ -38,10 +38,10 @@
                                                         src={% static "img/comment.png" %}> {{ instance_article.get_comment_count_by_article_id }}
                                                 </div>
                                                 <div class="info"><img src={% static 'img/rating.png' %} alt="like">
-                                                    {% if not article.get_rating_by_article_id %}
+                                                    {% if not instance_article.get_rating_by_article_id %}
                                                         0
                                                     {% else %}
-                                                        {{ article.get_rating_by_article_id }}
+                                                        {{ instance_article.get_rating_by_article_id }}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -52,20 +52,34 @@
                                                    href="{% url 'article_update' instance_article.pk %}">Редактировать</a>
 
                                                 {% if instance_article.status == 'D' %}
-                                                <form method="post"
-                                                      action="{% url 'article_status_update' instance_article.pk %}">
-                                                    {% csrf_token %}
-                                                    <input hidden="true" name="status" value="A">
-                                                    <button type="submit" class="article-button">Опубликовать</button>
-                                                </form>
+                                                    <form method="post"
+                                                          action="{% url 'article_status_update' instance_article.pk %}">
+                                                        {% csrf_token %}
+                                                        <input hidden="true" name="status" value="A">
+                                                        <button type="submit" class="article-button">Опубликовать
+                                                        </button>
+                                                    </form>
                                                 {% endif %}
-
-                                                <form method="post" enctype="multipart/form-data"
-                                                      action="{% url 'article_status_update' instance_article.pk %}">
-                                                    {% csrf_token %}
-                                                    <input hidden="true" name="status" value="H">
+                                                <div class="popup" onclick="myFunction()">
                                                     <button class="article-button"> Удалить</button>
-                                                </form>
+                                                    <span class="popuptext" id="myPopup">Вы точно хотите удалить статью?
+
+
+                                                        <div class="button-box">
+                                                            <form method="post" enctype="multipart/form-data"
+                                                                  action="{% url 'article_status_update' instance_article.pk %}">
+                                                            {% csrf_token %}
+                                                            <input hidden="true" name="status" value="H">
+                                                            <button class="popup-button">Да</button>
+                                                        </form>
+                                                        <button class="popup-button">Нет</button>
+
+                                                        </div>
+
+
+
+                                                    </span>
+                                                </div>
 
 
                                             </div>
@@ -114,4 +128,12 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // When the user clicks on <div>, open the popup
+        function myFunction() {
+            var popup = document.getElementById("myPopup");
+            popup.classList.toggle("show");
+        }
+    </script>
 {% endblock %}
