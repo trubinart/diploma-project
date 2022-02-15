@@ -5,11 +5,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator
-from django.db.models.signals import post_save
 from django.urls import reverse
-
-from django.dispatch import receiver
-
 from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 from django.db.models import Avg
@@ -58,6 +54,16 @@ class Article(BaseModel):
     # добавили менеджер для изменения логики поиска в модели
     objects = ArticleManager()
 
+    DRAFT = 'D'
+    ACTIVE = 'A'
+    ARCHIVE = 'H'
+
+    STATUS_CHOICES = (
+        (DRAFT, 'Черновик'),
+        (ACTIVE, 'Активная'),
+        (ARCHIVE, 'Архивная'),
+    )
+
     categories = models.ForeignKey(ArticleCategories, on_delete=models.CASCADE, verbose_name='categories')
     title = models.CharField(max_length=60, verbose_name='title')
     subtitle = models.CharField(max_length=100, verbose_name='subtitle')
@@ -67,6 +73,8 @@ class Article(BaseModel):
                              related_name='article_author')
     likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
     tags = TaggableManager(through=UUIDTaggedItem)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Статус', default='D')
+    blocked = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -120,7 +128,7 @@ class Article(BaseModel):
         """
         Метод выводит последние по дате 3 статьи автора исключая текущую статью
           """
-        return Article.objects.filter(user=self.user).exclude(id=self.id).order_by('-created_timestamp')[:3]
+        return Article.objects.filter(user=self.user, status='A').exclude(id=self.id).order_by('-created_timestamp')[:3]
 
     def get_absolute_url(self):
         """

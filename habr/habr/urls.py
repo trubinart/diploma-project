@@ -10,8 +10,9 @@ from mainapp.views import MainListView, ArticleDetailView, \
     CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, SearchView, \
     ArticleLikeRedirectView, CommentLikeRedirectView, \
     AuthorStarRedirectView, AuthorArticleStarRedirectView, UpdateArticle, ProfileCreateView, \
-    ProfileEditView, LkListView, MyArticleListView, UserCommentDeleteView, BannedAuthorCommentView, BannedAuthorArticleView, \
-    ModeratorNotificationUpdate
+    ProfileEditView, LkListView, MyArticleListView, BannedAuthorCommentView, BannedAuthorArticleView, \
+    ModeratorNotificationUpdate, PageNotFountView, ArticleStatusUpdate, UserCommentDeleteView
+
 
 
 from authapp.views import UserEditView
@@ -50,8 +51,12 @@ urlpatterns = [
 
     path('article/<str:pk>/banned/<str:id>', BannedAuthorCommentView.as_view(), name='banned_user_toggle'),
     path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle'),
+    path('status-update/<str:pk>/', ArticleStatusUpdate.as_view(), name='article_status_update'),
+    path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle'),
     path('user-comment-delete/<str:pk>/', UserCommentDeleteView.as_view(), name='comment_delete'),
 ]
+
+handler404 = PageNotFountView.as_view()
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

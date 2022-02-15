@@ -1,3 +1,5 @@
+import re
+
 from datetime import timedelta
 from django.utils import timezone
 
@@ -6,13 +8,14 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, \
+    UpdateView, TemplateView, DeleteView
 from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
 
 from uuid import UUID
 
 from authapp.forms import UserRegisterForm
-from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm
+from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, ArticleStatusEditForm
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification
@@ -47,13 +50,13 @@ class MainListView(ListView):
         sort = self.get_sort_from_request()
 
         if sort == 'date_reverse':
-            return Article.objects.all().reverse()
+            return Article.objects.filter(status='A').reverse()
         elif sort == 'rating':
-            return Article.objects.order_by('article_rating__rating').reverse()
+            return Article.objects.filter(status='A').order_by('article_rating__rating').reverse()
         elif sort == 'rating_reverse':
-            return Article.objects.order_by('article_rating__rating')
+            return Article.objects.filter(status='A').order_by('article_rating__rating')
         else:
-            return Article.objects.all()
+            return Article.objects.filter(status='A')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -84,6 +87,13 @@ class ArticleDetailView(DetailView):
         context['search_form'] = search_form
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        article_id = self.kwargs['pk']
+        article_status = Article.objects.get(id=article_id).status
+        if article_status != 'A':
+            self.template_name = 'mainapp/404.html'
+        return super().dispatch(request, *args, **kwargs)
+
 
 class CategoriesListView(ListView):
     """Класс для вывода списка категорий """
@@ -100,13 +110,14 @@ class CategoriesListView(ListView):
         categories = self.kwargs['pk']
 
         if sort == 'date_reverse':
-            return Article.objects.filter(categories_id=categories).reverse()
+            return Article.objects.filter(categories_id=categories, status='A').reverse()
         elif sort == 'rating':
-            return Article.objects.filter(categories_id=categories).order_by('article_rating__rating').reverse()
+            return Article.objects.filter(categories_id=categories, status='A').order_by(
+                'article_rating__rating').reverse()
         elif sort == 'rating_reverse':
-            return Article.objects.filter(categories_id=categories).order_by('article_rating__rating')
+            return Article.objects.filter(categories_id=categories, status='A').order_by('article_rating__rating')
         else:
-            return Article.objects.filter(categories_id=categories)
+            return Article.objects.filter(categories_id=categories, status='A')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -160,7 +171,6 @@ class CreateArticle(CreateView):
     model = Article
     template_name = 'mainapp/updateArticle.html'
     form_class = ArticleEditForm
-    success_url = reverse_lazy('main')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -168,6 +178,9 @@ class CreateArticle(CreateView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+    def get_success_url(self):
+        return reverse_lazy('my_articles', args=[self.request.user.id])
 
 
 class UpdateArticle(UpdateView):
@@ -184,11 +197,14 @@ class UpdateArticle(UpdateView):
         return context
 
     def get_success_url(self):
-        pk = self.object.pk
-        return reverse_lazy('article', args=[pk])
+        return reverse_lazy('my_articles', args=[self.request.user.id])
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
+        article_id = self.kwargs['pk']
+        user_id = Article.objects.get(id=article_id).user.id
+        if user_id != self.request.user.id:
+            self.template_name = 'mainapp/404.html'
         return super(UpdateArticle, self).dispatch(*args, **kwargs)
 
 
@@ -281,13 +297,13 @@ class UserArticleListView(ListView):
         user_id = self.kwargs['pk']
 
         if sort == 'date_reverse':
-            return Article.objects.filter(user=user_id).reverse()
+            return Article.objects.filter(user=user_id, status='A').reverse()
         elif sort == 'rating':
-            return Article.objects.filter(user=user_id).order_by('article_rating__rating').reverse()
+            return Article.objects.filter(user=user_id, status='A').order_by('article_rating__rating').reverse()
         elif sort == 'rating_reverse':
-            return Article.objects.filter(user=user_id).order_by('article_rating__rating')
+            return Article.objects.filter(user=user_id, status='A').order_by('article_rating__rating')
         else:
-            return Article.objects.filter(user=user_id)
+            return Article.objects.filter(user=user_id, status='A')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -316,7 +332,7 @@ class MyArticleListView(ListView):
     def get_queryset(self):
         # Объявляем переменную user и записываем ссылку на id автора
         user_id = self.kwargs['pk']
-        new_context = Article.objects.filter(user=user_id)
+        new_context = Article.objects.filter(user=user_id).exclude(status='H')
         return new_context
 
     def get_context_data(self, **kwargs):
@@ -342,13 +358,14 @@ class SearchView(ListView):
             query_string = form.cleaned_data['query']
 
             if sort == 'date_reverse':
-                return Article.objects.search(query=query_string).reverse()
+                return Article.objects.search(query=query_string).filter(status='A').reverse()
             elif sort == 'rating':
-                return Article.objects.search(query=query_string).order_by('article_rating__rating').reverse()
+                return Article.objects.search(query=query_string).filter(status='A').order_by(
+                    'article_rating__rating').reverse()
             elif sort == 'rating_reverse':
-                return Article.objects.search(query=query_string).order_by('article_rating__rating')
+                return Article.objects.search(query=query_string).filter(status='A').order_by('article_rating__rating')
             else:
-                return Article.objects.search(query=query_string)
+                return Article.objects.search(query=query_string).filter(status='A')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -489,6 +506,35 @@ class BannedAuthorArticleView(RedirectView):
         else:
             pass
         return url_article
+
+
+class ArticleStatusUpdate(UpdateView):
+    template_name = 'mainapp/myArticles.html'
+    paginate_by = 9
+    model = Article
+    form_class = ArticleStatusEditForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Мои статьи'
+        context['categories_list'] = category_list
+        return context
+
+    def get_success_url(self):
+        if re.search(r'\/article\/', self.request.META.get('HTTP_REFERER')):
+            return reverse_lazy('main')
+        else:
+            return reverse_lazy('my_articles', args=[self.request.user.id])
+
+
+class PageNotFountView(TemplateView):
+    template_name = "mainapp/404.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Страница не найдена'
+        context['categories_list'] = category_list
+        return context
 
 
 class UserCommentDeleteView(DeleteView):
