@@ -496,7 +496,6 @@ class UserCommentDeleteView(DeleteView):
 
     def get_success_url(self):
         article_id = self.request.META['HTTP_REFERER'].split('/')[-2]
-        print(article_id)
         return reverse_lazy('article', kwargs={'pk': article_id})
 
     @method_decorator(user_passes_test(lambda u: u.is_staff))
