@@ -28,7 +28,6 @@ ENV TZ=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #команда которая выполниться в консоли
-#CMD [ "uwsgi", "--http", ":9090", "--wsgi-file", "modules/main.py"]
-#CMD [ "python3", "run.py"]
 CMD [ "python3", "manage.py", "collectstatic"]
-CMD [ "python3", "manage.py", "runserver", "0.0.0.0:9090"]
+#CMD [ "python3", "manage.py", "runserver", "0.0.0.0:9090"]
+CMD [ "uwsgi", "--http", ":9090", "--wsgi-file", "habr/wsgi.py"]

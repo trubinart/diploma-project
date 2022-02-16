@@ -9,9 +9,4 @@ default:
       NAME: db.sqlite3
 
 production:
-  SECRET_KEY: ''
-  ALLOWED_HOSTS:
-    - '*'
   DEBUG: False
-  STATIC_ROOT: .
-  MEDIA_ROOT: .
