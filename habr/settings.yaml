@@ -1,0 +1,17 @@
+default:
+  SECRET_KEY: ''
+  ALLOWED_HOSTS:
+    - '*'
+  DEBUG: True
+  DATABASES:
+    default:
+      ENGINE: django.db.backends.sqlite3
+      NAME: db.sqlite3
+
+production:
+  SECRET_KEY: ''
+  ALLOWED_HOSTS:
+    - '*'
+  DEBUG: False
+  STATIC_ROOT: .
+  MEDIA_ROOT: .
