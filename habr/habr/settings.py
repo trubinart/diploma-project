@@ -142,15 +142,3 @@ import dynaconf  # noqa
 
 settings = dynaconf.DjangoDynaconf(__name__)  # noqa
 # HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)
-
-DATABASES = {
-    'default': {
-        'DATABASE': 'postgres',
-        'NAME': 'geek_habr_db',
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'habr_admin',
-        'PASSWORD': 'habr_admin',
-        'HOST': 'db',
-        'PORT': 5432,
-    }
-}

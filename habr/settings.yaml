@@ -9,8 +9,8 @@ default:
       NAME: db.sqlite3
 
 production:
-  DEBUG: False
-#  DATABASES:
-#    default:
-#      ENGINE: django.db.backends.postgresql
-#      NAME: geek_habr_db
+  DEBUG: True
+  SESSION_COOKIE_HTTPONLY: True
+  SESSION_COOKIE_SECURE: True
+  CSRF_COOKIE_SECURE: True
+  CSRF_TRUSTED_ORIGINS:  ['https://*.geek-habr.ru','https://*.127.0.0.1']
