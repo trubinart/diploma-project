@@ -9,7 +9,11 @@
         <div class="contentArticle">
             <div class="myArticles">
                 {% if user.is_authenticated %}
-                    {% if object_list and user  == object_list.0.user %}
+                    {% if not object_list %}
+                        <div class="titleArticleAdd">
+                            У Вас пока нет статей
+                        </div>
+                    {% elif user  == object_list.0.user %}
                         <div class="main">
                             <div class="title">
                                 Мои публикации
