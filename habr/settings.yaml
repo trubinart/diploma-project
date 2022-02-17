@@ -9,7 +9,7 @@ default:
       NAME: db.sqlite3
 
 production:
-  DEBUG: True
+  DEBUG: False
   SESSION_COOKIE_HTTPONLY: True
   SESSION_COOKIE_SECURE: True
   CSRF_COOKIE_SECURE: True
