@@ -1,0 +1,103 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="main">
+        <div class="title">
+        </div>
+
+        {% include 'mainapp/includes/inc-search-menu.html' %}
+
+        {% if  object_list %}
+            <div class="search-title">
+                Результаты поиска по запросу «{{ query }}»
+            </div>
+            <div class="search-subtitle">
+                всего найдено статей: {{ page_obj.paginator.count }}
+            </div>
+        {% endif %}
+
+        <div class="publications">
+            <div class="search-wrapper">
+
+                {% if not object_list %}
+                    <div class="not-search-title">
+                        По запросу «{{ query }}» ничего не найдено.<br>
+                        Вернитесь на <a href="{% url 'main' %}" class="">главную</a> или продолжите поиск.
+                    </div>
+                {% else %}
+
+                    {% for instance_article in object_list %}
+                        <div class="article-search-box">
+                            <div class="article-content-search-box">
+                                <div class="author-and-date-box">
+                                    <div class="author">{{ instance_article.user.get_profile.name }}</div>
+
+                                    <div class="likeCount">
+                                        <div class="icon">
+                                            <img src={% static 'img/rating.png' %} alt="like">
+                                        </div>
+                                        <div class="number_rating">
+                                            {% if not instance_article.get_rating_by_article_id %}
+                                                0
+                                            {% else %}
+                                                {{ instance_article.get_rating_by_article_id }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="dateInfo">
+                                        <div class="icon">
+                                            <img src={% static 'img/Calendar.png' %} alt="Calendar">
+                                        </div>
+                                        <div class="date">
+                                            {{ instance_article.created_timestamp|date:"d.m.Y" }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="article-title-and-text">
+                                    <a href="{% url 'article' instance_article.id %}"
+                                       class="article-search-title">{{ instance_article.title }}</a>
+                                    <div class="article-search-text">{{ instance_article.get_article_text_preview | safe }}</div>
+                                </div>
+                                <a class="artcle-search-button"
+                                   href="{% url 'article' instance_article.id %}">Читать</a>
+
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {% if object_list %}
+                <div class="paginator">
+                    {% if page_obj.has_previous %}
+                        <div class="pagLeft">
+                            <a href="?page={{ page_obj.previous_page_number }}&query=
+                                    {{ query }}{% if sort %}&sort={{ sort }}{% endif %}"><img
+                                    src={% static 'img/pagLeft.png' %} alt="left"></a>
+                        </div>
+                    {% endif %}
+
+                    {% for num_page in page_obj.paginator.page_range %}
+                        <div class="pagNum" {% if num_page == page_obj.number %}
+                             style="text-decoration: underline" {% endif %}>
+                            <a href="?page={{ num_page }}&query=
+                                    {{ query }}{% if sort %}&sort={{ sort }}{% endif %}">{{ num_page }}</a>
+                        </div>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <div class="pagRight">
+                            <a href="?page={{ page_obj.next_page_number }}&query=
+                                    {{ query }}{% if sort %}&sort={{ sort }}{% endif %}"><img
+                                    src={% static 'img/pagRight.png' %} alt=" right"></a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

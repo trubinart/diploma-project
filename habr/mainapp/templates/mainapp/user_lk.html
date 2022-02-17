@@ -10,109 +10,202 @@
     <div class="contentLK">
         <div class="mainLK">
             <div class="titleLK">
-                Редактирование страницы на сайте
+                Личный кабинет {% if user.is_staff %} модератора {% endif %}
             </div>
+            {% if user.is_staff %}
+            <div class="moderator">
+                <div class="requests">
+                    {% if object_list.0.get_count_new_requests_moderation %}
+                    <div class="text">
+                        <div class="info">
+                            Внимание! Есть новые запросы на модерацию контента:
+                        </div>
+                        <div class="count">
+                            {{object_list.0.get_count_new_requests_moderation}}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text noRequests">
+                        <div class="info">
+                            Нет новых заявок на модерацию
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="new_requests">
+                {% if object_list.0.get_count_new_requests_moderation %}
+                <div class="requests_title">
+                    Новые запросы на модерацию
+                </div>
+                {% endif %}
+                {% for notification in object_list %}
+                {% if notification.status == 'N' %}
+                <div class="request_wrapper">
+                    <div class="info">
+                        <div class="article">
+                            Запрос на проверку статьи: &nbsp;&nbsp; {{ notification.comment_initiator.article_comment }}
+                        </div>
+                        <div class="initiator">
+                            Запрос от пользователя: &nbsp;&nbsp; {{ notification.comment_initiator.user }}
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <div class="take">
+                            <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}">
+                                Просмотреть статью
+                            </a>
+                        </div>
+                        <div class="watch">
+                            <a href="{% url 'moder_not_update' notification.pk %}">
+                                Взять на модерацию
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {# Возможно, вместо проверки notification.status != 'R',  #}
+            {# лучше фильтровать в контроллере и не отдавать на страницу вообще #}
+            {% if user.get_count_notifications_on_moderation %}
+            <div class="new_requests my_request">
+                <div class="requests_title">
+                    Взятые в работу запросы на модерацию
+                </div>
+                {% for notification in object_list %}
+                {% if notification.responsible_moderator == user and notification.status != 'R' %}
+                <div class="request_wrapper">
+                    <div class="info">
+                        <div class="article">
+                            Запрос на проверку статьи: &nbsp;&nbsp; {{ notification.comment_initiator.article_comment }}
+                        </div>
+                        <div class="initiator">
+                            Запрос от пользователя: &nbsp;&nbsp; {{ notification.comment_initiator.user }}
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <div class="watch">
+                            <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}">
+                                Просмотреть статью
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% else %}
+            {% if user.userprofile.name %}
             <div class="infoLK">
                 <div class="infoTextLeftLK">
-                    Информацию на этой странице будут видеть пользователи сайта — твои потенциальные
-                    клиенты. Отнесись к ее заполнению
-                    ответственно.
-                </div>
-                <div class="infoTextRightLK">
-                    <a href="#">Как выглядит моя страница?</a>
+                    Данная страница предназначена для создания и редактирования статей,
+                    а так же для внесения и изменения информации о себе.
                 </div>
             </div>
-            <div class="profileLK">
-                <div class="menuProfileLK">
-                    <ul class="menuPrLK">
-                        <li class="persInfoLK"><a href="#">Персональная информация</a></li>
-                        <!-- <li class="servicesLK"><a href="#">Услуги</a></li>
-                        <li class="scheduleLK"><a href="#">Расписание</a></li>
-                        <li class="feedbackLK"><a href="#">Отзывы</a></li> -->
-                    </ul>
-
+            {% else %}
+            <div class="infoLK">
+                <div class="infoTextLeftLK">
+                    Что бы иметь возможность публиковать собственные статьи, необходимо заполнить информацию о
+                    себе.
+                    Для продолжения работы на сайте необходимо: нажать на кнопку <b>"Заполнить информацию о
+                    себе"</b>
+                    в блоке <b>"Информация о себе"</b> или перейти по ссылке <b>"ЗАПОЛНИТЬ ИНФОРМАЦИЮ О
+                    СЕБЕ"</b> в
+                    меню <b>"Личного кабинета"</b>.
                 </div>
-                <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
+            </div>
+            {% endif %}
+            {% endif %}
+            {% if user.get_count_notifications_about_blocking %}
+            <div class="titleImportantNotifications">
+                <div class="countNotifications">
+                    У Вас есть важные непрочитанные уведомления в количестве
+                    {{ user.get_count_notifications_about_blocking }} шт.
+                </div>
+                <div class="showNotifications">
+                    <a class="content_toggle" href="#">Показать уведомления</a>
+                </div>
+            </div>
+            <div class="importantNotifications" style="display: none;">
+                {% for notification in user.get_notification_about_blocking %}
+                <div class="messageWrapper">
+                    <div class="message">
+                    {{ notification.message|safe}}
+                    </div>
+                    <div class="readMessage">
+                        <a href="{% url 'message_edit' notification.pk %}">скрыть сообщение</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="profileLK">
                 <div class="blokPersonInfoLK">
                     <div class="baseInfoBlokLK">
                         <div class="menuBaseInfoBlokLK">
-                            <ul class="menuPrLK">
-                                <!-- <li class="persInfoLK"><a href="#">Основная информация</a></li> -->
-                                <li class="baseInfoTitleLK">Основная информация</li>
+                            <ul class="userInfo">
+                                <li class="title_lk">Учетные данные</li>
+                                <li class="text">Логин:</li>
+                                <li> {{ user.username }}</li>
+                                <li class="text">Почта:</li>
+                                <li>{{ user.email }}</li>
+
+                                <div class="buttonInLk">
+                                    <a href="{% url 'user_edit' user.pk %}">Редактировать учётные данные</a>
+                                </div>
+                            </ul>
+                            <ul class="userInfo">
+                                {% if user.userprofile.name %}
+                                <li class="title_lk">Информация о себе</li>
+                                <li class="text">Имя Фамилия:</li>
+                                <li>{{ user.userprofile.name }}</li>
+                                <li class="text">Возраст:</li>
+                                <li>{{ user.userprofile.birthday|date:"M d, Y" }}</li>
+                                <li class="text">Краткое описание:</li>
+                                <li>{{ user.userprofile.bio }}</li>
+                                <li class="text">Аватар:</li>
+                                <li>
+                                    <div class="infoBlockAvatar">
+                                        <img src="/media/{{ user.userprofile.avatar }}" alt="avatar">
+                                    </div>
+                                </li>
+                                <div class="buttonInLk">
+                                    <a href="{% url 'profile_edit' user.userprofile.id %}">Редактировать информацию
+                                        о
+                                        себе</a>
+                                </div>
+                                {% else %}
+                                <div class="buttonInLk">
+                                    <a href="{% url 'profile_edit' user.userprofile.id %}">Заполнить информацию о
+                                        себе</a>
+                                </div>
+                                {% endif %}
                             </ul>
                         </div>
-                        <hr class="profileHrLK" style="height: 1px;background-color: #DBE7FF;color: #DBE7FF;">
-                        <!-- <div class="baseBlokLK"> -->
-                        <form class="baseBlokLK">
-
-                            <div class="blokFirstName">
-                                <div class="FirstName">
-                                    Имя
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldFirstName" placeholder="Введите имя"
-                                        id="fieldFirstName">
-                                </div>
-                            </div>
-                            <div class="blokLastName">
-                                <div class="LastName">
-                                    Фамилия
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldLastName"
-                                        placeholder="Введите фамилию" id="fieldLastName">
-                                </div>
-                            </div>
-
-                            <div class="blokBirthdate">
-                                <div class="Birthdate">
-                                    Возраст
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="18"
-                                        id="fieldBirthdate">
-
-                                </div>
-                            </div>
-                            <div class="blokShortDescription">
-                                <div class="shortDescription">
-                                    Краткое описание
-                                </div>
-                                <div class="fieldName">
-                                    <!-- <input class="inputFild" type="text" name="fieldSecondName"
-                                                                    placeholder="Введите возраст" id="fieldSecondName"> -->
-                                    <textarea class="inputFild" name="fieldShortDescription"
-                                        placeholder="Краткое описание" id="fieldShortDescription"
-                                        type="textarea"></textarea>
-                                </div>
-                            </div>
-                            <div class="blokButton">
-
-                                <input class="form-control" type="submit" value="сохранить изменения" />
-                                <!-- <button type="submit" value="сохранить изменения"></button> -->
-
-                            </div>
-
-                            <!-- <div class="blokBirthdate">
-                                <div class="Birthdate">
-                                    Название студии
-                                </div>
-                                <div class="fieldName">
-                                    <input class="inputFild" type="text" name="fieldBirthdate" placeholder="01.01.1990"
-                                        id="fieldBirthdate">
-                                </div>
-                            </div> -->
-                        </form>
-                        <!-- </div> -->
                     </div>
-                    <!-- <div class="baseAvatarBlokLK">
-                        Картинка
-                    </div> -->
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-<!--/Вставка кода для кабинета-->
+<script>
+
+$(document).ready(function(){
+	$('.content_toggle').click(function(){
+		$('.importantNotifications').slideToggle(300, function(){
+			if ($(this).is(':hidden')) {
+				$('.content_toggle').html('Показать уведомления');
+				$('.content_toggle').removeClass('open');
+			} else {
+				$('.content_toggle').html('Скрыть уведомления');
+				$('.content_toggle').addClass('open');
+			}
+		});
+		return false;
+	});
+});
+
+</script>
 {% endblock %}

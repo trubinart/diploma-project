@@ -8,9 +8,8 @@
     </div>
     <div class="contentArticleAdd">
         <div class="mainArticleAdd">
-            {% if user.is_authenticated %}
             <div class="titleArticleAdd">
-                Добавление новой статьи
+                {{title}}
             </div>
             <div class="blokPersonInfoLK">
                 <div class="baseInfoBlokLK">
@@ -18,22 +17,24 @@
                         {% csrf_token %}
                         {{ form.media }}
                         {{ form.as_p }}
-                        <input class="form-control" type="submit" value="Сохранить статью">
+                        <input class="form-control" type="submit" value="Скрыть сообщение">
                     </form>
+                    <a href="{% url 'lk' %}" class="toLk">Вернуться в личный кабинет</a>
                 </div>
             </div>
-            <script>
-                $(document).ready(function () {
-                    $('#id_user').val('{{ user.pk }}');
-                });
-
-            </script>
-            {% else %}
-            <div class="titleArticleAdd">
-                Для добавления статьи необходимо авторизоваться
+            <div class="preview">
+                <div class="text_message">
+                    <div class="message_text">
+                       {{ object.message|safe }}
+                    </div>
+                </div>
             </div>
-            {% endif %}
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#id_is_read').val('True');
+    });
+</script>
 {% endblock %}
