@@ -1,7 +1,15 @@
-build:
-	 docker build . -t django:latest
+start:
+	sudo docker-compose up -d  --buil
+	sudo docker-compose exec django python manage.py migrate
+	sudo docker-compose exec django python manage.py collectstatic
+	sudo docker-compose exec django python manage.py createsuperuser
 
-run:
-	docker run -d -p 9090:9090 -v /home/diplom/habr/static:/app/static -v /home/diplom/habr/media:/app/media habr_django-2
+update:
+	sudo docker-compose up -d  --buil
 
+stop:
+	docker-compose down -v
+
+postgre:
+	docker-compose exec db psql --username=habr_admin --dbname=geek_habr_db
 
