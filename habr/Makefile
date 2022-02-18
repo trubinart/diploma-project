@@ -4,6 +4,10 @@ start:
 	sudo docker-compose exec django python manage.py collectstatic
 	sudo docker-compose exec django python manage.py createsuperuser
 
+up-start:
+	sudo docker-compose up -d  --buil
+	sudo docker-compose exec django python manage.py migrate
+
 update:
 	sudo docker-compose up -d  --buil
 
