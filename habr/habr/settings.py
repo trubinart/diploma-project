@@ -26,11 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# STATICFILES_DIRS = (
-#     BASE_DIR / 'static',
-# )
-
-
 # Media Files for Users and Articles
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -144,3 +139,8 @@ import dynaconf  # noqa
 
 settings = dynaconf.DjangoDynaconf(__name__)  # noqa
 # HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)
+
+if settings.DEBUG:
+    STATIC_ROOT = '/static/'
+
+    STATICFILES_DIRS = (BASE_DIR / 'static',)
