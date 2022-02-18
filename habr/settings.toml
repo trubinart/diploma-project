@@ -1,8 +1,0 @@
-[default]
-SECRET_KEY = ''
-
-#[development]
-#name = "developer"
-#
-#[production]
-#name = "admin"
