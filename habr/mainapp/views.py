@@ -548,3 +548,18 @@ class UserCommentDeleteView(DeleteView):
     @method_decorator(user_passes_test(lambda u: u.is_staff))
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+
+
+class ModeratorNotificationReviewedUpdate(UpdateView):
+    """Снятие модератором статьи с модерации"""
+    model = ModeratorNotification
+    template_name = 'mainapp/updateModerNotifReviewed.html'
+    form_class = ModeratorNotificationEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Вы действительно хотите снять с модерации статью?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
