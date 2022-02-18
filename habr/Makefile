@@ -14,6 +14,9 @@ update:
 stop:
 	docker-compose down -v
 
+delete:
+	docker system prune -a
+
 postgre:
 	docker-compose exec db psql --username=habr_admin --dbname=geek_habr_db
 
