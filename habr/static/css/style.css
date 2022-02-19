@@ -21,9 +21,10 @@ body {
     margin: 0 auto;
 }
 
-.main-footer {
-    flex: 0 0 auto;
-}
+/*.main-footer {*/
+/*    flex: 0 0 auto;*/
+/*    width: 1230px;*/
+/*}*/
 
 /* start .topNavbar */
 
@@ -133,7 +134,7 @@ body {
 /* start .footer  */
 .main-footer {
     height: 396px;
-    width: 100%;
+    width: 1230px;
     display: flex;
     flex-direction: column;
     background: #1E212C;
