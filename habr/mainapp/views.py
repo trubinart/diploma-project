@@ -18,7 +18,7 @@ from uuid import UUID
 from authapp.forms import UserRegisterForm
 
 from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, \
-    ArticleStatusEditForm, MessageEditForm
+    ArticleStatusEditForm, MessageEditForm, FilterForm
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile, NotificationUsersAboutBlocking
@@ -52,15 +52,17 @@ class MainListView(ListView):
 
     def get_queryset(self):
         sort = self.get_sort_from_request()
+        form = FilterForm(self.request.GET)
+        return Article.objects.filter(status='A')
 
-        if sort == 'date_reverse':
-            return Article.objects.filter(status='A').reverse()
-        elif sort == 'rating':
-            return Article.objects.filter(status='A').order_by('article_rating__rating').reverse()
-        elif sort == 'rating_reverse':
-            return Article.objects.filter(status='A').order_by('article_rating__rating')
-        else:
-            return Article.objects.filter(status='A')
+        # if sort == 'date_reverse':
+        #     return Article.objects.filter(status='A').reverse()
+        # elif sort == 'rating':
+        #     return Article.objects.filter(status='A').order_by('article_rating__rating').reverse()
+        # elif sort == 'rating_reverse':
+        #     return Article.objects.filter(status='A').order_by('article_rating__rating')
+        # else:
+        #     return Article.objects.filter(status='A')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста

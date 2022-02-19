@@ -44,11 +44,18 @@
 
     <div class="side">
         <div class="sort">
-            <div class="title">
-                Фильтровать по дате:
-                <input type="date" class="date" name="start_date">
-            <input type="date" class="date" name="end_date">
-            </div>
+            <form method="get" action="{{ request.page }}" class="filter-box">
+                <div class="subtitle">Дата
+                    <input type="date" class="date" name="start_date">
+                    <input type="date" class="date" name="end_date">
+                </div>
+
+                <div class="subtitle">Рейтинг
+                    <input type="number" class="date" name="start_rating" min="0">
+                    <input type="number" class="date" name="end_rating" min="0">
+                </div>
+                <button type="submit">Фильтровать</button>
+            </form>
 
         </div>
     </div>
