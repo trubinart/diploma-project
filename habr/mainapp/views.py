@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, \
     UpdateView, TemplateView, DeleteView
 from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
+from django.http import Http404
 
 from uuid import UUID
 
@@ -112,6 +113,10 @@ class CategoriesListView(ListView):
         sort = self.get_sort_from_request()
         # Объявляем переменную и записываем ссылку на id категории
         categories = self.kwargs['pk']
+        try:
+            UUID(categories)
+        except:
+            raise Http404()
 
         if sort == 'date_reverse':
             return Article.objects.filter(categories_id=categories, status='A').reverse()
@@ -122,6 +127,7 @@ class CategoriesListView(ListView):
             return Article.objects.filter(categories_id=categories, status='A').order_by('article_rating__rating')
         else:
             return Article.objects.filter(categories_id=categories, status='A')
+
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
