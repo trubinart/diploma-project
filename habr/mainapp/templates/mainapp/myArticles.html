@@ -64,9 +64,9 @@
                                                         </button>
                                                     </form>
                                                 {% endif %}
-                                                <div class="popup" onclick="myFunction()">
+                                                <div class="popup" onclick="myFunction('{{ instance_article.pk }}')">
                                                     <button class="article-button"> Удалить</button>
-                                                    <span class="popuptext" id="myPopup">Вы точно хотите удалить статью?
+                                                    <span class="popuptext" id="{{ instance_article.pk }}">Вы точно хотите удалить статью?
 
 
                                                         <div class="button-box">
@@ -77,10 +77,7 @@
                                                             <button class="popup-button">Да</button>
                                                         </form>
                                                         <button class="popup-button">Нет</button>
-
                                                         </div>
-
-
 
                                                     </span>
                                                 </div>
@@ -135,8 +132,8 @@
 
     <script>
         // When the user clicks on <div>, open the popup
-        function myFunction() {
-            var popup = document.getElementById("myPopup");
+        function myFunction(id) {
+            var popup = document.getElementById(id);
             popup.classList.toggle("show");
         }
     </script>
