@@ -127,7 +127,7 @@ sudo reboot
 
 
 
-# 8. Запустить проект
+# 8. Подготовить и запустить проект
 
 
 
@@ -135,6 +135,7 @@ sudo reboot
 2. Создать папку для проекта
 3. Перейти в папку и сделать git clone
 4. Вставить нужные домены в файл diploma-project/habr/settings.yaml в переменную CSRF_TRUSTED_ORIGINS
+5. Изменить настройки статики в файле habr/habr/settings.py
 5. Запустить проект с помощью MakeFile
 
 

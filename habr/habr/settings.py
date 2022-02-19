@@ -22,9 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+#FOR DEPLOY
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+#FOR DEVELOP
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = '/static/'
+STATICFILES_DIRS = (BASE_DIR / 'static',)
 
 # Media Files for Users and Articles
 MEDIA_URL = '/media/'
@@ -140,7 +145,3 @@ import dynaconf  # noqa
 settings = dynaconf.DjangoDynaconf(__name__)  # noqa
 # HERE ENDS DYNACONF EXTENSION LOAD (No more code below this line)
 
-if settings.DEBUG:
-    STATIC_ROOT = '/static/'
-
-    STATICFILES_DIRS = (BASE_DIR / 'static',)
