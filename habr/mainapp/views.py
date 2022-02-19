@@ -16,12 +16,13 @@ from uuid import UUID
 
 from authapp.forms import UserRegisterForm
 
-from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm,\
+from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, \
     ArticleStatusEditForm, MessageEditForm
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
-from authapp.models import User, UserProfile, NotificationUsersAboutBlocking
-from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification
+from authapp.models import User, UserProfile
+from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification, \
+    NotificationUsersFromModerator
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -460,7 +461,7 @@ class ModeratorNotificationUpdate(UpdateView):
 
 
 class NotificationUsersAboutBlockingUpdate(UpdateView):
-    model = NotificationUsersAboutBlocking
+    model = NotificationUsersFromModerator
     template_name = 'mainapp/updateMessage.html'
     form_class = MessageEditForm
     success_url = reverse_lazy('lk')

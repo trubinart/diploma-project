@@ -1947,24 +1947,72 @@ body {
     border: 1px solid #bc4e24;
     background-color: #eef8ff;
     align-items: center;
+    padding: 20px 0;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .itemMessage {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .itemMessage {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .itemMessage .moderImage {
+    width: 60px;
+    height: 60px;
+    margin: 0 40px 0 80px;
+    position: relative;
+    border-radius: 60px;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .itemMessage .moderImage .infoModer {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    top: -50px;
+    left: -50px;
+    width: 180px;
+    border: 1px solid #bddc9f;
+    padding: 10px;
+    border-radius: 10px;
+    background: #fbffe5;
+    opacity: .8;
+    font-weight: 700;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .itemMessage .moderImage:hover {
+    box-shadow: 0.8em 0.8em 15px rgba(122,122,122,0.5);
+}
+
+.content .main .contentLK .mainLK .importantNotifications .itemMessage .moderImage:hover .infoModer{
+    display: flex;
+}
+
+.content .main .contentLK .mainLK .importantNotifications .itemMessage .moderImage img {
+    height: 60px;
+    border-radius: 60px;
 }
 
 .content .main .contentLK .mainLK .importantNotifications .messageWrapper {
     display: flex;
     justify-content: space-between;
-    width: 100%;
     border: 1px solid #9fb4dc;
     background-color: #eef8ff;
-    height: 82px;
+    min-height: 82px;
     align-items: center;
-    width: 1200px;
+    width: 1000px;
     margin: 10px auto;
     border-radius: 15px 15px 15px 0;
 }
 
 .content .main .contentLK .mainLK .importantNotifications .messageWrapper .message,
 .content .main .contentLK .mainLK .importantNotifications .messageWrapper .readMessage {
-    margin: 0 40px
+    margin: 16px 40px
 }
 
 .content .main .contentLK .mainLK .importantNotifications .messageWrapper .message {
@@ -1972,6 +2020,7 @@ body {
     font-weight: 600;
     opacity: .8;
     color: #0f1629;
+    width: 600px;
 }
 
 .content .main .contentLK .mainLK .importantNotifications .messageWrapper .readMessage a {

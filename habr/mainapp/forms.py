@@ -2,10 +2,9 @@ from datetime import date, timedelta
 
 from django import forms
 
-from mainapp.models import Article, ArticleComment, ModeratorNotification
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from authapp.models import UserProfile, User, NotificationUsersAboutBlocking
-from mainapp.models import ArticleComment
+from authapp.models import UserProfile, User
+from mainapp.models import NotificationUsersFromModerator, Article, ArticleComment, ModeratorNotification
 
 
 class ArticleEditForm(forms.ModelForm):
@@ -170,7 +169,7 @@ class ModeratorNotificationEditForm(forms.ModelForm):
 
 class MessageEditForm(forms.ModelForm):
     class Meta:
-        model = NotificationUsersAboutBlocking
+        model = NotificationUsersFromModerator
         fields = ('is_read',)
 
     def __init__(self, *args, **kwargs):
