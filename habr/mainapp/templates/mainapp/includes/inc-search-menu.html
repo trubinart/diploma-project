@@ -1,43 +1,55 @@
 {% load static %}
 
 <div class="menu">
+    {#    <div class="side">#}
+    {#        <div class="sort">#}
+    {#            <div class="title">#}
+    {#                Сортировать:#}
+    {#            </div>#}
+    {#            <div class="sortDate">#}
+    {#                {% if not sort %}#}
+    {#                    <a class="text"#}
+    {#                       href="{{ request.path }}?sort=date_reverse{% if query %}&query={{ query }}{% endif %}"#}
+    {#                       style="color: #FF3F3A; text-decoration: underline">по дате</a>#}
+    {#                    <img src="https://img.icons8.com/ios/13/fa314a/double-down--v1.png"/>#}
+    {#                {% elif sort == 'date_reverse' %}#}
+    {#                    <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}"#}
+    {#                       style="color: #FF3F3A; text-decoration: underline">по#}
+    {#                        дате</a>#}
+    {#                    <img src="https://img.icons8.com/ios/13/fa314a/double-up.png"/>#}
+    {#                {% else %}#}
+    {#                    <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}">по дате</a>#}
+    {#                {% endif %}#}
+    {##}
+    {#            </div>#}
+    {#            <div class="sortDate">#}
+    {#                {% if not sort or sort == 'date_reverse' %}#}
+    {#                    <a class="text" href="{{ request.path }}?sort=rating{% if query %}&query={{ query }}{% endif %}">по#}
+    {#                        рейтингу</a>#}
+    {#                {% elif sort == 'rating' %}#}
+    {#                    <a class="text"#}
+    {#                       href="{{ request.path }}?sort=rating_reverse{% if query %}&query={{ query }}{% endif %}"#}
+    {#                       style="color: #FF3F3A; text-decoration: underline">по рейтингу</a>#}
+    {#                    <img src="https://img.icons8.com/ios/13/fa314a/double-down--v1.png"/>#}
+    {#                {% elif sort == 'rating_reverse' %}#}
+    {#                    <a class="text" href="{{ request.path }}?sort=rating{% if query %}&query={{ query }}{% endif %}"#}
+    {#                       style="color: #FF3F3A; text-decoration: underline">по рейтингу</a>#}
+    {#                    <img src="https://img.icons8.com/ios/13/fa314a/double-up.png"/>#}
+    {##}
+    {#                {% endif %}#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+
+
     <div class="side">
         <div class="sort">
             <div class="title">
-                Сортировать:
+                Фильтровать по дате:
+                <input type="date" class="date" name="start_date">
+            <input type="date" class="date" name="end_date">
             </div>
-            <div class="sortDate">
-                {% if not sort %}
-                    <a class="text"
-                       href="{{ request.path }}?sort=date_reverse{% if query %}&query={{ query }}{% endif %}"
-                       style="color: #FF3F3A; text-decoration: underline">по дате</a>
-                    <img src="https://img.icons8.com/ios/13/fa314a/double-down--v1.png"/>
-                {% elif sort == 'date_reverse' %}
-                    <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}"
-                       style="color: #FF3F3A; text-decoration: underline">по
-                        дате</a>
-                    <img src="https://img.icons8.com/ios/13/fa314a/double-up.png"/>
-                {% else %}
-                    <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}">по дате</a>
-                {% endif %}
 
-            </div>
-            <div class="sortDate">
-                {% if not sort or sort == 'date_reverse' %}
-                    <a class="text" href="{{ request.path }}?sort=rating{% if query %}&query={{ query }}{% endif %}">по
-                        рейтингу</a>
-                {% elif sort == 'rating' %}
-                    <a class="text"
-                       href="{{ request.path }}?sort=rating_reverse{% if query %}&query={{ query }}{% endif %}"
-                       style="color: #FF3F3A; text-decoration: underline">по рейтингу</a>
-                    <img src="https://img.icons8.com/ios/13/fa314a/double-down--v1.png"/>
-                {% elif sort == 'rating_reverse' %}
-                    <a class="text" href="{{ request.path }}?sort=rating{% if query %}&query={{ query }}{% endif %}"
-                       style="color: #FF3F3A; text-decoration: underline">по рейтингу</a>
-                    <img src="https://img.icons8.com/ios/13/fa314a/double-up.png"/>
-
-                {% endif %}
-            </div>
         </div>
     </div>
 

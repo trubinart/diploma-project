@@ -2592,3 +2592,8 @@ body {
     background: linear-gradient(55.95deg, #FF3F3A 0%, #F75E05 100%);
     color: #FFFFFF;
 }
+
+.side .sort .date{
+    width: 140px;
+    height: 24px;
+}
