@@ -8,14 +8,19 @@
         </div>
 
         {% include 'mainapp/includes/inc-search-menu.html' %}
+        {% include 'mainapp/includes/inc-filter-results.html' %}
 
         {% if  object_list %}
             <div class="search-title">
                 Результаты поиска по запросу «{{ query }}»
             </div>
+
             <div class="search-subtitle">
-                всего найдено статей: {{ page_obj.paginator.count }}
+                {% if not start_date and not end_date and not start_rating and not end_rating %}
+                    всего найдено статей: {{ page_obj.paginator.count }}
+                {% endif %}
             </div>
+
         {% endif %}
 
         <div class="publications">
@@ -23,8 +28,9 @@
 
                 {% if not object_list %}
                     <div class="not-search-title">
-                        По запросу «{{ query }}» ничего не найдено.<br>
-                        Вернитесь на <a href="{% url 'main' %}" class="">главную</a> или продолжите поиск.
+                        <b>Статьи не найдены.</b> <br>
+                        Вернитесь на <a href="{% url 'main' %}" class="">главную</a>, введите другой запрос
+                        или измените настройки фильтра.
                     </div>
                 {% else %}
 

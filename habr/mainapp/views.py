@@ -1,6 +1,6 @@
 import re
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.utils import timezone
 
 from django.urls import reverse_lazy
@@ -40,13 +40,25 @@ def get_sort_from_request(self):
         return None
 
 
-def get_params_from_get_request(self):
+def get_filter_params_from_get_request(self):
     """метод получения параметра сортировки"""
     param_string = ''
     for key, value in self.request.GET.items():
         if key != 'page' and key != 'sort':
             param_string += f'{key}={value}&'
     return param_string.rstrip('&')
+
+
+def add_filter_params_to_context(self, context):
+    for key, value in self.request.GET.items():
+        if key != 'page' and key != 'sort' and key != 'query':
+            context[key] = value
+    try:
+        context['start_date'] = datetime.strptime((context['start_date']), "%Y-%m-%d")
+        context['end_date'] = datetime.strptime((context['end_date']), "%Y-%m-%d")
+    except:
+        pass
+    return context
 
 
 def get_filter_article_queryset(self, article_queryset):
@@ -94,11 +106,14 @@ class MainListView(ListView):
     def get_sort_article_queryset(self, article_queryset):
         return get_sort_article_queryset(self, article_queryset)
 
-    def get_params_from_get_request(self):
-        return get_params_from_get_request(self)
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
 
     def get_filter_article_queryset(self, article_queryset):
         return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
 
     def get_queryset(self):
         queryset = Article.objects
@@ -116,8 +131,9 @@ class MainListView(ListView):
         context['search_form'] = search_form
 
         # добавляем параметры
-        context['params'] = self.get_params_from_get_request()
+        context['params'] = self.get_filter_params_from_get_request()
         context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 
@@ -155,11 +171,14 @@ class CategoriesListView(ListView):
     def get_sort_article_queryset(self, article_queryset):
         return get_sort_article_queryset(self, article_queryset)
 
-    def get_params_from_get_request(self):
-        return get_params_from_get_request(self)
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
 
     def get_filter_article_queryset(self, article_queryset):
         return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
 
     def get_queryset(self):
         categories = self.kwargs['pk']
@@ -185,8 +204,9 @@ class CategoriesListView(ListView):
         context['search_form'] = search_form
 
         # добавляем параметры
-        context['params'] = self.get_params_from_get_request()
+        context['params'] = self.get_filter_params_from_get_request()
         context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 
@@ -335,11 +355,14 @@ class UserArticleListView(ListView):
     def get_sort_article_queryset(self, article_queryset):
         return get_sort_article_queryset(self, article_queryset)
 
-    def get_params_from_get_request(self):
-        return get_params_from_get_request(self)
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
 
     def get_filter_article_queryset(self, article_queryset):
         return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
 
     def get_queryset(self):
         user_id = self.kwargs['pk']
@@ -366,8 +389,9 @@ class UserArticleListView(ListView):
         context['author'] = author
         context['search_form'] = search_form
         # добавляем параметры
-        context['params'] = self.get_params_from_get_request()
+        context['params'] = self.get_filter_params_from_get_request()
         context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 
@@ -402,11 +426,14 @@ class SearchView(ListView):
     def get_sort_article_queryset(self, article_queryset):
         return get_sort_article_queryset(self, article_queryset)
 
-    def get_params_from_get_request(self):
-        return get_params_from_get_request(self)
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
 
     def get_filter_article_queryset(self, article_queryset):
         return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
 
     def get_queryset(self):
         form = SearchForm(self.request.GET)
@@ -424,8 +451,9 @@ class SearchView(ListView):
         context['title'] = 'Поиск по сайту'
         context['query'] = self.request.GET['query']
         # добавляем параметры
-        context['params'] = self.get_params_from_get_request()
+        context['params'] = self.get_filter_params_from_get_request()
         context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 

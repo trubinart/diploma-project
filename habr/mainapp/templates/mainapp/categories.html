@@ -9,14 +9,15 @@
         </div>
 
         {% include 'mainapp/includes/inc-search-menu.html' %}
+        {% include 'mainapp/includes/inc-filter-results.html' %}
 
         <div class="publications">
             <div class="wrapper">
                 {% if not object_list %}
                     <div class="not-search-title" style="margin-top: 30px; margin-left: 370px">
-                        По категории «{{ category_name }}» статьи не найдены.<br>
-                        Вернитесь на <a href="{% url 'main' %}" class="">главную</a> или выберете другую
-                        категорию.
+                        <b>Статьи не найдены.</b> <br>
+                        Вернитесь на <a href="{% url 'main' %}" class="">главную</a>, введите другой запрос
+                        или измените настройки фильтра.
                     </div>
                 {% else %}
                     {% for instance_article in object_list %}
