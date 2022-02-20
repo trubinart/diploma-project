@@ -85,9 +85,14 @@
                         </div>
                     </div>
                     <div class="buttons">
-                        <div class="watch">
+                        <div class="take">
                             <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}">
                                 Просмотреть статью
+                            </a>
+                        </div>
+                        <div class="watch">
+                            <a href="{% url 'moder_not_rev_update' notification.pk %}">
+                                Снять с модерации
                             </a>
                         </div>
                     </div>
