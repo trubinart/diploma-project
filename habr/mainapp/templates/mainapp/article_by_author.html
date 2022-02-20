@@ -20,7 +20,7 @@
 
                     <div class="name_and_share">
                         <h3>{% if author.userprofile.name %}{{ author.userprofile.name }}
-                            {% else %}{{ author.username }}{% endif %}</h3>
+                        {% else %}{{ author.username }}{% endif %}</h3>
                         <p>{{ author.get_profile.bio }}</p>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                                 {% else %}
                                     title="Понизить ранг автора"
                                 {% endif %}
-                                   href="{% url 'user_article_star_toggle' author.pk %}">
+                                    href="{% url 'user_article_star_toggle' author.pk %}">
                                     <img src={% static "img/chevron_blue.png" %}>
                                 </a>
                             {% else %}
@@ -46,7 +46,7 @@
                                 {% else %}
                                     title="Повысить ранг автора"
                                 {% endif %}
-                                   href="{% url 'user_article_star_toggle' author.pk %}">
+                                    href="{% url 'user_article_star_toggle' author.pk %}">
                                     <img src={% static "img/chevron_red.png" %}>
                                 </a>
                             {% endif %}
@@ -123,29 +123,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="paginator">
-                {% if page_obj.has_previous %}
-                    <div class="pagLeft">
-                        <a href="?page={{ page_obj.previous_page_number }}{% if sort %}&sort={{ sort }}{% endif %}">
-                            <img src={% static 'img/pagLeft.png' %} alt="left">
-                        </a>
-                    </div>
-                {% endif %}
-
-                {% for num_page in page_obj.paginator.page_range %}
-                    <div class="pagNum" {% if num_page == page_obj.number %}
-                         style="text-decoration: underline" {% endif %}>
-                        <a href="?page={{ num_page }}{% if sort %}&sort={{ sort }}{% endif %}">{{ num_page }}</a>
-                    </div>
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                    <div class="pagRight">
-                        <a href="?page={{ page_obj.next_page_number }}{% if sort %}&sort={{ sort }}{% endif %}"><img
-                                src={% static 'img/pagRight.png' %} alt="right"></a>
-                    </div>
-                {% endif %}
-            </div>
+            {% include 'mainapp/includes/inc-pagination.html' %}
         </div>
     </div>
 {% endblock %}
