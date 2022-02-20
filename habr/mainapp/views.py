@@ -18,12 +18,12 @@ from uuid import UUID
 from authapp.forms import UserRegisterForm
 
 from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, \
-    ArticleStatusEditForm, MessageEditForm
+    ArticleStatusEditForm, MessageEditForm, ModeratorNotificationAboutReModerationEditForm
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification, \
-    NotificationUsersFromModerator
+    NotificationUsersFromModerator, ModeratorNotificationAboutReModeration
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -55,13 +55,17 @@ class MainListView(ListView):
         sort = self.get_sort_from_request()
 
         if sort == 'date_reverse':
-            return Article.objects.filter(status='A').reverse()
+            return Article.objects.filter(status='A').exclude(
+                blocked='True').reverse()
         elif sort == 'rating':
-            return Article.objects.filter(status='A').order_by('article_rating__rating').reverse()
+            return Article.objects.filter(status='A').exclude(
+                blocked='True').order_by('article_rating__rating').reverse()
         elif sort == 'rating_reverse':
-            return Article.objects.filter(status='A').order_by('article_rating__rating')
+            return Article.objects.filter(status='A').exclude(
+                blocked='True').order_by('article_rating__rating')
         else:
-            return Article.objects.filter(status='A')
+            return Article.objects.filter(status='A').exclude(
+                blocked='True')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -95,7 +99,8 @@ class ArticleDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         article_id = self.kwargs['pk']
         article_status = Article.objects.get(id=article_id).status
-        if article_status != 'A':
+        article_blocked = Article.objects.get(id=article_id).blocked
+        if article_status != 'A' or article_blocked:
             self.template_name = 'mainapp/404.html'
         return super().dispatch(request, *args, **kwargs)
 
@@ -119,15 +124,19 @@ class CategoriesListView(ListView):
             raise Http404()
 
         if sort == 'date_reverse':
-            return Article.objects.filter(categories_id=categories, status='A').reverse()
+            return Article.objects.filter(categories_id=categories, status='A').exclude(
+                blocked='True').reverse()
         elif sort == 'rating':
-            return Article.objects.filter(categories_id=categories, status='A').order_by(
+            return Article.objects.filter(categories_id=categories, status='A').exclude(
+                blocked='True').order_by(
                 'article_rating__rating').reverse()
         elif sort == 'rating_reverse':
-            return Article.objects.filter(categories_id=categories, status='A').order_by('article_rating__rating')
+            return Article.objects.filter(categories_id=categories, status='A').exclude(
+                blocked='True').order_by(
+                'article_rating__rating')
         else:
-            return Article.objects.filter(categories_id=categories, status='A')
-
+            return Article.objects.filter(categories_id=categories, status='A').exclude(
+                blocked='True')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -153,8 +162,12 @@ class LkListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Личный кабинет'
+        re_moderation_notifications_list = ModeratorNotificationAboutReModeration.objects.exclude(
+            status='R'
+        )
         context['title'] = title
         context['categories_list'] = category_list
+        context['re_moderation_notifications_list'] = re_moderation_notifications_list
         return context
 
     @method_decorator(user_passes_test(lambda u: u.is_active))
@@ -293,13 +306,17 @@ class UserArticleListView(ListView):
         user_id = self.kwargs['pk']
 
         if sort == 'date_reverse':
-            return Article.objects.filter(user=user_id, status='A').reverse()
+            return Article.objects.filter(user=user_id, status='A').exclude(
+                blocked='True').reverse()
         elif sort == 'rating':
-            return Article.objects.filter(user=user_id, status='A').order_by('article_rating__rating').reverse()
+            return Article.objects.filter(user=user_id, status='A').exclude(
+                blocked='True').order_by('article_rating__rating').reverse()
         elif sort == 'rating_reverse':
-            return Article.objects.filter(user=user_id, status='A').order_by('article_rating__rating')
+            return Article.objects.filter(user=user_id, status='A').exclude(
+                blocked='True').order_by('article_rating__rating')
         else:
-            return Article.objects.filter(user=user_id, status='A')
+            return Article.objects.filter(user=user_id, status='A').exclude(
+                blocked='True')
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -461,6 +478,20 @@ class ModeratorNotificationUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Вы действительно хотите взять на модерацию статью?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class ModeratorNotificationAboutReModerationUpdate(UpdateView):
+    model = ModeratorNotificationAboutReModeration
+    template_name = 'mainapp/updateModerNotifAboutReModer.html'
+    form_class = ModeratorNotificationAboutReModerationEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Вы действительно хотите взять  статью на повторную модерацию?'
         context['title'] = title
         context['categories_list'] = category_list
         return context

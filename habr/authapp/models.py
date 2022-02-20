@@ -62,6 +62,13 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
             status='R'
         ).count()
 
+    def get_count_notifications_on_article_for_re_moderation(self):
+        return mainapp_models.ModeratorNotificationAboutReModeration.objects.filter(
+            responsible_moderator=self
+        ).exclude(
+            status='R'
+        ).count()
+
     @property
     def is_now_banned(self) -> bool:
         if self.is_banned:
@@ -129,4 +136,3 @@ def change_author_rating_by_author_likes(sender, instance, action, **kwargs):
     if action == 'post_remove' and instance.rating != 0:
         instance.rating -= 1
         instance.save()
-

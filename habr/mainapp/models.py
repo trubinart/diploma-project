@@ -170,6 +170,18 @@ class Article(BaseModel):
         # return ArticleRating.objects.filter(article_rating=self.id).select_related('rating')
         return ArticleRating.objects.get(article_rating=self.id).rating
 
+    @property
+    def is_for_correction(self) -> bool:
+        if self.status == 'D' and self.blocked:
+            return True
+        return False
+
+    @property
+    def is_for_re_moderation(self) -> bool:
+        if self.status == 'A' and self.blocked:
+            return True
+        return False
+
 
 # сигнал для создания таблицы рейтинга к статье
 @receiver(post_save, sender=Article)
@@ -471,8 +483,8 @@ class NotificationUsersFromModerator(BaseModel):
         status = instance.status
         blocked = instance.blocked
 
-        if status_before == status and blocked_before == blocked:
-            #  Если поля status и blocked не менялись - выходим
+        if status_before == status and blocked:
+            #  Если поля status и нет блокировки - выходим
             return
 
         #  получаем составные части сообщения
@@ -487,7 +499,7 @@ class NotificationUsersFromModerator(BaseModel):
                      f'</a>' \
                      f' на доработку.'
 
-        if not blocked_before and blocked:
+        if blocked:
             # Если статью заблокировали
             part_2 = 'Статья заблокирована для публикации. ' \
                      'Для повторной публикации необходимо исправить статью и ' \
@@ -511,3 +523,97 @@ class NotificationUsersFromModerator(BaseModel):
             moderator=moderator.pk,
             message=message
         )
+
+
+class ModeratorNotificationAboutReModeration(BaseModel):
+    """
+    Модель для хранения и уведомления модератора о повторной модерации статьи
+    """
+
+    NEW = 'N'
+    ASSIGNED = 'A'
+    UNDER_CONSIDERATION = 'U'
+    REVIEWED = 'R'
+
+    STATUS_CHOICES = (
+        (NEW, 'Новая'),
+        (ASSIGNED, 'Назначена'),
+        (UNDER_CONSIDERATION, 'На рассмотрении'),
+        (REVIEWED, 'Рассмотрена'),
+    )
+
+    article_for_re_moderation = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        verbose_name='Статья для повторной модерации',
+        related_name='article_for_re_moderation'
+    )
+    responsible_moderator = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        verbose_name='Ответственный модератор',
+        related_name='responsible_article_moderator',
+        blank=True,
+        null=True
+    )
+    status = models.CharField(
+        max_length=1,
+        choices=STATUS_CHOICES,
+        verbose_name='Статус',
+        default='N'
+    )
+
+    def __str__(self):
+        status_verbose_names = {'N': 'Новая',
+                                'A': 'Назначена',
+                                'U': 'На рассмотрении',
+                                'R': 'Рассмотрена'}
+        return f'Запрос на проверку статьи "{self.article_for_re_moderation}"; ' \
+               f'от "{self.article_for_re_moderation.user}"; ' \
+               f'статус заявки: {status_verbose_names[self.status]}.'
+
+    class Meta:
+        db_table = 'moderator_notification_about_re_moderation'
+        ordering = ['-created_timestamp']
+
+    @staticmethod
+    def get_user(inspect_stack):
+        """получаем модератора из request"""
+        for frame_record in inspect_stack:
+            if frame_record[3] == 'get_response':
+                request = frame_record[0].f_locals['request']
+                return request.user
+        return
+
+    @receiver(post_save, sender=Article)
+    def create_notification_article_status_update(sender, instance, **kwargs):
+        """
+        Уведомление модератора об отправки статьи автором на модерацию
+        """
+
+        author_article = instance.user
+        user = ModeratorNotificationAboutReModeration.get_user(inspect.stack())
+
+        if author_article != user:
+            #  Если изменения вносит не автор - выходим
+            return
+
+        # Получаем значение полей до изменений
+        article_status_before = instance._Article__original_status
+        article_blocked_before = instance._Article__original_blocked
+
+        # Получаем значение полей после изменений
+        article_status = instance.status
+
+        if article_status_before == article_status or not article_blocked_before:
+            #  Если поля status не менялись или статья не заблокирована - выходим
+            return
+
+        if article_status_before == 'D' and article_status == 'A':
+            ModeratorNotificationAboutReModeration.objects.create(
+                article_for_re_moderation=instance,
+            )
+
+    @staticmethod
+    def get_count_new_article_for_re_moderation():
+        return ModeratorNotificationAboutReModeration.objects.filter(status='N').count()
