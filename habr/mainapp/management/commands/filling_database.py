@@ -1,6 +1,7 @@
 import random
 import os
 import requests
+import datetime
 
 from mimesis import Text, Person, Datetime
 from mimesis import Internet
@@ -23,61 +24,61 @@ class Command(BaseCommand):
         person = Person()
         birthday = Datetime()
 
-        print('Заполняю таблицу USERS')
+        # print('Заполняю таблицу USERS')
+        #
+        # for _ in range(10):
+        #     username_ = person.username(mask='C')
+        #     password_ = person.password(length=8)
+        #
+        #     print(f'Логин: {username_} / Пароль: {password_}')
+        #
+        #     user = User(
+        #         username=username_,
+        #         email=person.email())
+        #
+        #     user.set_password(password_)
+        #     user.save()
 
-        for _ in range(10):
-            username_ = person.username(mask='C')
-            password_ = person.password(length=8)
-
-            print(f'Логин: {username_} / Пароль: {password_}')
-
-            user = User(
-                username=username_,
-                email=person.email())
-
-            user.set_password(password_)
-            user.save()
-
-        print('Заполняю таблицу USERS PROFILE')
-        for item in UserProfile.objects.all():
-            name = person.name()
-
-            item.name = name
-            item.birthday = birthday.formatted_datetime(fmt="%Y-%m-%d")
-            item.bio = "Этот автор - самый крутой. Статьи у него пушка-бомба!"
-            item.stars.set(User.objects.all())
-            item.rating = random.randrange(50, 400)
-            item.previous_article_rating = random.randrange(1, 50)
-
-            img_url = Internet().stock_image(width=50, height=50, keywords=['лицо'])
-            img_file = requests.get(img_url)
-
-            file_name = f'{name}.png'
-            with open(file_name, 'wb') as file:
-                file.write(img_file.content)
-
-            with open(file_name, 'rb') as file:
-                data = File(file)
-                item.avatar.save(file_name, data, True)
-
-            os.remove(file_name)
-            # заполняется поле stars у таблицы USERS PROFILE
-            for _ in range(random.randint(0, 10)):
-                user_liked = random.choice(User.objects.all())
-                if user_liked in item.stars.all():
-                    item.stars.remove(user_liked)
-                else:
-                    item.stars.add(user_liked)
-
-            item.save()
-
-        # CREATE ARTICLE CATEGORIES
-        ARTICLE_CATEGORIES = ['Дизайн', 'Веб-разработка', 'Мобильная разработка', 'Маркетинг']
-
-        print('Заполняю таблицу ARTICLE CATEGORIES')
-        for categories in ARTICLE_CATEGORIES:
-            new_categories = ArticleCategories(name=categories)
-            new_categories.save()
+        # print('Заполняю таблицу USERS PROFILE')
+        # for item in UserProfile.objects.all():
+        #     name = person.name()
+        #
+        #     item.name = name
+        #     item.birthday = birthday.formatted_datetime(fmt="%Y-%m-%d")
+        #     item.bio = "Этот автор - самый крутой. Статьи у него пушка-бомба!"
+        #     item.stars.set(User.objects.all())
+        #     item.rating = random.randrange(50, 400)
+        #     item.previous_article_rating = random.randrange(1, 50)
+        #
+        #     img_url = Internet().stock_image(width=50, height=50, keywords=['лицо'])
+        #     img_file = requests.get(img_url)
+        #
+        #     file_name = f'{name}.png'
+        #     with open(file_name, 'wb') as file:
+        #         file.write(img_file.content)
+        #
+        #     with open(file_name, 'rb') as file:
+        #         data = File(file)
+        #         item.avatar.save(file_name, data, True)
+        #
+        #     os.remove(file_name)
+        #     # заполняется поле stars у таблицы USERS PROFILE
+        #     for _ in range(random.randint(0, 10)):
+        #         user_liked = random.choice(User.objects.all())
+        #         if user_liked in item.stars.all():
+        #             item.stars.remove(user_liked)
+        #         else:
+        #             item.stars.add(user_liked)
+        #
+        #     item.save()
+        #
+        # # CREATE ARTICLE CATEGORIES
+        # ARTICLE_CATEGORIES = ['Дизайн', 'Веб-разработка', 'Мобильная разработка', 'Маркетинг']
+        #
+        # print('Заполняю таблицу ARTICLE CATEGORIES')
+        # for categories in ARTICLE_CATEGORIES:
+        #     new_categories = ArticleCategories(name=categories)
+        #     new_categories.save()
 
         # CREATE ARTICLES
         print('Заполняю таблицу ARTICLES')
@@ -118,19 +119,22 @@ class Command(BaseCommand):
             new_article.save()
             new_article.tags.add(*[text.word() for i in range(4)])
 
-        # CREATE COMMENTS
-        print('Заполняю таблицу COMMENTS')
-        for item in User.objects.all():
-            count = random.choice([i for i in range(0, 10)])
-            for i in range(0, count):
-                new_comment = ArticleComment(text=text.text(quantity=2))
-                new_comment.article_comment = random.choice(Article.objects.all())
-                new_comment.user = item
-                new_comment.save()
-                # заполняется поле likes у таблицы COMMENTS
-                for _ in range(random.randint(0, 10)):
-                    user_liked = random.choice(User.objects.all())
-                    if user_liked in new_comment.likes.all():
-                        new_comment.likes.remove(user_liked)
-                    else:
-                        new_comment.likes.add(user_liked)
+            new_article.created_timestamp = datetime.datetime.now() + datetime.timedelta(days=random.choice([1, 3, 4, 5]))
+            new_article.save()
+
+        # # CREATE COMMENTS
+        # print('Заполняю таблицу COMMENTS')
+        # for item in User.objects.all():
+        #     count = random.choice([i for i in range(0, 10)])
+        #     for i in range(0, count):
+        #         new_comment = ArticleComment(text=text.text(quantity=2))
+        #         new_comment.article_comment = random.choice(Article.objects.all())
+        #         new_comment.user = item
+        #         new_comment.save()
+        #         # заполняется поле likes у таблицы COMMENTS
+        #         for _ in range(random.randint(0, 10)):
+        #             user_liked = random.choice(User.objects.all())
+        #             if user_liked in new_comment.likes.all():
+        #                 new_comment.likes.remove(user_liked)
+        #             else:
+        #                 new_comment.likes.add(user_liked)

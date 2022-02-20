@@ -30,15 +30,32 @@ category_list = ArticleCategories.objects.all()
 """обозначение формы поиска для вывода в меню во разных view"""
 search_form = SearchForm()
 
-"""метод получения параметра сортировки"""
-
 
 def get_sort_from_request(self):
+    """метод получения параметра сортировки"""
     try:
         sort = self.request.GET['sort']
         return sort
     except Exception:
         return None
+
+def get_filter_article_queryset(self, article_queryset):
+    """метод получения отфильтрованных статей"""
+    form = FilterForm(self.request.GET)
+    if form.is_valid():
+        data = form.cleaned_data
+    else:
+        raise Http404()
+    queryset = article_queryset
+    if data['start_date']:
+        queryset = queryset.filter(created_timestamp__gte=data['start_date'])
+    if data['end_date']:
+        queryset = queryset.filter(created_timestamp__lte=data['end_date'] + timedelta(days=1))
+    if data['start_rating']:
+        queryset = queryset.filter(article_rating__rating__gte=data['start_rating'])
+    if data['end_rating']:
+        queryset = queryset.filter(article_rating__rating__lte=data['end_rating'])
+    return queryset
 
 
 class MainListView(ListView):
@@ -50,19 +67,13 @@ class MainListView(ListView):
     def get_sort_from_request(self):
         return get_sort_from_request(self)
 
-    def get_queryset(self):
-        sort = self.get_sort_from_request()
-        form = FilterForm(self.request.GET)
-        return Article.objects.filter(status='A')
+    def get_filter_article_queryset(self):
+        queryset = Article.objects.filter(status='A')
+        return get_filter_article_queryset(self, queryset)
 
-        # if sort == 'date_reverse':
-        #     return Article.objects.filter(status='A').reverse()
-        # elif sort == 'rating':
-        #     return Article.objects.filter(status='A').order_by('article_rating__rating').reverse()
-        # elif sort == 'rating_reverse':
-        #     return Article.objects.filter(status='A').order_by('article_rating__rating')
-        # else:
-        #     return Article.objects.filter(status='A')
+    def get_queryset(self):
+        return self.get_filter_article_queryset()
+
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -128,7 +139,6 @@ class CategoriesListView(ListView):
             return Article.objects.filter(categories_id=categories, status='A').order_by('article_rating__rating')
         else:
             return Article.objects.filter(categories_id=categories, status='A')
-
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста

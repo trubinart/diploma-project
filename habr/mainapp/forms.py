@@ -194,3 +194,6 @@ class FilterForm(forms.Form):
     end_date = forms.DateField(required=False)
     start_rating = forms.IntegerField(required=False)
     end_rating = forms.IntegerField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(FilterForm, self).__init__(*args, **kwargs)

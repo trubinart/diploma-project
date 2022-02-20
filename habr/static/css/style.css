@@ -2610,6 +2610,13 @@ body {
 
 .side .sort input{
     margin-left: 10px;
+    -moz-appearance:textfield;
+}
+
+.side .sort input::-webkit-outer-spin-button,
+.side .sort input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .side .sort .filter-box{
