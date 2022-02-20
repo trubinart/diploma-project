@@ -2560,7 +2560,7 @@ body {
 }
 
 .content .main .menu .side .sort {
-    /*display: flex;*/
+    display: flex;
     /*align-items: flex-end;*/
     /*justify-content: flex-start;*/
     height: 44px;
@@ -2604,8 +2604,9 @@ body {
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
-    height: 30px;
-    margin-right: 30px;
+    display: flex;
+    margin-left: 10px;
+
 }
 
 .side .sort input{
@@ -2636,6 +2637,7 @@ body {
     background: white;
     padding: 3px 3px 3px 3px;
     color: #787A80;
+    margin-left: 10px;
 
 }
 
