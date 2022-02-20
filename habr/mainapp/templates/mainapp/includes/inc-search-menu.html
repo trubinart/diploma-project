@@ -11,31 +11,31 @@
                 <div class="sortDate">
                     {% if not sort %}
                         <a class="text"
-                           href="{{ request.path }}?sort=date_reverse{% if query %}&query={{ query }}{% endif %}"
+                           href="{{ request.path }}?sort=date_reverse{% if params %}&{{ params }}{% endif %}"
                            style="color: #FF3F3A; text-decoration: underline">по дате</a>
                         <img src="https://img.icons8.com/ios/13/fa314a/double-down--v1.png"/>
                     {% elif sort == 'date_reverse' %}
-                        <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}"
+                        <a class="text" href="{{ request.path }}{% if params %}?{{ params }}{% endif %}"
                            style="color: #FF3F3A; text-decoration: underline">по
                             дате</a>
                         <img src="https://img.icons8.com/ios/13/fa314a/double-up.png"/>
                     {% else %}
-                        <a class="text" href="{{ request.path }}{% if query %}?query={{ query }}{% endif %}">по дате</a>
+                        <a class="text" href="{{ request.path }}{% if params %}?{{ params }}{% endif %}">по дате</a>
                     {% endif %}
 
                 </div>
                 <div class="sortDate">
                     {% if not sort or sort == 'date_reverse' %}
                         <a class="text"
-                           href="{{ request.path }}?sort=rating{% if query %}&query={{ query }}{% endif %}">по
+                           href="{{ request.path }}?sort=rating{% if params %}&{{ params }}{% endif %}">по
                             рейтингу</a>
                     {% elif sort == 'rating' %}
                         <a class="text"
-                           href="{{ request.path }}?sort=rating_reverse{% if query %}&query={{ query }}{% endif %}"
+                           href="{{ request.path }}?sort=rating_reverse{% if params %}&{{ params }}{% endif %}"
                            style="color: #FF3F3A; text-decoration: underline">по рейтингу</a>
                         <img src="https://img.icons8.com/ios/13/fa314a/double-down--v1.png"/>
                     {% elif sort == 'rating_reverse' %}
-                        <a class="text" href="{{ request.path }}?sort=rating{% if query %}&query={{ query }}{% endif %}"
+                        <a class="text" href="{{ request.path }}?sort=rating{% if params %}&{{ params }}{% endif %}"
                            style="color: #FF3F3A; text-decoration: underline">по рейтингу</a>
                         <img src="https://img.icons8.com/ios/13/fa314a/double-up.png"/>
 
@@ -43,8 +43,6 @@
                 </div>
             </div>
         </div>
-
-
         <div class="side">
             <div class="sort">
                     <div class="title">
@@ -54,14 +52,24 @@
                     <div class="subtitle">Дата
                         <input type="date" class="date" name="start_date">
                         <input type="date" class="date" name="end_date">
+                        {% if sort %}
+                           <input type="text" hidden="hidden" name="sort" value="{{ sort }}">
+                        {% endif %}
                     </div>
 
                     <div class="subtitle">Рейтинг
                         <input type="number" class="date" name="start_rating" min="0" max="500" step="1">
                         <input type="number" class="date" name="end_rating" min="0" max="500" step="1">
+                         {% if sort %}
+                           <input type="text" hidden="hidden" name="sort" value="{{ sort }}">
+                        {% endif %}
                     </div>
                     <button type="submit">Фильтровать</button>
                 </form>
+                <form action="{{ request.page }}" class="">
+                    <button type="submit">Сбросить</button>
+                </form>
+
 
             </div>
         </div>

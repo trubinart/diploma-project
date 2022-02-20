@@ -39,6 +39,16 @@ def get_sort_from_request(self):
     except Exception:
         return None
 
+
+def get_params_from_get_request(self):
+    """метод получения параметра сортировки"""
+    param_string = ''
+    for key, value in self.request.GET.items():
+        if key != 'page' and key != 'sort':
+            param_string += f'{key}={value}&'
+    return param_string.rstrip('&')
+
+
 def get_filter_article_queryset(self, article_queryset):
     """метод получения отфильтрованных статей"""
     form = FilterForm(self.request.GET)
@@ -58,6 +68,20 @@ def get_filter_article_queryset(self, article_queryset):
     return queryset
 
 
+def get_sort_article_queryset(self, article_queryset):
+    """метод получения сортированных статей"""
+    sort = self.get_sort_from_request()
+    if sort == 'date_reverse':
+        return article_queryset.reverse()
+    elif sort == 'rating':
+        return article_queryset.order_by(
+            'article_rating__rating').reverse()
+    elif sort == 'rating_reverse':
+        return article_queryset.order_by('article_rating__rating')
+    else:
+        return article_queryset
+
+
 class MainListView(ListView):
     """Класс для вывода списка «Хабров» на главной """
     template_name = 'mainapp/index.html'
@@ -67,13 +91,20 @@ class MainListView(ListView):
     def get_sort_from_request(self):
         return get_sort_from_request(self)
 
-    def get_filter_article_queryset(self):
-        queryset = Article.objects.filter(status='A')
-        return get_filter_article_queryset(self, queryset)
+    def get_sort_article_queryset(self, article_queryset):
+        return get_sort_article_queryset(self, article_queryset)
+
+    def get_params_from_get_request(self):
+        return get_params_from_get_request(self)
+
+    def get_filter_article_queryset(self, article_queryset):
+        return get_filter_article_queryset(self, article_queryset)
 
     def get_queryset(self):
-        return self.get_filter_article_queryset()
-
+        queryset = Article.objects.filter(status='A')
+        queryset = self.get_filter_article_queryset(queryset)
+        queryset = self.get_sort_article_queryset(queryset)
+        return queryset
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -84,9 +115,9 @@ class MainListView(ListView):
         context['categories_list'] = category_list
         context['search_form'] = search_form
 
-        # добавляем сортировку
-        sort = self.get_sort_from_request()
-        context['sort'] = sort
+        # добавляем параметры
+        context['params'] = self.get_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
         return context
 
 
