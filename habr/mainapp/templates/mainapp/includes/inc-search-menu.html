@@ -48,7 +48,7 @@
                 <div class="title">
                     Фильтровать:
                 </div>
-                <form method="get" action="{{ request.path }}{% if query %}?query={{ query }}{% endif %}"
+                <form method="get" action="{{ request.path }}"
                       class="filter-box">
                     <div class="subtitle">Дата
                         <input type="date" class="date" name="start_date">
@@ -61,14 +61,14 @@
                         {% if sort %}
                             <input type="text" hidden="hidden" name="sort" value="{{ sort }}">
                         {% endif %}
-                        {% if sort %}
+                        {% if query %}
                             <input type="text" hidden="hidden" name="query" value="{{ query }}">
                         {% endif %}
                     </div>
                     <button type="submit">Фильтровать</button>
                 </form>
                 <form method="get" action="{{ request.path }}" class="">
-                    {% if sort %}
+                    {% if query %}
                         <input type="text" hidden="hidden" name="query" value="{{ query }}">
                     {% endif %}
                     <button type="submit">Сбросить</button>

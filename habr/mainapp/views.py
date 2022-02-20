@@ -42,7 +42,6 @@ def get_sort_from_request(self):
 
 def get_params_from_get_request(self):
     """метод получения параметра сортировки"""
-    print(self.request.GET)
     param_string = ''
     for key, value in self.request.GET.items():
         if key != 'page' and key != 'sort':
