@@ -167,7 +167,6 @@ class Article(BaseModel):
         """
         Получение рейтинга для статьи.
         """
-        # return ArticleRating.objects.filter(article_rating=self.id).select_related('rating')
         return ArticleRating.objects.get(article_rating=self.id).rating
 
 
@@ -511,3 +510,19 @@ class NotificationUsersFromModerator(BaseModel):
             moderator=moderator.pk,
             message=message
         )
+
+    @receiver(post_delete, sender=ArticleComment)
+    def create_notification_after_delete_comment(sender, instance, **kwargs):
+        """
+        Уведомление пользователя при удалении комментария модератором
+        """
+        recipient_notification = instance.user
+        moderator = NotificationUsersFromModerator.get_moderator(inspect.stack())
+        message = f'Модератор удалил Ваш комментарий: {instance.text[:60]}...'
+
+        NotificationUsersFromModerator.objects.create(
+            recipient_notification=recipient_notification,
+            moderator=moderator.pk,
+            message=message
+        )
+        return None
