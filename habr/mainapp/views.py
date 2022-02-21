@@ -1,6 +1,6 @@
 import re
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.utils import timezone
 
 from django.urls import reverse_lazy
@@ -18,7 +18,7 @@ from uuid import UUID
 from authapp.forms import UserRegisterForm
 
 from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, \
-    ArticleStatusEditForm, MessageEditForm
+    ArticleStatusEditForm, MessageEditForm, FilterForm
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
@@ -31,15 +31,68 @@ category_list = ArticleCategories.objects.all()
 """обозначение формы поиска для вывода в меню во разных view"""
 search_form = SearchForm()
 
-"""метод получения параметра сортировки"""
-
 
 def get_sort_from_request(self):
+    """метод получения параметра сортировки"""
     try:
         sort = self.request.GET['sort']
         return sort
     except Exception:
         return None
+
+
+def get_filter_params_from_get_request(self):
+    """метод получения параметра сортировки"""
+    param_string = ''
+    for key, value in self.request.GET.items():
+        if key != 'page' and key != 'sort':
+            param_string += f'{key}={value}&'
+    return param_string.rstrip('&')
+
+
+def add_filter_params_to_context(self, context):
+    for key, value in self.request.GET.items():
+        if key != 'page' and key != 'sort' and key != 'query':
+            context[key] = value
+    try:
+        context['start_date'] = datetime.strptime((context['start_date']), "%Y-%m-%d")
+        context['end_date'] = datetime.strptime((context['end_date']), "%Y-%m-%d")
+    except:
+        pass
+    return context
+
+
+def get_filter_article_queryset(self, article_queryset):
+    """метод получения отфильтрованных статей"""
+    form = FilterForm(self.request.GET)
+    if form.is_valid():
+        data = form.cleaned_data
+    else:
+        raise Http404()
+    queryset = article_queryset.filter(status='A')
+    if data['start_date']:
+        queryset = queryset.filter(created_timestamp__gte=data['start_date'])
+    if data['end_date']:
+        queryset = queryset.filter(created_timestamp__lte=data['end_date'] + timedelta(days=1))
+    if data['start_rating']:
+        queryset = queryset.filter(article_rating__rating__gte=data['start_rating'])
+    if data['end_rating']:
+        queryset = queryset.filter(article_rating__rating__lte=data['end_rating'])
+    return queryset
+
+
+def get_sort_article_queryset(self, article_queryset):
+    """метод получения сортированных статей"""
+    sort = self.get_sort_from_request()
+    if sort == 'date_reverse':
+        return article_queryset.reverse()
+    elif sort == 'rating':
+        return article_queryset.order_by(
+            'article_rating__rating').reverse()
+    elif sort == 'rating_reverse':
+        return article_queryset.order_by('article_rating__rating')
+    else:
+        return article_queryset
 
 
 class MainListView(ListView):
@@ -51,17 +104,23 @@ class MainListView(ListView):
     def get_sort_from_request(self):
         return get_sort_from_request(self)
 
-    def get_queryset(self):
-        sort = self.get_sort_from_request()
+    def get_sort_article_queryset(self, article_queryset):
+        return get_sort_article_queryset(self, article_queryset)
 
-        if sort == 'date_reverse':
-            return Article.objects.filter(status='A').reverse()
-        elif sort == 'rating':
-            return Article.objects.filter(status='A').order_by('article_rating__rating').reverse()
-        elif sort == 'rating_reverse':
-            return Article.objects.filter(status='A').order_by('article_rating__rating')
-        else:
-            return Article.objects.filter(status='A')
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
+
+    def get_filter_article_queryset(self, article_queryset):
+        return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
+
+    def get_queryset(self):
+        queryset = Article.objects
+        queryset = self.get_filter_article_queryset(queryset)
+        queryset = self.get_sort_article_queryset(queryset)
+        return queryset
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -72,9 +131,10 @@ class MainListView(ListView):
         context['categories_list'] = category_list
         context['search_form'] = search_form
 
-        # добавляем сортировку
-        sort = self.get_sort_from_request()
-        context['sort'] = sort
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 
@@ -109,39 +169,45 @@ class CategoriesListView(ListView):
     def get_sort_from_request(self):
         return get_sort_from_request(self)
 
+    def get_sort_article_queryset(self, article_queryset):
+        return get_sort_article_queryset(self, article_queryset)
+
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
+
+    def get_filter_article_queryset(self, article_queryset):
+        return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
+
     def get_queryset(self):
-        sort = self.get_sort_from_request()
-        # Объявляем переменную и записываем ссылку на id категории
         categories = self.kwargs['pk']
         try:
             UUID(categories)
         except:
             raise Http404()
 
-        if sort == 'date_reverse':
-            return Article.objects.filter(categories_id=categories, status='A').reverse()
-        elif sort == 'rating':
-            return Article.objects.filter(categories_id=categories, status='A').order_by(
-                'article_rating__rating').reverse()
-        elif sort == 'rating_reverse':
-            return Article.objects.filter(categories_id=categories, status='A').order_by('article_rating__rating')
-        else:
-            return Article.objects.filter(categories_id=categories, status='A')
-
+        queryset = Article.objects.filter(categories_id=categories)
+        queryset = self.get_filter_article_queryset(queryset)
+        queryset = self.get_sort_article_queryset(queryset)
+        return queryset
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
         context = super().get_context_data(**kwargs)
         category_id = self.kwargs['pk']
         category = ArticleCategories.objects.get(id=category_id)
-        context['title'] = f'Статьи по категории {category.name}'
+        context['title'] = f'Статьи по категории «{category.name}»'
         context['categories_list'] = category_list
         context['categories_pk'] = UUID(category_id)
         context['category_name'] = category.name
         context['search_form'] = search_form
-        # добавляем сортировку
-        sort = self.get_sort_from_request()
-        context['sort'] = sort
+
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 
@@ -287,19 +353,29 @@ class UserArticleListView(ListView):
     def get_sort_from_request(self):
         return get_sort_from_request(self)
 
-    def get_queryset(self):
-        sort = self.get_sort_from_request()
-        # Объявляем переменную user и записываем ссылку на id автора
-        user_id = self.kwargs['pk']
+    def get_sort_article_queryset(self, article_queryset):
+        return get_sort_article_queryset(self, article_queryset)
 
-        if sort == 'date_reverse':
-            return Article.objects.filter(user=user_id, status='A').reverse()
-        elif sort == 'rating':
-            return Article.objects.filter(user=user_id, status='A').order_by('article_rating__rating').reverse()
-        elif sort == 'rating_reverse':
-            return Article.objects.filter(user=user_id, status='A').order_by('article_rating__rating')
-        else:
-            return Article.objects.filter(user=user_id, status='A')
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
+
+    def get_filter_article_queryset(self, article_queryset):
+        return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
+
+    def get_queryset(self):
+        user_id = self.kwargs['pk']
+        try:
+            UUID(user_id)
+        except:
+            raise Http404()
+
+        queryset = Article.objects.filter(user=user_id)
+        queryset = self.get_filter_article_queryset(queryset)
+        queryset = self.get_sort_article_queryset(queryset)
+        return queryset
 
     def get_context_data(self, **kwargs):
         # вызов базовой реализации для получения контекста
@@ -313,9 +389,10 @@ class UserArticleListView(ListView):
         context['categories_list'] = category_list
         context['author'] = author
         context['search_form'] = search_form
-        # добавляем сортировку
-        sort = self.get_sort_from_request()
-        context['sort'] = sort
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 
@@ -347,21 +424,26 @@ class SearchView(ListView):
     def get_sort_from_request(self):
         return get_sort_from_request(self)
 
+    def get_sort_article_queryset(self, article_queryset):
+        return get_sort_article_queryset(self, article_queryset)
+
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
+
+    def get_filter_article_queryset(self, article_queryset):
+        return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
+
     def get_queryset(self):
-        sort = self.get_sort_from_request()
         form = SearchForm(self.request.GET)
         if form.is_valid():
             query_string = form.cleaned_data['query']
-
-            if sort == 'date_reverse':
-                return Article.objects.search(query=query_string).filter(status='A').reverse()
-            elif sort == 'rating':
-                return Article.objects.search(query=query_string).filter(status='A').order_by(
-                    'article_rating__rating').reverse()
-            elif sort == 'rating_reverse':
-                return Article.objects.search(query=query_string).filter(status='A').order_by('article_rating__rating')
-            else:
-                return Article.objects.search(query=query_string).filter(status='A')
+            queryset = Article.objects.search(query=query_string)
+            queryset = self.get_filter_article_queryset(queryset)
+            queryset = self.get_sort_article_queryset(queryset)
+            return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -369,9 +451,10 @@ class SearchView(ListView):
         context['categories_list'] = category_list
         context['title'] = 'Поиск по сайту'
         context['query'] = self.request.GET['query']
-        # добавляем сортировку
-        sort = self.get_sort_from_request()
-        context['sort'] = sort
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 

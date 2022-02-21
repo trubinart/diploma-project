@@ -1,7 +1,9 @@
 import random
 import os
 import requests
+import datetime
 
+from django.utils import timezone
 from mimesis import Text, Person, Datetime
 from mimesis import Internet
 
@@ -116,7 +118,11 @@ class Command(BaseCommand):
 
             # save article
             new_article.save()
-            new_article.tags.add(*[text.word() for i in range(4)])
+            new_article.tags.add(*[text.word() for _ in range(4)])
+
+            new_article.created_timestamp = \
+                timezone.localtime(timezone.now()) - datetime.timedelta(days=random.choice([_ for _ in range(0, 10)]))
+            new_article.save()
 
         # CREATE COMMENTS
         print('Заполняю таблицу COMMENTS')
