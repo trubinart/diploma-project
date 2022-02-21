@@ -2650,12 +2650,17 @@ body {
     height: 24px;
 }
 
+.side .sort .rating{
+    width: 50px;
+    height: 24px;
+}
+
 .side .sort .subtitle{
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
     display: flex;
-    margin-left: 10px;
+    margin-left: 20px;
 
 }
 
