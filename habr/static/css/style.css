@@ -134,7 +134,7 @@ body {
 /* start .footer  */
 .main-footer {
     height: 396px;
-    width: 1230px;
+    min-width: 1230px;
     display: flex;
     flex-direction: column;
     background: #1E212C;
@@ -2646,7 +2646,7 @@ body {
 
 
 .side .sort .date{
-    width: 140px;
+    width: 147px;
     height: 24px;
 }
 
