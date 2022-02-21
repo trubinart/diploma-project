@@ -2659,9 +2659,17 @@ body {
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
-    display: flex;
     margin-left: 20px;
+}
 
+.count_article {
+    height: 16px;
+    text-align: center;
+    font-style: normal;
+    font-size: 14px;
+    padding: 3px 3px 3px 3px;
+    color: #787A80;
+    margin-left: 367px;
 }
 
 .side .sort input{
@@ -2693,7 +2701,6 @@ body {
     padding: 3px 3px 3px 3px;
     color: #787A80;
     margin-left: 10px;
-
 }
 
 .side .sort button:hover{
