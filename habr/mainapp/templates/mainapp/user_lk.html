@@ -135,12 +135,20 @@
             </div>
             <div class="importantNotifications" style="display: none;">
                 {% for notification in user.get_notification_about_blocking %}
-                <div class="messageWrapper">
-                    <div class="message">
-                    {{ notification.message|safe}}
+                <div class="itemMessage">
+                    <div class="moderImage">
+                        <div class="infoModer">
+                            Написать модератору
+                        </div>
+                        <a href="#"><img src={% static "img/moder.jpg" %} alt="avatar"></a>
                     </div>
-                    <div class="readMessage">
-                        <a href="{% url 'message_edit' notification.pk %}">скрыть сообщение</a>
+                    <div class="messageWrapper">
+                        <div class="message">
+                        {{ notification.message|safe}}
+                        </div>
+                        <div class="readMessage">
+                            <a href="{% url 'message_edit' notification.pk %}">скрыть сообщение</a>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}

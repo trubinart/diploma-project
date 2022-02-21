@@ -1,3 +1,4 @@
+import inspect
 import uuid
 import re
 
@@ -9,6 +10,7 @@ from django.urls import reverse
 from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 from django.db.models import Avg
+from django.utils import timezone
 from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase, Tag
 
@@ -75,6 +77,12 @@ class Article(BaseModel):
     tags = TaggableManager(through=UUIDTaggedItem)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Статус', default='D')
     blocked = models.BooleanField(default=False)
+
+    def __init__(self, *args, **kwargs):
+        """ для фиксации изменений о статусе аккаунта"""
+        super(Article, self).__init__(*args, **kwargs)
+        self.__original_status = self.status
+        self.__original_blocked = self.blocked
 
     def __str__(self):
         return self.title
@@ -345,3 +353,161 @@ def change_article_rating_by_count_comments_to_article(instance, **kwargs):
     article_rating.rating = new_article_rating
     article_rating.save()
     return None
+
+
+class NotificationUsersFromModerator(BaseModel):
+    """
+    Уведомление пользователей о блокировки аккаунта,
+    а так же о блокировках и удалении контента
+    """
+    recipient_notification = models.ForeignKey(
+        User,
+        null=False,
+        db_index=True,
+        on_delete=models.CASCADE,
+        verbose_name='получатель уведомления'
+    )
+
+    moderator = models.UUIDField(
+        verbose_name='модератор',
+    )
+
+    is_read = models.BooleanField(
+        default=False,
+        verbose_name='прочитано',
+    )
+
+    message = models.CharField(
+        max_length=500,
+        verbose_name='уведомление',
+        blank=True,
+        null=True,
+    )
+
+    def __str__(self):
+        return f'уведомление о блокировке пользователя "{self.recipient_notification.username}"'
+
+    @staticmethod
+    def get_moderator(inspect_stack):
+        """получаем модератора из request"""
+        for frame_record in inspect_stack:
+            if frame_record[3] == 'get_response':
+                request = frame_record[0].f_locals['request']
+                return request.user
+        return
+
+    @staticmethod
+    def get_full_message(part_1, part_2):
+        """создаем строку сообщения"""
+        if part_1 and part_2:
+            return f'<p>{part_1}</p><p>{part_2}</p>'
+        if part_1:
+            return f'<p>{part_1}</p>'
+        if part_2:
+            return f'<p>{part_2}</p>'
+
+    @receiver(post_save, sender=User)
+    def create_moderator_notification(sender, instance, **kwargs):
+        """
+        При изменении модели User проверяем, изменились ли данные,
+        отвечающие за блокировку пользователя. В зависимости от изменений,
+        отправляем соответствующие сообщения, если требуется.
+        Если изменений не было; если пользователь как был заблокирован
+        бессрочно, так и остался; или пользователь как не был заблокирован,
+        так и остался не заблокирован - уведомление не создается
+        """
+        #  получаем составные части сообщения
+        part_1, part_2 = '', ''  # все сообщения будут формироваться из этих кусков
+        if instance.is_banned != instance._User__original_is_banned:  # было изм. поле is_banned
+            if instance.is_banned:  # уст. бессрочный бан
+                part_1 = "Ваш аккаунт заблокирован модератором бессрочно."
+            else:
+                part_1 = "C Вашего аккаунта снята бессрочная блокировка."
+                if instance.is_now_banned:  # в настоящий момент действует временный бан
+                    part_2 = f'Ваш аккаунт заблокирован модератором до' \
+                             f' {instance.date_end_banned.strftime("%d.%m.%Y %H:%M:%S %Z")}.'
+        elif not instance.is_banned and \
+                instance.date_end_banned != instance._User__original_date_end_banned:
+            # было изменение временной блокировки, и нет бессрочного бана
+            if instance.is_now_banned:  # временная блокировка действует
+                part_1 = f'Ваш аккаунт заблокирован модератором ' \
+                         f'до {str(instance.date_end_banned.strftime("%d.%m.%Y %H:%M:%S %Z"))}.'
+            elif instance._User__original_date_end_banned \
+                    and instance._User__original_date_end_banned > timezone.now():
+                # действовал временный бан, но был снят
+                part_1 = f'C Вашего аккаунта снята временная блокировка.'
+            else:
+                return  # если пользователь как не был заблокирован, так и остался не заблокирован
+        else:
+            return  # если ни чего не менялось или если пользователь как был заблокирован бессрочно, так и остался
+
+        message = NotificationUsersFromModerator.get_full_message(part_1, part_2)
+        moderator = NotificationUsersFromModerator.get_moderator(inspect.stack())
+
+        NotificationUsersFromModerator.objects.create(
+            recipient_notification=instance,
+            moderator=moderator.pk,
+            message=message
+        )
+
+    @receiver(post_save, sender=Article)
+    def create_notification_article_status_update(sender, instance, **kwargs):
+        """
+        Уведомление пользователя при блокировке статьи модератором
+        """
+
+        recipient_notification = instance.user
+        moderator = NotificationUsersFromModerator.get_moderator(inspect.stack())
+
+        if recipient_notification == moderator:
+            #  Если изменения вносит автор - выходим
+            return
+
+        # Получаем значение полей до изменений
+        status_before = instance._Article__original_status
+        blocked_before = instance._Article__original_blocked
+
+        # Получаем значение полей после изменений
+        status = instance.status
+        blocked = instance.blocked
+
+        if status_before == status and blocked_before == blocked:
+            #  Если поля status и blocked не менялись - выходим
+            return
+
+        #  получаем составные части сообщения
+        part_1, part_2 = '', ''  # все сообщения будут формироваться из этих кусков
+        if status_before == 'A' and status == 'D':
+            #  Если статус изменился с Активной на Черновик
+            wrap_start, wrap_end = '{% url ', '%}'
+            part_1 = f'Модератор отправил Вашу статью под заголовком: ' \
+                     f' <a class="article-button" ' \
+                     f'href="/article-update/{instance.pk}/">' \
+                     f'{instance.title} ' \
+                     f'</a>' \
+                     f' на доработку.'
+
+        if not blocked_before and blocked:
+            # Если статью заблокировали
+            part_2 = 'Статья заблокирована для публикации. ' \
+                     'Для повторной публикации необходимо исправить статью и ' \
+                     'получить разрешение на публикацию от модератора'
+
+        if not blocked and blocked_before:
+            # Если статью заблокировали
+            part_1 = f'Модератор снял блокировку Вашей стати под заголовком: ' \
+                     f'"{instance.title}" ' \
+                     f'Вы можете снова опубликовать эту статью.'
+
+        if part_1 or part_2:
+            message = NotificationUsersFromModerator.get_full_message(part_1, part_2)
+        else:
+            return
+
+        # print(moderator, recipient_notification, message)
+
+        NotificationUsersFromModerator.objects.create(
+            recipient_notification=recipient_notification,
+            moderator=moderator.pk,
+            message=message
+        )
