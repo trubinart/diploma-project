@@ -503,8 +503,6 @@ class NotificationUsersFromModerator(BaseModel):
         else:
             return
 
-        # print(moderator, recipient_notification, message)
-
         NotificationUsersFromModerator.objects.create(
             recipient_notification=recipient_notification,
             moderator=moderator.pk,
