@@ -134,7 +134,7 @@ body {
 /* start .footer  */
 .main-footer {
     height: 396px;
-    width: 1230px;
+    min-width: 1230px;
     display: flex;
     flex-direction: column;
     background: #1E212C;
@@ -2659,9 +2659,18 @@ body {
     font-size: 14px;
     line-height: 150%;
     color: #787A80;
-    display: flex;
+    /*display: flex;*/
     margin-left: 20px;
+}
 
+.count_article {
+    height: 16px;
+    text-align: center;
+    font-style: normal;
+    font-size: 14px;
+    padding: 3px 3px 3px 3px;
+    color: #787A80;
+    margin-left: 367px;
 }
 
 .side .sort input{
@@ -2693,7 +2702,6 @@ body {
     padding: 3px 3px 3px 3px;
     color: #787A80;
     margin-left: 10px;
-
 }
 
 .side .sort button:hover{
