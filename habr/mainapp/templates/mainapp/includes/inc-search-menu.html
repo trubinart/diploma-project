@@ -51,13 +51,19 @@
                 <form method="get" action="{{ request.path }}"
                       class="filter-box">
                     <div class="subtitle">Дата
-                        <input type="date" class="date" name="start_date">
-                        <input type="date" class="date" name="end_date">
+                        <input type="date" class="date" name="start_date" {% if start_date %}
+                               value="{{ start_date|date:"Y-m-d" }}" {% endif %}>
+                        <input type="date" class="date" name="end_date" {% if end_date %}
+                               value="{{ end_date|date:"Y-m-d" }}" {% endif %}>
                     </div>
 
                     <div class="subtitle">Рейтинг
-                        <input type="number" class="date" name="start_rating" min="0" max="500" step="1">
-                        <input type="number" class="date" name="end_rating" min="0" max="500" step="1">
+                        <input type="number" class="date" placeholder="1" name="start_rating" min="0" max="500" step="1"
+                                {% if start_rating %}
+                               value="{{ start_rating }}" {% endif %}>
+                        <input type="number" class="date" placeholder="3" name="end_rating" min="0" max="500" step="1"
+                                {% if end_rating %}
+                               value="{{ end_rating }}" {% endif %}>
                         {% if sort %}
                             <input type="text" hidden="hidden" name="sort" value="{{ sort }}">
                         {% endif %}
@@ -88,4 +94,12 @@
     </div>
 
 </div>
+
+{% if start_date or end_date  or start_rating or end_rating %}
+    <div class="search-subtitle">
+        Статей: {{ page_obj.paginator.count }}
+    </div>
+{% endif %}
+
+
 
