@@ -186,3 +186,13 @@ class ArticleStatusEditForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ('status', 'blocked')
+
+
+class FilterForm(forms.Form):
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
+    start_rating = forms.IntegerField(required=False)
+    end_rating = forms.IntegerField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(FilterForm, self).__init__(*args, **kwargs)
