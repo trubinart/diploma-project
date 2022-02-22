@@ -18,12 +18,12 @@ from uuid import UUID
 from authapp.forms import UserRegisterForm
 
 from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, \
-    ArticleStatusEditForm, MessageEditForm, FilterForm
+    ArticleStatusEditForm, MessageEditForm, FilterForm, GeneralMessageEditForm
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification, \
-    NotificationUsersFromModerator
+    NotificationUsersFromModerator, NotificationUserAfterLikeAndComment
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -653,3 +653,42 @@ class ModeratorNotificationReviewedUpdate(UpdateView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+
+class GeneralNotificationUsersUpdate(UpdateView):
+    """Переместить уведомление в прочитанные"""
+    model = NotificationUserAfterLikeAndComment
+    template_name = 'mainapp/updateGeneralMessage.html'
+    form_class = GeneralMessageEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Переместить уведомление в прочитанные?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class AllGeneralNotificationUserView(ListView):
+    """Подтверждение о перемещении всех уведомлений в прочитанные"""
+    model = NotificationUserAfterLikeAndComment
+    template_name = 'mainapp/updateAllGeneralMessage.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Переместить все уведомления в прочитанные?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class AllGeneralNotificationUserUpdate(RedirectView):
+    """Переместить все уведомления в прочитанные"""
+    def get_redirect_url(self, *args, **kwargs):
+        user = self.request.user
+        obj_notify = user.get_general_user_notification()
+        for gen_notify in obj_notify:
+            gen_notify.is_read = True
+            gen_notify.save()
+        return reverse_lazy('lk')
