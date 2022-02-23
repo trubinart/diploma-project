@@ -18,7 +18,7 @@ from uuid import UUID
 from authapp.forms import UserRegisterForm
 
 from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, \
-    ArticleStatusEditForm, MessageEditForm, FilterForm, GeneralMessageEditForm
+    ArticleStatusEditForm, MessageEditForm, FilterForm, GeneralMessageEditForm, ReplyCommentForm
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
@@ -692,3 +692,17 @@ class AllGeneralNotificationUserUpdate(RedirectView):
             gen_notify.is_read = True
             gen_notify.save()
         return reverse_lazy('lk')
+
+
+class ReplyCommentView(View):
+    """Класс для создания ответа на комментарий """
+
+    @staticmethod
+    def post(request):
+        article_id = request.POST['pk']
+        form = ReplyCommentForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
+        else:
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
