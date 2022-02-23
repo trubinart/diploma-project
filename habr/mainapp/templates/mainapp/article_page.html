@@ -158,19 +158,39 @@
                                 {% endif %}
                             </div>
                             <p class="info">{{ comment.likes.count }}</p>
-                            {#  ----- ОТВЕТ НА КОММЕНТАРИй ----  #}
-                            <div class="form_add_comment">
-                                {% if user.is_authenticated %}
-                                    <form method="post" enctype="multipart/form-data" action="{% url 'reply-comment' %}">
+                            {% if user.is_staff %}
+                                <form method="post" action="{% url 'comment_delete' comment.pk %}"
+                                      class="delete_comment">
+                                    {% csrf_token %}
+                                    <button type="submit">Удалить комментарий</button>
+                                </form>
+                                <div class="block_author_comment">
+                                    {% if comment.user.is_now_banned %}
+                                        <p class="blocked_author_comment">заблокирован</p>
+                                    {% elif comment.user.is_banned is not True and user.id != comment.user.id %}
+                                        <form method="post"
+                                              action="{% url 'banned_user_toggle' article.pk comment.id %}"
+                                              class="block_author_comment">
                                             {% csrf_token %}
-                                            {{ form.text }}
-                                            <input type="hidden" name="pk" value="{{ object.pk }}">
-                                            <input type="hidden" name="comment_to_reply" value="{{ comment.id }}">
-                                            <input type="hidden" name="user" value="{{ user.id }}">
-                                            <button type="submit" class="add_comment_button"> Ответить</button>
-                                    </form>
-                                {% endif %}
-                            </div>
+                                            <button type="submit">Заблокировать автора</button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {#  ----- ОТВЕТ НА КОММЕНТАРИй ----  #}
+                        <div class="form_add_comment">
+                            {% if user.is_authenticated %}
+                                <form method="post" enctype="multipart/form-data" action="{% url 'reply-comment' %}">
+                                        {% csrf_token %}
+                                        {{ form.text }}
+                                        <input type="hidden" name="pk" value="{{ object.pk }}">
+                                        <input type="hidden" name="comment_to_reply" value="{{ comment.id }}">
+                                        <input type="hidden" name="user" value="{{ user.id }}">
+                                        <button type="submit" class="add_comment_button"> Ответить</button>
+                                </form>
+                            {% endif %}
+                        </div>
                         <div class="reply_block">
                             {% if comment.get_count %}
                             <div class="titleImportantNotifications">
@@ -193,25 +213,6 @@
                                 </div>
                                 {% endfor %}
                             </div>
-                            {% endif %}
-                            {% if user.is_staff %}
-                                <form method="post" action="{% url 'comment_delete' comment.pk %}"
-                                      class="delete_comment">
-                                    {% csrf_token %}
-                                    <button type="submit">Удалить комментарий</button>
-                                </form>
-                                <div class="block_author_comment">
-                                    {% if comment.user.is_now_banned %}
-                                        <p class="blocked_author_comment">заблокирован</p>
-                                    {% elif comment.user.is_banned is not True and user.id != comment.user.id %}
-                                        <form method="post"
-                                              action="{% url 'banned_user_toggle' article.pk comment.id %}"
-                                              class="block_author_comment">
-                                            {% csrf_token %}
-                                            <button type="submit">Заблокировать автора</button>
-                                        </form>
-                                    {% endif %}
-                                </div>
                             {% endif %}
                         </div>
                     </div>
