@@ -229,10 +229,10 @@ class ReplyComments(BaseModel):
     Model for Reply on Comments
     """
     comment_to_reply = models.ForeignKey(ArticleComment, on_delete=models.CASCADE, verbose_name='Comment to reply',
-                                             related_name='comment_to_reply')
+                                         related_name='comment_to_reply')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='ReplyComment Author',
-                                 related_name='reply_comment_author')
-    text = models.TextField(max_length=200, verbose_name='ReplyComment Text')
+                             related_name='reply_comment_author')
+    text = models.TextField(max_length=300, verbose_name='ReplyComment Text')
 
     def __str__(self):
         return f'from {self.user.username} to {self.comment_to_reply.user.username}'
