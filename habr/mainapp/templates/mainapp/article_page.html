@@ -349,7 +349,7 @@
                             <div class="info_habr">
                                 <div class="habr_date_creat">
                                     <img src={% static "img/Calendar.png" %}>
-                                    <p class="date">{{ other_article.created_timestamp | date:"d.m.Y г. H:m" }}</p>
+                                    <p class="date">{{ other_article.created_timestamp|date:"d.m.Y г. H:i" }}</p>
                                 </div>
                                 <a href="{% url 'article' other_article.pk %}">{{ other_article.title }}</a>
                             </div>
