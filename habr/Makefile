@@ -12,6 +12,7 @@ up-start:
 	sudo docker-compose exec django python manage.py migrate
 
 update:
+	sudo docker-compose exec django python manage.py migrate
 	sudo docker-compose up -d  --buil
 
 stop:
