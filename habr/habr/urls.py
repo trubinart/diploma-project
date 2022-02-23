@@ -10,8 +10,9 @@ from mainapp.views import MainListView, ArticleDetailView, \
     CategoriesListView, UserArticleListView, CreateCommentView, CreateArticle, SearchView, \
     ArticleLikeRedirectView, CommentLikeRedirectView, \
     AuthorStarRedirectView, AuthorArticleStarRedirectView, UpdateArticle, ProfileCreateView, \
-    ProfileEditView, LkListView, MyArticleListView, ModeratorNotificationUpdate
-
+    ProfileEditView, LkListView, MyArticleListView, ModeratorNotificationUpdate, ReplyCommentView, \
+    NotificationUsersAboutBlockingUpdate, ModeratorNotificationReviewedUpdate, PageNotFountView, \
+    BannedAuthorCommentView, BannedAuthorArticleView, ArticleStatusUpdate, UserCommentDeleteView
 
 from authapp.views import UserEditView
 from ckeditor_uploader import views
@@ -22,14 +23,17 @@ urlpatterns = [
     path('lk/', LkListView.as_view(), name='lk'),
     path('lk/add/', ProfileCreateView.as_view(), name='profile_add'),
     path('lk/edit/<str:pk>/', ProfileEditView.as_view(), name='profile_edit'),
+    path('lk/read-block-message/<str:pk>/', NotificationUsersAboutBlockingUpdate.as_view(), name='message_edit'),
     path('article/<str:pk>/', ArticleDetailView.as_view(), name='article'),
     path('user-edit/<str:pk>/', UserEditView.as_view(), name='user_edit'),
     path('article-add/', CreateArticle.as_view(), name='article_create'),
     path('article-update/<str:pk>/', UpdateArticle.as_view(), name='article_update'),
 
     path('ModerNot-update/<str:pk>/', ModeratorNotificationUpdate.as_view(), name='moder_not_update'),
+    path('ModerNotRev-update/<str:pk>/', ModeratorNotificationReviewedUpdate.as_view(), name='moder_not_rev_update'),
 
     path('add-comment/', CreateCommentView.as_view(), name='add-comment'),
+    path('reply-comment/', ReplyCommentView.as_view(), name='reply-comment'),
     path('category/<str:pk>/', CategoriesListView.as_view(), name='category'),
     path('user-article/<str:pk>/', UserArticleListView.as_view(), name='user_article'),
     path('my-articles/<str:pk>/', MyArticleListView.as_view(), name='my_articles'),
@@ -46,7 +50,15 @@ urlpatterns = [
     path('article/<str:pk>/star/', AuthorStarRedirectView.as_view(), name='star_toggle'),
     path('article/<str:pk>/like/<str:id>', CommentLikeRedirectView.as_view(), name='like_comment_toggle'),
     path('user-article/<str:pk>/star/', AuthorArticleStarRedirectView.as_view(), name='user_article_star_toggle'),
+
+    path('article/<str:pk>/banned/<str:id>', BannedAuthorCommentView.as_view(), name='banned_user_toggle'),
+    path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle'),
+    path('status-update/<str:pk>/', ArticleStatusUpdate.as_view(), name='article_status_update'),
+    path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle'),
+    path('user-comment-delete/<str:pk>/', UserCommentDeleteView.as_view(), name='comment_delete'),
 ]
+
+handler404 = PageNotFountView.as_view()
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

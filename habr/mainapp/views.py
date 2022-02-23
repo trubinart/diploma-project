@@ -1,18 +1,28 @@
+import re
+
+from datetime import timedelta, datetime
+from django.utils import timezone
+
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, View, RedirectView, UpdateView, TemplateView, \
+    DeleteView
 from django.shortcuts import HttpResponseRedirect, render, get_object_or_404
+from django.http import Http404
 
 from uuid import UUID
 
 from authapp.forms import UserRegisterForm
-from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm
+
+from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, \
+    ArticleStatusEditForm, MessageEditForm, FilterForm, ReplyCommentForm
+
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
-from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification
+from mainapp.models import Article, ArticleCategories, ArticleComment, ReplyComments, ModeratorNotification, NotificationUsersFromModerator
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -24,11 +34,66 @@ search_form = SearchForm()
 
 
 def get_sort_from_request(self):
+    """метод получения параметра сортировки"""
     try:
         sort = self.request.GET['sort']
         return sort
     except Exception:
         return None
+
+
+def get_filter_params_from_get_request(self):
+    """метод получения параметра сортировки"""
+    param_string = ''
+    for key, value in self.request.GET.items():
+        if key != 'page' and key != 'sort':
+            param_string += f'{key}={value}&'
+    return param_string.rstrip('&')
+
+
+def add_filter_params_to_context(self, context):
+    for key, value in self.request.GET.items():
+        if key != 'page' and key != 'sort' and key != 'query':
+            context[key] = value
+    try:
+        context['start_date'] = datetime.strptime((context['start_date']), "%Y-%m-%d")
+        context['end_date'] = datetime.strptime((context['end_date']), "%Y-%m-%d")
+    except:
+        pass
+    return context
+
+
+def get_filter_article_queryset(self, article_queryset):
+    """метод получения отфильтрованных статей"""
+    form = FilterForm(self.request.GET)
+    if form.is_valid():
+        data = form.cleaned_data
+    else:
+        raise Http404()
+    queryset = article_queryset.filter(status='A')
+    if data['start_date']:
+        queryset = queryset.filter(created_timestamp__gte=data['start_date'])
+    if data['end_date']:
+        queryset = queryset.filter(created_timestamp__lte=data['end_date'] + timedelta(days=1))
+    if data['start_rating']:
+        queryset = queryset.filter(article_rating__rating__gte=data['start_rating'])
+    if data['end_rating']:
+        queryset = queryset.filter(article_rating__rating__lte=data['end_rating'])
+    return queryset
+
+
+def get_sort_article_queryset(self, article_queryset):
+    """метод получения сортированных статей"""
+    sort = self.get_sort_from_request()
+    if sort == 'date_reverse':
+        return article_queryset.reverse()
+    elif sort == 'rating':
+        return article_queryset.order_by(
+            'article_rating__rating').reverse()
+    elif sort == 'rating_reverse':
+        return article_queryset.order_by('article_rating__rating')
+    else:
+        return article_queryset
 
 
 class MainListView(ListView):
@@ -39,6 +104,18 @@ class MainListView(ListView):
 
     def get_sort_from_request(self):
         return get_sort_from_request(self)
+
+    def get_sort_article_queryset(self, article_queryset):
+        return get_sort_article_queryset(self, article_queryset)
+
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
+
+    def get_filter_article_queryset(self, article_queryset):
+        return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
 
     def get_queryset(self):
         sort = self.get_sort_from_request()
@@ -81,6 +158,13 @@ class ArticleDetailView(DetailView):
         context['search_form'] = search_form
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        article_id = self.kwargs['pk']
+        article_status = Article.objects.get(id=article_id).status
+        if article_status != 'A':
+            self.template_name = 'mainapp/404.html'
+        return super().dispatch(request, *args, **kwargs)
+
 
 class CategoriesListView(ListView):
     """Класс для вывода списка категорий """
@@ -91,10 +175,26 @@ class CategoriesListView(ListView):
     def get_sort_from_request(self):
         return get_sort_from_request(self)
 
+    def get_sort_article_queryset(self, article_queryset):
+        return get_sort_article_queryset(self, article_queryset)
+
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
+
+    def get_filter_article_queryset(self, article_queryset):
+        return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
+
     def get_queryset(self):
         sort = self.get_sort_from_request()
         # Объявляем переменную и записываем ссылку на id категории
         categories = self.kwargs['pk']
+        try:
+            UUID(categories)
+        except:
+            raise Http404()
 
         if sort == 'date_reverse':
             return Article.objects.filter(categories_id=categories).reverse()
@@ -115,9 +215,11 @@ class CategoriesListView(ListView):
         context['categories_pk'] = UUID(category_id)
         context['category_name'] = category.name
         context['search_form'] = search_form
-        # добавляем сортировку
-        sort = self.get_sort_from_request()
-        context['sort'] = sort
+
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 
@@ -152,6 +254,9 @@ class CreateArticle(CreateView):
         context['categories_list'] = category_list
         return context
 
+    def get_success_url(self):
+        return reverse_lazy('my_articles', args=[self.request.user.id])
+
 
 class UpdateArticle(UpdateView):
     """Класс для создания статьи"""
@@ -172,6 +277,10 @@ class UpdateArticle(UpdateView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
+        article_id = self.kwargs['pk']
+        user_id = Article.objects.get(id=article_id).user.id
+        if user_id != self.request.user.id:
+            self.template_name = 'mainapp/404.html'
         return super(UpdateArticle, self).dispatch(*args, **kwargs)
 
 
@@ -217,7 +326,7 @@ class LkEditView(UpdateView):
     template_name = 'mainapp/user_lk_update.html'
 
     @staticmethod
-    def post(request):
+    def post(request, **kwargs):
         title = 'Редактирование ЛК'
         if request.POST:
             edit_user_form = UserRegisterForm(request.POST, request.FILES, instance=request.user)
@@ -258,10 +367,26 @@ class UserArticleListView(ListView):
     def get_sort_from_request(self):
         return get_sort_from_request(self)
 
+    def get_sort_article_queryset(self, article_queryset):
+        return get_sort_article_queryset(self, article_queryset)
+
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
+
+    def get_filter_article_queryset(self, article_queryset):
+        return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
+
     def get_queryset(self):
         sort = self.get_sort_from_request()
         # Объявляем переменную user и записываем ссылку на id автора
         user_id = self.kwargs['pk']
+        try:
+            UUID(user_id)
+        except:
+            raise Http404()
 
         if sort == 'date_reverse':
             return Article.objects.filter(user=user_id).reverse()
@@ -284,9 +409,10 @@ class UserArticleListView(ListView):
         context['categories_list'] = category_list
         context['author'] = author
         context['search_form'] = search_form
-        # добавляем сортировку
-        sort = self.get_sort_from_request()
-        context['sort'] = sort
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 
@@ -299,7 +425,7 @@ class MyArticleListView(ListView):
     def get_queryset(self):
         # Объявляем переменную user и записываем ссылку на id автора
         user_id = self.kwargs['pk']
-        new_context = Article.objects.filter(user=user_id)
+        new_context = Article.objects.filter(user=user_id).exclude(status='H')
         return new_context
 
     def get_context_data(self, **kwargs):
@@ -318,20 +444,27 @@ class SearchView(ListView):
     def get_sort_from_request(self):
         return get_sort_from_request(self)
 
+    def get_sort_article_queryset(self, article_queryset):
+        return get_sort_article_queryset(self, article_queryset)
+
+    def get_filter_params_from_get_request(self):
+        return get_filter_params_from_get_request(self)
+
+    def get_filter_article_queryset(self, article_queryset):
+        return get_filter_article_queryset(self, article_queryset)
+
+    def add_filter_params_to_context(self, context):
+        return add_filter_params_to_context(self, context)
+
     def get_queryset(self):
         sort = self.get_sort_from_request()
         form = SearchForm(self.request.GET)
         if form.is_valid():
             query_string = form.cleaned_data['query']
-
-            if sort == 'date_reverse':
-                return Article.objects.search(query=query_string).reverse()
-            elif sort == 'rating':
-                return Article.objects.search(query=query_string).order_by('article_rating__rating').reverse()
-            elif sort == 'rating_reverse':
-                return Article.objects.search(query=query_string).order_by('article_rating__rating')
-            else:
-                return Article.objects.search(query=query_string)
+            queryset = Article.objects.search(query=query_string)
+            queryset = self.get_filter_article_queryset(queryset)
+            queryset = self.get_sort_article_queryset(queryset)
+            return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -339,9 +472,10 @@ class SearchView(ListView):
         context['categories_list'] = category_list
         context['title'] = 'Поиск по сайту'
         context['query'] = self.request.GET['query']
-        # добавляем сортировку
-        sort = self.get_sort_from_request()
-        context['sort'] = sort
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
         return context
 
 
@@ -354,7 +488,7 @@ class ArticleLikeRedirectView(RedirectView):
         url_article = obj_article.get_absolute_url()
         user = self.request.user
 
-        if user.is_authenticated:
+        if user.is_authenticated and not user.is_now_banned:
             if user in obj_article.likes.all():
                 obj_article.likes.remove(user)
             else:
@@ -373,7 +507,7 @@ class CommentLikeRedirectView(RedirectView):
         user = self.request.user
 
         obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
-        if user.is_authenticated:
+        if user.is_authenticated and not user.is_now_banned:
             if user in obj_comment.likes.all():
                 obj_comment.likes.remove(user)
             else:
@@ -392,7 +526,7 @@ class AuthorStarRedirectView(RedirectView):
         user = self.request.user
 
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
-        if user.is_authenticated:
+        if user.is_authenticated and not user.is_now_banned:
             if user in obj_userprofile.stars.all():
                 obj_userprofile.stars.remove(user)
             else:
@@ -412,7 +546,7 @@ class AuthorArticleStarRedirectView(RedirectView):
         user = self.request.user
 
         obj_userprofile = get_object_or_404(UserProfile, user_id=obj_author.id)
-        if user.is_authenticated:
+        if user.is_authenticated and not user.is_now_banned:
             if user in obj_userprofile.stars.all():
                 obj_userprofile.stars.remove(user)
             else:
@@ -434,3 +568,123 @@ class ModeratorNotificationUpdate(UpdateView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+
+class NotificationUsersAboutBlockingUpdate(UpdateView):
+    model = NotificationUsersFromModerator
+    template_name = 'mainapp/updateMessage.html'
+    form_class = MessageEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Вы действительно хотите скрыть сообщение?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class BannedAuthorCommentView(RedirectView):
+    """Класс для блокировки пользователя (автора комментария) на 2 недели"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        obj_comment = get_object_or_404(ArticleComment, id=self.kwargs['id'])
+        if user.is_authenticated and user.is_staff is True:
+            banned_date = timezone.now() + timedelta(days=14)
+            obj_comment.user.date_end_banned = banned_date
+            obj_comment.user.save()
+        else:
+            pass
+        return url_article
+
+
+class BannedAuthorArticleView(RedirectView):
+    """Класс для блокировки пользователя (автора статьи) на 2 недели"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        obj_article = get_object_or_404(Article, id=self.kwargs['pk'])
+        url_article = obj_article.get_absolute_url()
+        user = self.request.user
+
+        obj_userprofile = get_object_or_404(UserProfile, user_id=obj_article.user_id)
+        if user.is_authenticated and user.is_staff is True:
+            banned_date = timezone.localtime(timezone.now()) + timedelta(days=14)
+            obj_userprofile.user.date_end_banned = banned_date
+            obj_userprofile.user.save()
+        else:
+            pass
+        return url_article
+
+
+class ArticleStatusUpdate(UpdateView):
+    template_name = 'mainapp/myArticles.html'
+    paginate_by = 9
+    model = Article
+    form_class = ArticleStatusEditForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Мои статьи'
+        context['categories_list'] = category_list
+        return context
+
+    def get_success_url(self):
+        if re.search(r'\/article\/', self.request.META.get('HTTP_REFERER')):
+            return reverse_lazy('main')
+        else:
+            return reverse_lazy('my_articles', args=[self.request.user.id])
+
+
+class PageNotFountView(TemplateView):
+    template_name = "mainapp/404.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Страница не найдена'
+        context['categories_list'] = category_list
+        return context
+
+
+class UserCommentDeleteView(DeleteView):
+    model = ArticleComment
+
+    def get_success_url(self):
+        article_id = self.request.META['HTTP_REFERER'].split('/')[-2]
+        return reverse_lazy('article', kwargs={'pk': article_id})
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ModeratorNotificationReviewedUpdate(UpdateView):
+    """Снятие модератором статьи с модерации"""
+    model = ModeratorNotification
+    template_name = 'mainapp/updateModerNotifReviewed.html'
+    form_class = ModeratorNotificationEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Вы действительно хотите снять с модерации статью?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class ReplyCommentView(View):
+    """Класс для создания ответа на комментарий """
+
+    @staticmethod
+    def post(request):
+        article_id = request.POST['pk']
+        form = ReplyCommentForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
+        else:
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))

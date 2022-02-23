@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 from django import forms
 
+from mainapp.models import Article, ArticleComment, ModeratorNotification, ReplyComments, NotificationUsersFromModerator
 from mainapp.models import Article, ArticleComment, ModeratorNotification
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from authapp.models import UserProfile, User
@@ -78,7 +79,6 @@ class SearchForm(forms.Form):
         self.fields['query'].widget.attrs['class'] = 'search'
 
 
-# --_--
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -164,7 +164,52 @@ class ModeratorNotificationEditForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['responsible_moderator'].widget = forms.HiddenInput()
         self.fields['status'].widget = forms.HiddenInput()
-        # self.fields['status'].label = 'Установите статус'
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = f'form-control {field_name}'
             field.help_text = ''
+
+
+class MessageEditForm(forms.ModelForm):
+    class Meta:
+        model = NotificationUsersFromModerator
+        fields = ('is_read',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['is_read'].widget = forms.HiddenInput()
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = f'form-control {field_name}'
+            field.help_text = ''
+
+
+class ArticleStatusEditForm(forms.ModelForm):
+    """Форма статуса статьи"""
+
+    class Meta:
+        model = Article
+        fields = ('status', 'blocked')
+
+
+class FilterForm(forms.Form):
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
+    start_rating = forms.IntegerField(required=False)
+    end_rating = forms.IntegerField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(FilterForm, self).__init__(*args, **kwargs)
+
+
+class ReplyCommentForm(forms.ModelForm):
+    class Meta:
+        model = ReplyComments
+        fields = ('comment_to_reply', 'user', 'text')
+
+    def __init__(self, *args, **kwargs):
+        super(ReplyCommentForm, self).__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs['placeholder'] = 'Ответить на комментарий'
+        self.fields['text'].widget.attrs['name'] = 'text'
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            self.fields['text'].widget.attrs['class'] = 'reply_input'
