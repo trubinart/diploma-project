@@ -4,7 +4,7 @@ from django import forms
 
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from authapp.models import UserProfile, User
-from mainapp.models import NotificationUsersFromModerator, Article, ArticleComment, ModeratorNotification
+from mainapp.models import NotificationUsersFromModerator, Article, ArticleComment, ModeratorNotification, ReplyComments
 
 
 class ArticleEditForm(forms.ModelForm):
@@ -209,3 +209,18 @@ class FilterForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(FilterForm, self).__init__(*args, **kwargs)
+
+
+class ReplyCommentForm(forms.ModelForm):
+    class Meta:
+        model = ReplyComments
+        fields = ('comment_to_reply', 'user', 'text')
+
+    def __init__(self, *args, **kwargs):
+        super(ReplyCommentForm, self).__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs['placeholder'] = 'Ответить на комментарий'
+        self.fields['text'].widget.attrs['name'] = 'text'
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            self.fields['text'].widget.attrs['class'] = 'reply_input'

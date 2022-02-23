@@ -13,7 +13,7 @@ from mainapp.views import MainListView, ArticleDetailView, \
     ProfileEditView, LkListView, MyArticleListView, BannedAuthorCommentView, BannedAuthorArticleView, \
     ModeratorNotificationUpdate, NotificationUsersAboutBlockingUpdate, PageNotFountView, \
     ArticleStatusUpdate, UserCommentDeleteView, ModeratorNotificationReviewedUpdate, GeneralNotificationUsersUpdate, \
-    AllGeneralNotificationUserView, AllGeneralNotificationUserUpdate
+    AllGeneralNotificationUserView, AllGeneralNotificationUserUpdate, ReplyCommentView
 
 from authapp.views import UserEditView
 from ckeditor_uploader import views
@@ -35,6 +35,7 @@ urlpatterns = [
     path('ModerNotRev-update/<str:pk>/', ModeratorNotificationReviewedUpdate.as_view(), name='moder_not_rev_update'),
 
     path('add-comment/', CreateCommentView.as_view(), name='add-comment'),
+    path('reply-comment/', ReplyCommentView.as_view(), name='reply-comment'),
     path('category/<str:pk>/', CategoriesListView.as_view(), name='category'),
     path('user-article/<str:pk>/', UserArticleListView.as_view(), name='user_article'),
     path('my-articles/<str:pk>/', MyArticleListView.as_view(), name='my_articles'),
