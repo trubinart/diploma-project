@@ -1,19 +1,19 @@
 start:
-	sudo docker-compose up -d  --buil
-	sudo docker-compose exec django python manage.py migrate
-	sudo docker-compose exec django python manage.py collectstatic
-	sudo docker-compose exec django python manage.py createsuperuser
+	docker-compose up -d  --buil
+	docker-compose exec django python manage.py migrate
+	docker-compose exec django python manage.py collectstatic
+	docker-compose exec django python manage.py createsuperuser
 
 add-data:
-	sudo docker-compose exec django python manage.py filling_database
+	docker-compose exec django python manage.py filling_database
 
 up-start:
-	sudo docker-compose up -d  --buil
-	sudo docker-compose exec django python manage.py migrate
+	docker-compose up -d  --buil
+	docker-compose exec django python manage.py migrate
 
 update:
-	sudo docker-compose exec django python manage.py migrate
-	sudo docker-compose up -d  --buil
+	docker-compose exec django python manage.py migrate
+	docker-compose up -d  --buil
 
 stop:
 	docker-compose down -v
