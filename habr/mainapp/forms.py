@@ -4,8 +4,9 @@ from django import forms
 
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from authapp.models import UserProfile, User
-from mainapp.models import NotificationUsersFromModerator, Article, ArticleComment, ModeratorNotification, \
-    ModeratorNotificationAboutReModeration
+
+from mainapp.models import NotificationUsersFromModerator, Article, ArticleComment, \
+    ModeratorNotification, ReplyComments, ModeratorNotificationAboutReModeration
 
 
 class ArticleEditForm(forms.ModelForm):
@@ -52,6 +53,7 @@ class ArticleEditForm(forms.ModelForm):
     #             print(split_data)
     #             raise forms.ValidationError("Максимальная длинна слова в статье не должна превышать 84 символа")
     #     return data
+    # Ах, как я был наивен, когда думал, что поправлю...
 
 
 class CreationCommentForm(forms.ModelForm):
@@ -181,6 +183,19 @@ class MessageEditForm(forms.ModelForm):
             field.help_text = ''
 
 
+class GeneralMessageEditForm(forms.ModelForm):
+    class Meta:
+        model = NotificationUsersFromModerator
+        fields = ('is_read',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['is_read'].widget = forms.HiddenInput()
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = f'form-control {field_name}'
+            field.help_text = ''
+
+
 class ArticleStatusEditForm(forms.ModelForm):
     """Форма статуса статьи"""
 
@@ -211,3 +226,18 @@ class FilterForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(FilterForm, self).__init__(*args, **kwargs)
+
+
+class ReplyCommentForm(forms.ModelForm):
+    class Meta:
+        model = ReplyComments
+        fields = ('comment_to_reply', 'user', 'text')
+
+    def __init__(self, *args, **kwargs):
+        super(ReplyCommentForm, self).__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs['placeholder'] = 'Ответить на комментарий'
+        self.fields['text'].widget.attrs['name'] = 'text'
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            self.fields['text'].widget.attrs['class'] = 'reply_input'

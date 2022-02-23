@@ -1,8 +1,7 @@
 import uuid
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
-from django.core.signals import request_finished, got_request_exception, request_started
 from django.db import models
-from django.db.models.signals import post_save, m2m_changed, pre_save
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
@@ -96,6 +95,14 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
         ).select_related(
             "recipient_notification"
         ).count()
+
+    def get_general_user_notification(self):
+        return mainapp_models.NotificationUserAfterLikeAndComment.objects.filter(recipient_notification=self). \
+            exclude(is_read=True).select_related("recipient_notification").order_by('-created_timestamp')
+
+    def get_count_general_user_notification(self):
+        return mainapp_models.NotificationUserAfterLikeAndComment.objects.filter(recipient_notification=self). \
+            exclude(is_read=True).select_related("recipient_notification").count()
 
 
 class UserProfile(models.Model):

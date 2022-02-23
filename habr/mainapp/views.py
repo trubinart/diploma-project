@@ -18,13 +18,14 @@ from uuid import UUID
 from authapp.forms import UserRegisterForm
 
 from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, \
-    ArticleStatusEditForm, MessageEditForm, ModeratorNotificationAboutReModerationEditForm, \
-    FilterForm
+    ModeratorNotificationAboutReModerationEditForm, ArticleStatusEditForm, MessageEditForm, \
+    FilterForm, GeneralMessageEditForm, ReplyCommentForm
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification, \
-    NotificationUsersFromModerator, ModeratorNotificationAboutReModeration
+    ModeratorNotificationAboutReModeration, NotificationUsersFromModerator, \
+    NotificationUserAfterLikeAndComment
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -71,7 +72,7 @@ def get_filter_article_queryset(self, article_queryset):
     else:
         raise Http404()
     queryset = article_queryset.filter(status='A').exclude(
-                blocked='True')
+        blocked='True')
     if data['start_date']:
         queryset = queryset.filter(created_timestamp__gte=data['start_date'])
     if data['end_date']:
@@ -196,27 +197,22 @@ class CategoriesListView(ListView):
         queryset = self.get_sort_article_queryset(queryset)
         return queryset
 
+    def get_context_data(self, **kwargs):
+        # вызов базовой реализации для получения контекста
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs['pk']
+        category = ArticleCategories.objects.get(id=category_id)
+        context['title'] = f'Статьи по категории «{category.name}»'
+        context['categories_list'] = category_list
+        context['categories_pk'] = UUID(category_id)
+        context['category_name'] = category.name
+        context['search_form'] = search_form
 
-# >> >> >> > 684
-# b6a5d242fa4c02e8ec96de2db109580666fb8
-
-
-def get_context_data(self, **kwargs):
-    # вызов базовой реализации для получения контекста
-    context = super().get_context_data(**kwargs)
-    category_id = self.kwargs['pk']
-    category = ArticleCategories.objects.get(id=category_id)
-    context['title'] = f'Статьи по категории «{category.name}»'
-    context['categories_list'] = category_list
-    context['categories_pk'] = UUID(category_id)
-    context['category_name'] = category.name
-    context['search_form'] = search_form
-
-    # добавляем параметры
-    context['params'] = self.get_filter_params_from_get_request()
-    context['sort'] = self.get_sort_from_request()
-    self.add_filter_params_to_context(context)
-    return context
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
+        return context
 
 
 class LkListView(ListView):
@@ -389,24 +385,23 @@ class UserArticleListView(ListView):
         queryset = self.get_sort_article_queryset(queryset)
         return queryset
 
-
-def get_context_data(self, **kwargs):
-    # вызов базовой реализации для получения контекста
-    context = super().get_context_data(**kwargs)
-    user_id = self.kwargs['pk']
-    author = User.objects.get(id=user_id)
-    try:
-        context['title'] = f'Статьи автора {author.get_profile().name}'
-    except:
-        context['title'] = f'Статьи автора {author.username}'
-    context['categories_list'] = category_list
-    context['author'] = author
-    context['search_form'] = search_form
-    # добавляем параметры
-    context['params'] = self.get_filter_params_from_get_request()
-    context['sort'] = self.get_sort_from_request()
-    self.add_filter_params_to_context(context)
-    return context
+    def get_context_data(self, **kwargs):
+        # вызов базовой реализации для получения контекста
+        context = super().get_context_data(**kwargs)
+        user_id = self.kwargs['pk']
+        author = User.objects.get(id=user_id)
+        try:
+            context['title'] = f'Статьи автора {author.get_profile().name}'
+        except:
+            context['title'] = f'Статьи автора {author.username}'
+        context['categories_list'] = category_list
+        context['author'] = author
+        context['search_form'] = search_form
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
+        return context
 
 
 class MyArticleListView(ListView):
@@ -459,18 +454,17 @@ class SearchView(ListView):
         queryset = self.get_sort_article_queryset(queryset)
         return queryset
 
-
-def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['search_form'] = search_form
-    context['categories_list'] = category_list
-    context['title'] = 'Поиск по сайту'
-    context['query'] = self.request.GET['query']
-    # добавляем параметры
-    context['params'] = self.get_filter_params_from_get_request()
-    context['sort'] = self.get_sort_from_request()
-    self.add_filter_params_to_context(context)
-    return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_form'] = search_form
+        context['categories_list'] = category_list
+        context['title'] = 'Поиск по сайту'
+        context['query'] = self.request.GET['query']
+        # добавляем параметры
+        context['params'] = self.get_filter_params_from_get_request()
+        context['sort'] = self.get_sort_from_request()
+        self.add_filter_params_to_context(context)
+        return context
 
 
 class ArticleLikeRedirectView(RedirectView):
@@ -684,3 +678,57 @@ class ModeratorNotificationReviewedUpdate(UpdateView):
         context['title'] = title
         context['categories_list'] = category_list
         return context
+
+
+class GeneralNotificationUsersUpdate(UpdateView):
+    """Переместить уведомление в прочитанные"""
+    model = NotificationUserAfterLikeAndComment
+    template_name = 'mainapp/updateGeneralMessage.html'
+    form_class = GeneralMessageEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Переместить уведомление в прочитанные?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class AllGeneralNotificationUserView(ListView):
+    """Подтверждение о перемещении всех уведомлений в прочитанные"""
+    model = NotificationUserAfterLikeAndComment
+    template_name = 'mainapp/updateAllGeneralMessage.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Переместить все уведомления в прочитанные?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class AllGeneralNotificationUserUpdate(RedirectView):
+    """Переместить все уведомления в прочитанные"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        user = self.request.user
+        obj_notify = user.get_general_user_notification()
+        for gen_notify in obj_notify:
+            gen_notify.is_read = True
+            gen_notify.save()
+        return reverse_lazy('lk')
+
+
+class ReplyCommentView(View):
+    """Класс для создания ответа на комментарий """
+
+    @staticmethod
+    def post(request):
+        article_id = request.POST['pk']
+        form = ReplyCommentForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))
+        else:
+            return HttpResponseRedirect(reverse('article', kwargs={'pk': article_id}))

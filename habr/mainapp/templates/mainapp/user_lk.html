@@ -33,7 +33,6 @@
                     {% endif %}
                 </div>
             </div>
-
             <div class="new_requests">
                 {% if object_list.0.get_count_new_requests_moderation %}
                 <div class="requests_title">
@@ -315,6 +314,22 @@ $(document).ready(function(){
 		return false;
 	});
 });
+
+$(document).ready(function () {
+    $('.content_toggle_general').click(function () {
+        $('.importantNotificationsGeneral').slideToggle(300, function () {
+            if ($(this).is(':hidden')) {
+                $('.content_toggle_general').html('Показать уведомления');
+                $('.content_toggle_general').removeClass('open');
+            } else {
+                $('.content_toggle_general').html('Скрыть уведомления');
+                $('.content_toggle_general').addClass('open');
+            }
+        });
+        return false;
+    });
+});
+
 
 </script>
 {% endblock %}

@@ -211,6 +211,35 @@ class ArticleComment(BaseModel):
         db_table = 'article_comments'
         ordering = ['-created_timestamp']
 
+    def get_replies_by_comment_id(self) -> QuerySet:
+        """
+        Метод для нахождения ответов на комментарий
+        """
+        return ReplyComments.objects.select_related('comment_to_reply').filter(comment_to_reply=self)
+
+    def get_count(self):
+        """
+        метод для подсчета ответов на комментарий
+        """
+        return ReplyComments.objects.filter(comment_to_reply=self).count()
+
+
+class ReplyComments(BaseModel):
+    """
+    Model for Reply on Comments
+    """
+    comment_to_reply = models.ForeignKey(ArticleComment, on_delete=models.CASCADE, verbose_name='Comment to reply',
+                                             related_name='comment_to_reply')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='ReplyComment Author',
+                                 related_name='reply_comment_author')
+    text = models.TextField(max_length=200, verbose_name='ReplyComment Text')
+
+    def __str__(self):
+        return f'from {self.user.username} to {self.comment_to_reply.user.username}'
+
+    class Meta:
+        ordering = ['-created_timestamp']
+
 
 class ModeratorNotification(BaseModel):
     """
@@ -351,6 +380,7 @@ def change_article_rating_by_likes_to_article(instance, action, **kwargs):
 
 
 @receiver(post_save, sender=ArticleComment)
+@receiver(post_delete, sender=ArticleComment)
 def change_article_rating_by_count_comments_to_article(instance, **kwargs):
     """
     Сигнал для изменения рейтинга статьи от изменения кол-ва комментов к статье
@@ -539,7 +569,10 @@ class NotificationUsersFromModerator(BaseModel):
         """
         recipient_notification = instance.user
         moderator = NotificationUsersFromModerator.get_moderator(inspect.stack())
-        message = f'Модератор удалил Ваш комментарий: {instance.text[:60]}...'
+        if len(instance.text) > 60:
+            message = f'Модератор удалил Ваш комментарий: {instance.text[:60]}...'
+        else:
+            message = f'Модератор удалил Ваш комментарий: {instance.text}'
 
         NotificationUsersFromModerator.objects.create(
             recipient_notification=recipient_notification,
@@ -640,3 +673,102 @@ class ModeratorNotificationAboutReModeration(BaseModel):
     @staticmethod
     def get_count_new_article_for_re_moderation():
         return ModeratorNotificationAboutReModeration.objects.filter(status='N').count()
+
+
+class NotificationUserAfterLikeAndComment(BaseModel):
+    """
+    Уведомления пользователей о лайках статьи, лайках автора и комментариях к статье
+    """
+    recipient_notification = models.ForeignKey(User, null=False, db_index=True, on_delete=models.CASCADE,
+                                               verbose_name='получатель уведомления')
+    sender_notification = models.UUIDField(verbose_name='отправитель уведомления')
+    is_read = models.BooleanField(default=False, verbose_name='прочитано')
+    message = models.CharField(max_length=200, verbose_name='уведомление', blank=True, null=True)
+
+    def __str__(self):
+        return f'уведомление пользователя "{self.recipient_notification.username} о лайке или комменте"'
+
+    def get_user_sender(self):
+        """
+        Метод отдает пользователя, который стал инициатором создания уведомления
+        """
+        return User.objects.filter(pk=self.sender_notification).first()
+
+    @staticmethod
+    def get_user_name_sender(user_sender):
+        user_sender_lst = str(user_sender).split(' - ')
+        if len(user_sender_lst[1]) > 0:
+            user_sender_name = user_sender_lst[1]
+        else:
+            user_sender_name = user_sender_lst[0]
+        return user_sender_name
+
+    @receiver(m2m_changed, sender=Article.likes.through)
+    def notify_user_after_like_article(sender, action, instance, pk_set, **kwargs):
+        """
+        Сигнал для отправки уведомления автору статьи, после лайка статьи
+        """
+        if action == 'post_add':
+            user_sender_id = [_ for _ in pk_set][0]
+            user_sender = UserProfile.objects.get(user_id=user_sender_id).user
+            user_sender_name = NotificationUserAfterLikeAndComment.get_user_name_sender(user_sender)
+            if user_sender != instance.user:
+                NotificationUserAfterLikeAndComment.objects.create(
+                    recipient_notification=instance.user,
+                    sender_notification=user_sender.pk,
+                    message=f'{user_sender_name} поставил лайк статье: {instance.title}'
+                )
+        return None
+
+    @receiver(m2m_changed, sender=UserProfile.stars.through)
+    def notify_user_after_like_author(sender, action, instance, pk_set, **kwargs):
+        """
+        Сигнал для отправки уведомления юзеру, которому повысили ранг
+        """
+        if action == 'post_add':
+            user_sender_id = [_ for _ in pk_set][0]
+            user_sender = UserProfile.objects.get(user_id=user_sender_id).user
+            user_sender_name = NotificationUserAfterLikeAndComment.get_user_name_sender(user_sender)
+            if user_sender != instance.user:
+                NotificationUserAfterLikeAndComment.objects.create(
+                    recipient_notification=instance.user,
+                    sender_notification=user_sender.pk,
+                    message=f'{user_sender_name} повысил Ваш ранг!'
+                )
+        return None
+
+    @receiver(m2m_changed, sender=ArticleComment.likes.through)
+    def notify_user_after_like_comment(sender, action, instance, pk_set, **kwargs):
+        """
+        Сигнал для отправки уведомления автору комментария, после лайка комментария
+        """
+        if action == 'post_add':
+            user_sender_id = [_ for _ in pk_set][0]
+            user_sender = UserProfile.objects.get(user_id=user_sender_id).user
+            user_sender_name = NotificationUserAfterLikeAndComment.get_user_name_sender(user_sender)
+            if len(instance.text) > 60:
+                comment = f'{instance.text[:60]}...'
+            else:
+                comment = instance.text
+            if user_sender != instance.user:
+                NotificationUserAfterLikeAndComment.objects.create(
+                    recipient_notification=instance.user,
+                    sender_notification=user_sender.pk,
+                    message=f'{user_sender_name} поставил лайк комментарию: {comment}'
+                )
+        return None
+
+    @receiver(post_save, sender=ArticleComment)
+    def notify_user_after_added_comment(sender, instance, **kwargs):
+        """
+        Сигнал для отправки уведомления автору статьи, после добавления комментария к статье
+        """
+        user_sender_name = NotificationUserAfterLikeAndComment.get_user_name_sender(instance.user)
+        if instance.user != instance.article_comment.user:
+            NotificationUserAfterLikeAndComment.objects.create(
+                recipient_notification=instance.article_comment.user,
+                sender_notification=instance.user.pk,
+                message=f'{user_sender_name} оставил комментарий к статье: {instance.article_comment}'
+            )
+        return None
+
