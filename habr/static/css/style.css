@@ -2336,7 +2336,6 @@ body {
     color: #FFFFFF;
 }
 
-
 /* end .comment-add */
 .sidebar-author .author-article_title {
     font-weight: bold;
@@ -2524,7 +2523,6 @@ body {
     margin: 0 auto 40px;
 }
 
-.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal button:hover,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .toLk_new {
     display: flex;
     text-decoration: none;
@@ -2541,6 +2539,7 @@ body {
     margin: 0 auto 40px;
 }
 
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal button:hover,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK a:hover,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal input[type="submit"]:hover {
     opacity: .9;
@@ -2803,7 +2802,6 @@ body {
 .content .main .menu .side .sort a:hover {
     opacity: .8;
 }
-
 
 .side .sort .date{
     width: 150px;

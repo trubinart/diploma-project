@@ -35,13 +35,6 @@
                             <button type="submit">Вернуть ошибочно снятую блокировку</button>
                             {% endif %}
                         </form>
-
-<!--                        <form class="form-horizontal" method="post" enctype="multipart/form-data">-->
-<!--                            {% csrf_token %}-->
-<!--                            {{ form.media }}-->
-<!--                            {{ form.as_p }}-->
-<!--                            <input class="form-control" type="submit" value="ОТКЛОНИТЬ (статья не прошла модерацию)">-->
-<!--                        </form>-->
                     {% else %}
                     <form class="form-horizontal" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
