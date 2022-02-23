@@ -23,7 +23,7 @@
                 <div class="habr_information">
                     <div class="habr_date_creat">
                         <img src={% static "img/Calendar.png" %}>
-                        <p class="date">{{ article.created_timestamp|date:"d.m.Y г. H:m" }}</p>
+                        <p class="date">{{ article.created_timestamp|date:"d.m.Y г. H:i" }}</p>
                         <div style="margin-right: 10px">
                             <img src={% static 'img/rating.png' %} alt="like">
                         </div>
@@ -124,9 +124,10 @@
                 {% for comment in article.get_comments_by_article_id %}
                     <div class="comment_views">
                         <div class="comment_attribute">
-                            <div class="comment_author">{% if comment.user.userprofile.name %}{{ comment.user.userprofile.name }}
-                            {% else %}{{ comment.user.username }}{% endif %}</div>
-                            <div class="comment_author">{{ comment.created_timestamp | date:"d.m.Y г. H:m" }}</div>
+                            <div class="comment_author">
+                                {% if comment.user.userprofile.name %}{{ comment.user.userprofile.name }}
+                                {% else %}{{ comment.user.username }}{% endif %}</div>
+                            <div class="comment_author">{{ comment.created_timestamp|date:"d.m.Y г. H:i" }}</div>
                         </div>
                         <div class="comment_text">{{ comment.text }}</div>
                         <div class="habr_info">
@@ -158,6 +159,20 @@
                                 {% endif %}
                             </div>
                             <p class="info">{{ comment.likes.count }}</p>
+                            {% if user.is_authenticated %}
+                            <div class="titleImportantNotifications">
+                                <div class="showNotifications">
+                                    <button class="content_toggle form_content{{ comment.pk }} reply_">Ответить</button>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if comment.get_count %}
+                                <div class="titleImportantNotifications">
+                                    <div class="showNotifications">
+                                        <button class="content_toggle content{{ comment.pk }} reply_">Посмотреть ответы ({{ comment.get_count }} шт.)</button>
+                                    </div>
+                                </div>
+                            {% endif %}
                             {% if user.is_staff %}
                                 <form method="post" action="{% url 'comment_delete' comment.pk %}"
                                       class="delete_comment">
@@ -178,44 +193,68 @@
                                 </div>
                             {% endif %}
                         </div>
-                    {#  ----- ОТВЕТ НА КОММЕНТАРИй ----  #}
+                        {#  ----- ОТВЕТ НА КОММЕНТАРИй ----  #}
                         <div class="form_add_comment">
                             {% if user.is_authenticated %}
-                                <form method="post" enctype="multipart/form-data" action="{% url 'reply-comment' %}">
-                                        {% csrf_token %}
-                                        {{ form.text }}
-                                        <input type="hidden" name="pk" value="{{ object.pk }}">
-                                        <input type="hidden" name="comment_to_reply" value="{{ comment.id }}">
-                                        <input type="hidden" name="user" value="{{ user.id }}">
-                                        <button type="submit" class="add_comment_button"> Ответить</button>
+                                <form class="importantNotifications form{{ comment.pk }}" style="display: none;"
+                                      method="post" enctype="multipart/form-data" action="{% url 'reply-comment' %}">
+                                    {% csrf_token %}
+                                    {{ form.text }}
+                                    <input type="hidden" name="pk" value="{{ object.pk }}">
+                                    <input type="hidden" name="comment_to_reply" value="{{ comment.id }}">
+                                    <input type="hidden" name="user" value="{{ user.id }}">
+                                    <button type="submit" class="add_comment_button"> Ответить</button>
                                 </form>
                             {% endif %}
                         </div>
                         <div class="reply_block">
                             {% if comment.get_count %}
-                            <div class="titleImportantNotifications">
-                                <div class="countNotifications">
-                                    Ответы
-                                    {{ comment.get_count}} шт.
+                                <div class="importantNotifications {{ comment.pk }}" style="display: none;">
+                                    {% for reply_comment in comment.get_replies_by_comment_id %}
+                                        <div class="comment_views">
+                                            <div class="comment_attribute">
+                                                <div class="comment_author">{{ reply_comment.user.username }}</div>
+                                                <div class="comment_author">{{ reply_comment.created_timestamp|date:"d.m.Y г. H:i" }}</div>
+                                            </div>
+                                            <div class="comment_text">{{ reply_comment.text }}</div>
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                                <div class="showNotifications">
-                                    <a class="content_toggle reply_" href="#">Показать ответы</a>
-                                </div>
-                            </div>
-                            <div class="importantNotifications" style="display: none;">
-                                {% for reply_comment in comment.get_replies_by_comment_id %}
-                                    <div class="comment_views">
-                                    <div class="comment_attribute">
-                                        <div class="comment_author">{{ reply_comment.user.username }}</div>
-                                        <div class="comment_author">{{ reply_comment.created_timestamp | date:"d.m.Y" }}</div>
-                                    </div>
-                                    <div class="comment_text">{{ reply_comment.text }}</div>
-                                </div>
-                                {% endfor %}
-                            </div>
                             {% endif %}
                         </div>
                     </div>
+                <script>
+                    $(document).ready(function () {
+                        $('.content{{ comment.pk }}').click(function () {
+                            $('.{{ comment.pk }}').slideToggle(300, function () {
+                                if ($(this).is(':hidden')) {
+                                    $('.content{{ comment.pk }}').html('Посмотреть ответы ({{ comment.get_count }} шт.)');
+                                    $('.content{{ comment.pk }}').removeClass('open');
+                                } else {
+                                    $('.content{{ comment.pk }}').html('Скрыть ответы ({{ comment.get_count }} шт.)');
+                                    $('.content{{ comment.pk }}').addClass('open');
+                                }
+                            });
+                            return false;
+                        });
+                    });
+                </script>
+                <script>
+                    $(document).ready(function () {
+                        $('.form_content{{ comment.pk }}').click(function () {
+                            $('.form{{ comment.pk }}').slideToggle(300, function () {
+                                if ($(this).is(':hidden')) {
+                                    $('.form_content{{ comment.pk }}').html('Ответить');
+                                    $('.form_content{{ comment.pk }}').removeClass('open');
+                                } else {
+                                    $('.form_content{{ comment.pk }}').html('Скрыть');
+                                    $('.form_content{{ comment.pk }}').addClass('open');
+                                }
+                            });
+                            return false;
+                        });
+                    });
+                </script>
                 {% endfor %}
 
             </div>
@@ -248,7 +287,7 @@
                     </div>
                     <div class="name_and_share">
                         <h3>{% if article.user.userprofile.name %}{{ article.user.userprofile.name }}
-                            {% else %}{{ article.user.username }}{% endif %}</h3>
+                        {% else %}{{ article.user.username }}{% endif %}</h3>
                         <p>{{ article.user.get_profile.bio }}</p>
                     </div>
                 </div>
@@ -335,20 +374,5 @@
 
         </div>
     </div>
-<script>
-    $(document).ready(function(){
-  $('.content_toggle').click(function(){
-    $('.importantNotifications').slideToggle(300, function(){
-      if ($(this).is(':hidden')) {
-        $('.content_toggle').html('Показать ответы');
-        $('.content_toggle').removeClass('open');
-      } else {
-        $('.content_toggle').html('Скрыть ответы');
-        $('.content_toggle').addClass('open');
-      }
-    });
-    return false;
-  });
-});
-</script>
+
 {% endblock %}
