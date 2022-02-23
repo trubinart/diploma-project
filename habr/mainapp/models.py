@@ -483,24 +483,35 @@ class NotificationUsersFromModerator(BaseModel):
         status = instance.status
         blocked = instance.blocked
 
-        if status_before == status and blocked:
-            #  Если поля status и нет блокировки - выходим
-            return
+        # if not blocked and status_before == status:
+        #     #  Если поля status и нет блокировки - выходим
+        #     return
 
         #  получаем составные части сообщения
         part_1, part_2 = '', ''  # все сообщения будут формироваться из этих кусков
         if status_before == 'A' and status == 'D':
             #  Если статус изменился с Активной на Черновик
-            wrap_start, wrap_end = '{% url ', '%}'
-            part_1 = f'Модератор отправил Вашу статью под заголовком: ' \
-                     f' <a class="article-button" ' \
-                     f'href="/article-update/{instance.pk}/">' \
-                     f'{instance.title} ' \
-                     f'</a>' \
-                     f' на доработку.'
+            if not blocked_before and blocked:
+                # если статья была не была заблокирована и ее заблокировали
+                part_1 = f'Модератор отправил Вашу статью под заголовком: ' \
+                         f' <a class="article-button" ' \
+                         f'href="/article-update/{instance.pk}/">' \
+                         f'{instance.title} ' \
+                         f'</a>' \
+                         f' на доработку.'
+            elif blocked_before and blocked:
+                # если статья была и осталась заблокированной
+                part_1 = f'Ваша статья под заголовком: ' \
+                         f' <a class="article-button" ' \
+                         f'href="/article-update/{instance.pk}/">' \
+                         f'{instance.title} ' \
+                         f'</a>' \
+                         f' не прошла модерацию. <br />' \
+                         f'Просим Вас быть внимательнее, ' \
+                         f'в следующий раз могут быть приняты более жесткие меры'
 
-        if blocked:
-            # Если статью заблокировали
+        if blocked and status_before != status or not blocked_before and blocked:
+            # Если статья заблокирована и менялся статус, или не была заблокирована и ее заблокировали
             part_2 = 'Статья заблокирована для публикации. ' \
                      'Для повторной публикации необходимо исправить статью и ' \
                      'получить разрешение на публикацию от модератора'

@@ -371,14 +371,19 @@ class SearchView(ListView):
             query_string = form.cleaned_data['query']
 
             if sort == 'date_reverse':
-                return Article.objects.search(query=query_string).filter(status='A').reverse()
+                return Article.objects.search(query=query_string).filter(status='A').exclude(
+                    blocked='True').reverse()
             elif sort == 'rating':
-                return Article.objects.search(query=query_string).filter(status='A').order_by(
+                return Article.objects.search(query=query_string).filter(status='A').exclude(
+                    blocked='True').order_by(
                     'article_rating__rating').reverse()
             elif sort == 'rating_reverse':
-                return Article.objects.search(query=query_string).filter(status='A').order_by('article_rating__rating')
+                return Article.objects.search(query=query_string).filter(status='A').exclude(
+                    blocked='True').order_by(
+                    'article_rating__rating')
             else:
-                return Article.objects.search(query=query_string).filter(status='A')
+                return Article.objects.search(query=query_string).filter(status='A').exclude(
+                    blocked='True')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -491,7 +496,7 @@ class ModeratorNotificationAboutReModerationUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Вы действительно хотите взять  статью на повторную модерацию?'
+        title = 'Модерация статьи после доработки автором'
         context['title'] = title
         context['categories_list'] = category_list
         return context
@@ -562,6 +567,8 @@ class ArticleStatusUpdate(UpdateView):
     def get_success_url(self):
         if re.search(r'\/article\/', self.request.META.get('HTTP_REFERER')):
             return reverse_lazy('main')
+        elif re.search(r'\/ModerNotReMod-update\/', self.request.META.get('HTTP_REFERER')):
+            return reverse_lazy('lk')
         else:
             return reverse_lazy('my_articles', args=[self.request.user.id])
 

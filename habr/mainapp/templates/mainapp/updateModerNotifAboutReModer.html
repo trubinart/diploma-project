@@ -14,12 +14,42 @@
             </div>
             <div class="blokPersonInfoLK">
                 <div class="baseInfoBlokLK">
+                    {% if object.responsible_moderator and user == object.responsible_moderator %}
+                        {% if object.article_for_re_moderation.blocked %}
+                         <form class="form-horizontal unlock" method="post" enctype="multipart/form-data"
+                            action="{% url 'article_status_update' object.article_for_re_moderation.pk %}">
+                            {% csrf_token %}
+                            <input hidden="true" name="status" value="A">
+                            <input hidden="true" name="blocked" value="False">
+                            <button type="submit">Снять блокировку</button>
+                        </form>
+                        {% endif %}
+                        <form class="form-horizontal reject" method="post" enctype="multipart/form-data"
+                            action="{% url 'article_status_update' object.article_for_re_moderation.pk %}">
+                            {% csrf_token %}
+                            <input hidden="true" name="status" value="D">
+                            <input hidden="true" name="blocked" value="True">
+                            {% if object.article_for_re_moderation.blocked %}
+                            <button type="submit">Отклонить запрос на снятие блокировки</button>
+                            {% else %}
+                            <button type="submit">Вернуть ошибочно снятую блокировку</button>
+                            {% endif %}
+                        </form>
+
+<!--                        <form class="form-horizontal" method="post" enctype="multipart/form-data">-->
+<!--                            {% csrf_token %}-->
+<!--                            {{ form.media }}-->
+<!--                            {{ form.as_p }}-->
+<!--                            <input class="form-control" type="submit" value="ОТКЛОНИТЬ (статья не прошла модерацию)">-->
+<!--                        </form>-->
+                    {% else %}
                     <form class="form-horizontal" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.media }}
                         {{ form.as_p }}
                         <input class="form-control" type="submit" value="Взять на модерацию">
                     </form>
+                    {% endif %}
                     <a href="{% url 'lk' %}" class="toLk">Вернуться в личный кабинет</a>
                 </div>
             </div>

@@ -68,7 +68,7 @@
                 {% endfor %}
             </div>
             <div class="moderator">
-                <div class="requests">
+                <div class="requests re_moder">
                     {% if re_moderation_notifications_list.0.get_count_new_article_for_re_moderation %}
                     <div class="text">
                         <div class="info">
@@ -87,7 +87,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="new_requests">
+            <div class="new_requests re_moder">
                 {% if re_moderation_notifications_list.0.get_count_new_article_for_re_moderation %}
                 <div class="requests_title">
                     Новые запросы на повторную модерацию статьи
@@ -106,9 +106,7 @@
                     </div>
                     <div class="buttons">
                         <div class="take">
-                            <a href="{% url 'article' notification.article_for_re_moderation.pk %}">
-                                Просмотреть статью
-                            </a>
+
                         </div>
                         <div class="watch">
                             <a href="{% url 'moder_not_re_mod_update' notification.pk %}">
@@ -140,9 +138,16 @@
                     </div>
                     <div class="buttons">
                         <div class="watch">
+                            {% if notification.comment_initiator.article_comment.blocked %}
+                            <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}"
+                            style="pointer-events: none; opacity: .5;">
+                                Статья на доработке
+                            </a>
+                            {% else %}
                             <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}">
                                 Просмотреть статью
                             </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -150,8 +155,8 @@
                 {% endfor %}
             </div>
             {% endif %}
-                        {% if user.get_count_notifications_on_article_for_re_moderation %}
-            <div class="new_requests my_request">
+            {% if user.get_count_notifications_on_article_for_re_moderation %}
+            <div class="new_requests my_re_moder_request">
                 <div class="requests_title">
                     Взятые в работу запросы на повторную модерацию статьи
                 </div>
@@ -169,9 +174,17 @@
 
                     <div class="buttons">
                         <div class="watch">
-                            <a href="{% url 'article' notification.article_for_re_moderation.pk %}">
-                                Просмотреть статью
+                            <a href="{% url 'moder_not_re_mod_update' notification.pk %}">
+                                Приступить к модерации
                             </a>
+                        </div>
+                        <div class="close">
+                             <form class="form-lock" method="post" enctype="multipart/form-data"
+                                action="{% url 'moder_not_re_mod_update' notification.pk %}">
+                                {% csrf_token %}
+                                <input hidden="true" name="status" value="R">
+                                <button type="submit">Закрыть заявку</button>
+                            </form>
                         </div>
                     </div>
                 </div>
