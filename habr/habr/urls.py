@@ -12,7 +12,8 @@ from mainapp.views import MainListView, ArticleDetailView, \
     AuthorStarRedirectView, AuthorArticleStarRedirectView, UpdateArticle, ProfileCreateView, \
     ProfileEditView, LkListView, MyArticleListView, BannedAuthorCommentView, BannedAuthorArticleView, \
     ModeratorNotificationUpdate, NotificationUsersAboutBlockingUpdate, PageNotFountView, \
-    ArticleStatusUpdate, UserCommentDeleteView, ModeratorNotificationReviewedUpdate
+    ArticleStatusUpdate, UserCommentDeleteView, ModeratorNotificationReviewedUpdate, GeneralNotificationUsersUpdate, \
+    AllGeneralNotificationUserView, AllGeneralNotificationUserUpdate
 
 from authapp.views import UserEditView
 from ckeditor_uploader import views
@@ -24,6 +25,7 @@ urlpatterns = [
     path('lk/add/', ProfileCreateView.as_view(), name='profile_add'),
     path('lk/edit/<str:pk>/', ProfileEditView.as_view(), name='profile_edit'),
     path('lk/read-block-message/<str:pk>/', NotificationUsersAboutBlockingUpdate.as_view(), name='message_edit'),
+    path('lk/read-general-message/<str:pk>/', GeneralNotificationUsersUpdate.as_view(), name='gen_message_edit'),
     path('article/<str:pk>/', ArticleDetailView.as_view(), name='article'),
     path('user-edit/<str:pk>/', UserEditView.as_view(), name='user_edit'),
     path('article-add/', CreateArticle.as_view(), name='article_create'),
@@ -45,7 +47,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('article/<str:pk>/like/', ArticleLikeRedirectView.as_view(), name='like-toggle'),
-
     path('article/<str:pk>/star/', AuthorStarRedirectView.as_view(), name='star_toggle'),
     path('article/<str:pk>/like/<str:id>', CommentLikeRedirectView.as_view(), name='like_comment_toggle'),
     path('user-article/<str:pk>/star/', AuthorArticleStarRedirectView.as_view(), name='user_article_star_toggle'),
@@ -55,6 +56,9 @@ urlpatterns = [
     path('status-update/<str:pk>/', ArticleStatusUpdate.as_view(), name='article_status_update'),
     path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle'),
     path('user-comment-delete/<str:pk>/', UserCommentDeleteView.as_view(), name='comment_delete'),
+
+    path('warning-all-gen-notify/<str:pk>/', AllGeneralNotificationUserView.as_view(), name='warning_all_gen_notify'),
+    path('update-all-gen-notify/<str:pk>/', AllGeneralNotificationUserUpdate.as_view(), name='update_all_gen_notify'),
 ]
 
 handler404 = PageNotFountView.as_view()

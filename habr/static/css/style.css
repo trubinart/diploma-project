@@ -98,6 +98,18 @@ body {
     align-items: center;
 }
 
+.shake_img {
+  animation: shake 1.0s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+  0% { transform: translate(-1px, 0px) rotate(1deg); }
+  10% { transform: translate(1px, 1px) rotate(0deg); }
+  20% { transform: translate(-1px, 0px) rotate(1deg); }
+  30% { transform: translate(1px, 1px) rotate(0deg); }
+}
+
 .main-wrapper .topNavbar .accaunt .loginRegister {
     width: 122px;
     height: 26px;
@@ -1881,7 +1893,7 @@ body {
 }
 
 .content .main .contentLK .mainLK .titleImportantNotifications .showNotifications {
-    margin: 40px;
+    margin: 20px;
 }
 
 .content .main .contentLK .mainLK .titleImportantNotifications .showNotifications a {
@@ -1909,6 +1921,15 @@ body {
 }
 
 .content .main .contentLK .mainLK .importantNotifications {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #bc4e24;
+    background-color: #eef8ff;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral {
     display: flex;
     flex-direction: column;
     border: 1px solid #bc4e24;
@@ -2016,6 +2037,104 @@ body {
     color: #FF3F3A;
 }
 
+.content .main .contentLK .mainLK .importantNotificationsGeneral .itemMessage {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .itemMessage {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .itemMessage .moderImage {
+    width: 60px;
+    height: 60px;
+    margin: 0 40px 0 80px;
+    position: relative;
+    border-radius: 60px;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .itemMessage .moderImage .infoModer {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    top: -50px;
+    left: -50px;
+    width: 180px;
+    border: 1px solid #bddc9f;
+    padding: 10px;
+    border-radius: 10px;
+    background: #fbffe5;
+    opacity: .8;
+    font-weight: 700;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .itemMessage .moderImage:hover {
+    box-shadow: 0.8em 0.8em 15px rgba(122,122,122,0.5);
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .itemMessage .moderImage:hover .infoModer{
+    display: flex;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .itemMessage .moderImage img {
+    height: 60px;
+    border-radius: 60px;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .messageWrapper {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #9fb4dc;
+    background-color: #eef8ff;
+    min-height: 82px;
+    align-items: center;
+    width: 1000px;
+    margin: 10px auto;
+    border-radius: 15px 15px 15px 0;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .messageWrapper .message,
+.content .main .contentLK .mainLK .importantNotificationsGeneral .messageWrapper .readMessage {
+    margin: 16px 40px
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .messageWrapper .message {
+    font-size: 18px;
+    font-weight: 600;
+    opacity: .8;
+    color: #0f1629;
+    width: 600px;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .messageWrapper .readMessage a {
+    text-decoration: none;
+    height: 46px;
+    border: 1px solid #353030;
+    color: #221d1d;
+    background-color: #FF3F3A;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    opacity: .8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.content .main .contentLK .mainLK .importantNotificationsGeneral .messageWrapper .readMessage a:hover {
+
+    background-color: rgb(100%, 25%, 23%, .1);
+    border: 1px solid #FF3F3A;
+    color: #FF3F3A;
+}
 
 .article_by_author {
     text-decoration: none;
@@ -2132,7 +2251,7 @@ body {
     font-weight: normal;
     font-size: 14px;
     line-height: 150%;
-
+    word-break: break-word;
     color: #1E212C;
     flex: none;
     order: 0;
@@ -2381,6 +2500,22 @@ body {
     margin: 0 auto 40px;
 }
 
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .toLk_new {
+    display: flex;
+    text-decoration: none;
+    width: 840px;
+    background: linear-gradient(55.95deg, #FF3F3A 0%, #F75E05 100%);
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 44px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.5px;
+    color: #FFFFFF;
+    justify-content: center;
+    margin: 0 auto 40px;
+}
+
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK a:hover,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal input[type="submit"]:hover {
     opacity: .9;
@@ -2415,7 +2550,7 @@ body {
 
 .contentArticleAdd .mainArticleAdd .preview .text_message {
     width: 1000px;
-    margin: 0 auto;
+    margin: 1px auto;
     background-color: #FFFFFF;
     border-radius: 10px;
     padding: 40px 0;
@@ -2669,7 +2804,7 @@ body {
     font-size: 14px;
     padding: 3px 3px 3px 3px;
     color: #787A80;
-    margin-left: 367px;
+    margin-left: 380px;
 }
 
 .side .sort input{

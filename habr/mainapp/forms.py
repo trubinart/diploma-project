@@ -180,6 +180,19 @@ class MessageEditForm(forms.ModelForm):
             field.help_text = ''
 
 
+class GeneralMessageEditForm(forms.ModelForm):
+    class Meta:
+        model = NotificationUsersFromModerator
+        fields = ('is_read',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['is_read'].widget = forms.HiddenInput()
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = f'form-control {field_name}'
+            field.help_text = ''
+
+
 class ArticleStatusEditForm(forms.ModelForm):
     """Форма статуса статьи"""
 
