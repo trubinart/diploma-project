@@ -2781,7 +2781,7 @@ body {
 
 
 .side .sort .date{
-    width: 147px;
+    width: 150px;
     height: 24px;
 }
 
@@ -2804,7 +2804,7 @@ body {
     font-size: 14px;
     padding: 3px 3px 3px 3px;
     color: #787A80;
-    margin-left: 380px;
+    margin-left: 385px;
 }
 
 .side .sort input{

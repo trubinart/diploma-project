@@ -572,10 +572,16 @@ class NotificationUserAfterLikeAndComment(BaseModel):
     def __str__(self):
         return f'уведомление пользователя "{self.recipient_notification.username} о лайке или комменте"'
 
+    def get_user_sender(self):
+        """
+        Метод отдает пользователя, который стал инициатором создания уведомления
+        """
+        return User.objects.filter(pk=self.sender_notification).first()
+
     @staticmethod
     def get_user_name_sender(user_sender):
         user_sender_lst = str(user_sender).split(' - ')
-        if len(user_sender_lst) > 1:
+        if len(user_sender_lst[1]) > 0:
             user_sender_name = user_sender_lst[1]
         else:
             user_sender_name = user_sender_lst[0]
@@ -583,6 +589,9 @@ class NotificationUserAfterLikeAndComment(BaseModel):
 
     @receiver(m2m_changed, sender=Article.likes.through)
     def notify_user_after_like_article(sender, action, instance, pk_set, **kwargs):
+        """
+        Сигнал для отправки уведомления автору статьи, после лайка статьи
+        """
         if action == 'post_add':
             user_sender_id = [_ for _ in pk_set][0]
             user_sender = UserProfile.objects.get(user_id=user_sender_id).user
@@ -597,6 +606,9 @@ class NotificationUserAfterLikeAndComment(BaseModel):
 
     @receiver(m2m_changed, sender=UserProfile.stars.through)
     def notify_user_after_like_author(sender, action, instance, pk_set, **kwargs):
+        """
+        Сигнал для отправки уведомления юзеру, которому повысили ранг
+        """
         if action == 'post_add':
             user_sender_id = [_ for _ in pk_set][0]
             user_sender = UserProfile.objects.get(user_id=user_sender_id).user
@@ -611,6 +623,9 @@ class NotificationUserAfterLikeAndComment(BaseModel):
 
     @receiver(m2m_changed, sender=ArticleComment.likes.through)
     def notify_user_after_like_comment(sender, action, instance, pk_set, **kwargs):
+        """
+        Сигнал для отправки уведомления автору комментария, после лайка комментария
+        """
         if action == 'post_add':
             user_sender_id = [_ for _ in pk_set][0]
             user_sender = UserProfile.objects.get(user_id=user_sender_id).user
@@ -629,6 +644,9 @@ class NotificationUserAfterLikeAndComment(BaseModel):
 
     @receiver(post_save, sender=ArticleComment)
     def notify_user_after_added_comment(sender, instance, **kwargs):
+        """
+        Сигнал для отправки уведомления автору статьи, после добавления комментария к статье
+        """
         user_sender_name = NotificationUserAfterLikeAndComment.get_user_name_sender(instance.user)
         if instance.user != instance.article_comment.user:
             NotificationUserAfterLikeAndComment.objects.create(

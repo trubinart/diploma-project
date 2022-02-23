@@ -176,7 +176,12 @@
                         {% for notification in user.get_general_user_notification %}
                             <div class="itemMessage">
                                 <div class="moderImage">
-                                    <a href="{% url 'user_article' notification.sender_notification %}"><img src="{% static "img/default.png" %}" alt="avatar"></a>
+                                    {% if notification.get_user_sender.userprofile.avatar %}
+                                        <a href="{% url 'user_article' notification.sender_notification %}">
+                                            <img src="/media/{{ notification.get_user_sender.userprofile.avatar }}" alt="avatar"></a>
+                                    {% else %}
+                                        <img src="{% static "img/default.png" %}" alt="avatar"></a>
+                                    {% endif %}
                                 </div>
                                 <div class="messageWrapper">
                                     <div class="message">
@@ -260,7 +265,7 @@
 
     </script>
 
-        <script>
+    <script>
 
         $(document).ready(function () {
             $('.content_toggle_general').click(function () {
