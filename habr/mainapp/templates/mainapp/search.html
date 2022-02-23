@@ -13,9 +13,13 @@
             <div class="search-title">
                 Результаты поиска по запросу «{{ query }}»
             </div>
+
             <div class="search-subtitle">
-                всего найдено статей: {{ page_obj.paginator.count }}
+                {% if not start_date and not end_date and not start_rating and not end_rating %}
+                    всего найдено статей: {{ page_obj.paginator.count }}
+                {% endif %}
             </div>
+
         {% endif %}
 
         <div class="publications">
@@ -23,8 +27,9 @@
 
                 {% if not object_list %}
                     <div class="not-search-title">
-                        По запросу «{{ query }}» ничего не найдено.<br>
-                        Вернитесь на <a href="{% url 'main' %}" class="">главную</a> или продолжите поиск.
+                        <b>Статьи не найдены.</b> <br>
+                        Вернитесь на <a href="{% url 'main' %}" class="">главную</a>, введите другой запрос
+                        или измените настройки фильтра.
                     </div>
                 {% else %}
 
@@ -72,32 +77,9 @@
             </div>
 
             {% if object_list %}
-                <div class="paginator">
-                    {% if page_obj.has_previous %}
-                        <div class="pagLeft">
-                            <a href="?page={{ page_obj.previous_page_number }}&query=
-                                    {{ query }}{% if sort %}&sort={{ sort }}{% endif %}"><img
-                                    src={% static 'img/pagLeft.png' %} alt="left"></a>
-                        </div>
-                    {% endif %}
-
-                    {% for num_page in page_obj.paginator.page_range %}
-                        <div class="pagNum" {% if num_page == page_obj.number %}
-                             style="text-decoration: underline" {% endif %}>
-                            <a href="?page={{ num_page }}&query=
-                                    {{ query }}{% if sort %}&sort={{ sort }}{% endif %}">{{ num_page }}</a>
-                        </div>
-                    {% endfor %}
-
-                    {% if page_obj.has_next %}
-                        <div class="pagRight">
-                            <a href="?page={{ page_obj.next_page_number }}&query=
-                                    {{ query }}{% if sort %}&sort={{ sort }}{% endif %}"><img
-                                    src={% static 'img/pagRight.png' %} alt=" right"></a>
-                        </div>
-                    {% endif %}
-                </div>
+                {% include 'mainapp/includes/inc-pagination.html' %}
             {% endif %}
+
         </div>
     </div>
 {% endblock %}

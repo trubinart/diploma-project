@@ -137,6 +137,7 @@
                         </div>
                     </div>
                     <div class="buttons">
+<!--<<<<<<< HEAD-->
                         <div class="watch">
                             {% if notification.comment_initiator.article_comment.blocked %}
                             <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}"
@@ -144,10 +145,18 @@
                                 Статья на доработке
                             </a>
                             {% else %}
+<!--=======-->
+<!--                        <div class="take">-->
+<!--&gt;>>>>>> 684b6a5d242fa4c02e8ec96de2db109580666fb8-->
                             <a href="{% url 'article' notification.comment_initiator.article_comment.pk %}">
                                 Просмотреть статью
                             </a>
                             {% endif %}
+                        </div>
+                        <div class="watch">
+                            <a href="{% url 'moder_not_rev_update' notification.pk %}">
+                                Снять с модерации
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -231,7 +240,7 @@
                         <div class="infoModer">
                             Написать модератору
                         </div>
-                        <a href="#"><img src="/media/user_avatars/moder.jpg" alt="avatar"></a>
+                        <a href="#"><img src={% static "img/moder.jpg" %} alt="avatar"></a>
                     </div>
                     <div class="messageWrapper">
                         <div class="message">

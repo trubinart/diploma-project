@@ -201,3 +201,13 @@ class ModeratorNotificationAboutReModerationEditForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = f'form-control {field_name}'
             field.help_text = ''
+
+
+class FilterForm(forms.Form):
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
+    start_rating = forms.IntegerField(required=False)
+    end_rating = forms.IntegerField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(FilterForm, self).__init__(*args, **kwargs)
