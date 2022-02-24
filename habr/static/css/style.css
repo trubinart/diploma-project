@@ -2767,8 +2767,8 @@ body {
 
 .content .main .menu .side .sort {
     display: flex;
-    /*align-items: flex-end;*/
-    /*justify-content: flex-start;*/
+    align-items: flex-start;
+    justify-content: flex-start;
     height: 44px;
     margin: 0 30px;
 }
