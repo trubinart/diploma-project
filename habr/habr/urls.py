@@ -12,8 +12,10 @@ from mainapp.views import MainListView, ArticleDetailView, \
     AuthorStarRedirectView, AuthorArticleStarRedirectView, UpdateArticle, ProfileCreateView, \
     ProfileEditView, LkListView, MyArticleListView, BannedAuthorCommentView, BannedAuthorArticleView, \
     ModeratorNotificationUpdate, NotificationUsersAboutBlockingUpdate, PageNotFountView, \
+    ModeratorNotificationAboutReModerationUpdate, \
     ArticleStatusUpdate, UserCommentDeleteView, ModeratorNotificationReviewedUpdate, GeneralNotificationUsersUpdate, \
-    AllGeneralNotificationUserView, AllGeneralNotificationUserUpdate, ReplyCommentView
+    AllGeneralNotificationUserView, AllGeneralNotificationUserUpdate, ReplyCommentView, UserCommentToCommentDeleteView, \
+    ChapterHelpView
 
 from authapp.views import UserEditView
 from ckeditor_uploader import views
@@ -21,6 +23,7 @@ from ckeditor_uploader import views
 urlpatterns = [
 
     path('', MainListView.as_view(), name='main'),
+    path('help/', ChapterHelpView.as_view(), name='help'),
     path('lk/', LkListView.as_view(), name='lk'),
     path('lk/add/', ProfileCreateView.as_view(), name='profile_add'),
     path('lk/edit/<str:pk>/', ProfileEditView.as_view(), name='profile_edit'),
@@ -32,7 +35,13 @@ urlpatterns = [
     path('article-update/<str:pk>/', UpdateArticle.as_view(), name='article_update'),
 
     path('ModerNot-update/<str:pk>/', ModeratorNotificationUpdate.as_view(), name='moder_not_update'),
+
+    path('ModerNotReMod-update/<str:pk>/',
+         ModeratorNotificationAboutReModerationUpdate.as_view(),
+         name='moder_not_re_mod_update'),
+
     path('ModerNotRev-update/<str:pk>/', ModeratorNotificationReviewedUpdate.as_view(), name='moder_not_rev_update'),
+
 
     path('add-comment/', CreateCommentView.as_view(), name='add-comment'),
     path('reply-comment/', ReplyCommentView.as_view(), name='reply-comment'),
@@ -57,6 +66,7 @@ urlpatterns = [
     path('status-update/<str:pk>/', ArticleStatusUpdate.as_view(), name='article_status_update'),
     path('article/<str:pk>/banned/', BannedAuthorArticleView.as_view(), name='banned_author_article_toggle'),
     path('user-comment-delete/<str:pk>/', UserCommentDeleteView.as_view(), name='comment_delete'),
+    path('user-comment-to-comment-delete/<str:pk>/', UserCommentToCommentDeleteView.as_view(), name='comment_to_comment_delete'),
 
     path('warning-all-gen-notify/<str:pk>/', AllGeneralNotificationUserView.as_view(), name='warning_all_gen_notify'),
     path('update-all-gen-notify/<str:pk>/', AllGeneralNotificationUserUpdate.as_view(), name='update_all_gen_notify'),

@@ -18,12 +18,14 @@ from uuid import UUID
 from authapp.forms import UserRegisterForm
 
 from mainapp.forms import UserProfileEditForm, UserProfileForm, ModeratorNotificationEditForm, \
-    ArticleStatusEditForm, MessageEditForm, FilterForm, GeneralMessageEditForm, ReplyCommentForm
+    ModeratorNotificationAboutReModerationEditForm, ArticleStatusEditForm, MessageEditForm, \
+    FilterForm, GeneralMessageEditForm, ReplyCommentForm
 
 from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification, \
-    NotificationUsersFromModerator, NotificationUserAfterLikeAndComment
+    ModeratorNotificationAboutReModeration, NotificationUsersFromModerator, \
+    NotificationUserAfterLikeAndComment, ReplyComments
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -69,7 +71,8 @@ def get_filter_article_queryset(self, article_queryset):
         data = form.cleaned_data
     else:
         raise Http404()
-    queryset = article_queryset.filter(status='A')
+    queryset = article_queryset.filter(status='A').exclude(
+        blocked='True')
     if data['start_date']:
         queryset = queryset.filter(created_timestamp__gte=data['start_date'])
     if data['end_date']:
@@ -155,9 +158,26 @@ class ArticleDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         article_id = self.kwargs['pk']
         article_status = Article.objects.get(id=article_id).status
-        if article_status != 'A':
+        article_blocked = Article.objects.get(id=article_id).blocked
+        if article_status != 'A' or article_blocked:
             self.template_name = 'mainapp/404.html'
         return super().dispatch(request, *args, **kwargs)
+
+
+class ChapterHelpView(ListView):
+    """Класс для вывода страницы «Помощь»"""
+    template_name = 'mainapp/chapterHelp.html'
+
+    # заглушка
+    def get_queryset(self):
+        pass
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Помощь'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
 
 
 class CategoriesListView(ListView):
@@ -219,8 +239,12 @@ class LkListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = 'Личный кабинет'
+        re_moderation_notifications_list = ModeratorNotificationAboutReModeration.objects.exclude(
+            status='R'
+        )
         context['title'] = title
         context['categories_list'] = category_list
+        context['re_moderation_notifications_list'] = re_moderation_notifications_list
         return context
 
     @method_decorator(user_passes_test(lambda u: u.is_active))
@@ -440,10 +464,11 @@ class SearchView(ListView):
         form = SearchForm(self.request.GET)
         if form.is_valid():
             query_string = form.cleaned_data['query']
-            queryset = Article.objects.search(query=query_string)
-            queryset = self.get_filter_article_queryset(queryset)
-            queryset = self.get_sort_article_queryset(queryset)
-            return queryset
+
+        queryset = Article.objects.search(query=query_string)
+        queryset = self.get_filter_article_queryset(queryset)
+        queryset = self.get_sort_article_queryset(queryset)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -543,7 +568,21 @@ class ModeratorNotificationUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Вы действительно хотите взять на модерацию статью?'
+        title = 'Вы действительно хотите взять статью на модерацию?'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
+
+
+class ModeratorNotificationAboutReModerationUpdate(UpdateView):
+    model = ModeratorNotificationAboutReModeration
+    template_name = 'mainapp/updateModerNotifAboutReModer.html'
+    form_class = ModeratorNotificationAboutReModerationEditForm
+    success_url = reverse_lazy('lk')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Модерация статьи после доработки автором'
         context['title'] = title
         context['categories_list'] = category_list
         return context
@@ -614,6 +653,8 @@ class ArticleStatusUpdate(UpdateView):
     def get_success_url(self):
         if re.search(r'\/article\/', self.request.META.get('HTTP_REFERER')):
             return reverse_lazy('main')
+        elif re.search(r'\/ModerNotReMod-update\/', self.request.META.get('HTTP_REFERER')):
+            return reverse_lazy('lk')
         else:
             return reverse_lazy('my_articles', args=[self.request.user.id])
 
@@ -640,6 +681,18 @@ class UserCommentDeleteView(DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class UserCommentToCommentDeleteView(DeleteView):
+    model = ReplyComments
+
+    def get_success_url(self):
+        article_id = self.request.META['HTTP_REFERER'].split('/')[-2]
+        return reverse_lazy('article', kwargs={'pk': article_id})
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
 class ModeratorNotificationReviewedUpdate(UpdateView):
     """Снятие модератором статьи с модерации"""
     model = ModeratorNotification
@@ -649,7 +702,7 @@ class ModeratorNotificationReviewedUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Вы действительно хотите снять с модерации статью?'
+        title = 'Вы действительно хотите снять статью с модерации?'
         context['title'] = title
         context['categories_list'] = category_list
         return context
@@ -685,6 +738,7 @@ class AllGeneralNotificationUserView(ListView):
 
 class AllGeneralNotificationUserUpdate(RedirectView):
     """Переместить все уведомления в прочитанные"""
+
     def get_redirect_url(self, *args, **kwargs):
         user = self.request.user
         obj_notify = user.get_general_user_notification()

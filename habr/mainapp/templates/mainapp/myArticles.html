@@ -27,7 +27,12 @@
                                                 <div {% if instance_article.status == 'D' %}
                                                     style="background-color: #9A9CA5;"
                                                 {% endif %}
+                                                {% if instance_article.is_for_re_moderation %}
+                                                    class="status">Модерация</div>
+                                                {% else %}
                                                     class="status">{{ instance_article.get_status_display }}</div>
+                                                {% endif %}
+<!--                                                    class="status">{{ instance_article.get_status_display }}</div>-->
 
                                                 <div class="category">{{ instance_article.categories }}</div>
                                             </div>
@@ -52,15 +57,25 @@
                                             <div class="article-title">{{ instance_article.title }}</div>
                                             <div class="article-prewiev">{{ instance_article.subtitle }}</div>
                                             <div class="button-box">
+                                                {% if not instance_article.is_for_re_moderation %}
                                                 <a class="article-button"
                                                    href="{% url 'article_update' instance_article.pk %}">Редактировать</a>
 
-                                                {% if instance_article.status == 'D' %}
+                                                {% if instance_article.status == 'D' and not instance_article.is_for_correction %}
                                                     <form method="post"
                                                           action="{% url 'article_status_update' instance_article.pk %}">
                                                         {% csrf_token %}
                                                         <input hidden="true" name="status" value="A">
                                                         <button type="submit" class="article-button">Опубликовать
+                                                        </button>
+                                                    </form>
+                                                {% elif instance_article.is_for_correction %}
+                                                    <form method="post"
+                                                          action="{% url 'article_status_update' instance_article.pk %}">
+                                                        {% csrf_token %}
+                                                        <input hidden="true" name="status" value="A">
+                                                        <input hidden="true" name="blocked" value="True">
+                                                        <button type="submit" class="article-button">Отправить <br> на модерацию
                                                         </button>
                                                     </form>
                                                 {% endif %}
@@ -81,8 +96,11 @@
 
                                                     </span>
                                                 </div>
-
-
+                                            {% else %}
+                                                <div class="reModer">
+                                                    Статья проверяется модератором
+                                                </div>
+                                            {% endif %}
                                             </div>
                                         </div>
                                     {% endfor %}

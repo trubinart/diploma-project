@@ -1436,6 +1436,10 @@ body {
     border-radius: 3px;
 }
 
+.content .main .contentLK .mainLK .moderator .re_moder {
+    background-color: #efd1bd;
+}
+
 .content .main .contentLK .mainLK .moderator .requests .text {
     display: flex;
     justify-content: space-between;
@@ -1484,10 +1488,16 @@ body {
     border-radius: 4px;
 }
 
+.content .main .contentLK .mainLK .re_moder {
+    background: rgb(255 222 58 / 10%);
+}
+
 .content .main .contentLK .mainLK .my_request {
     background: rgb(195 195 243 / 50%);
 }
 
+.content .main .contentLK .mainLK .my_re_moder_request {
+    background: rgb(195 223 243 / 50%);}
 
 .content .main .contentLK .mainLK .new_requests .requests_title {
     display: flex;
@@ -1555,10 +1565,11 @@ body {
     margin: 0 20px;
 }
 
+.content .main .contentLK .mainLK .new_requests .buttons .close .form-lock button,
 .content .main .contentLK .mainLK .new_requests .buttons a {
     display: flex;
     text-decoration: none;
-    padding: 0px 32px;
+    padding: 0px 18px;
     width: 120px;
     height: 44px;
     border: 1px solid #F75E05;
@@ -1571,9 +1582,17 @@ body {
     margin: 5px;
 }
 
+.content .main .contentLK .mainLK .new_requests .buttons .close .form-lock button {
+    background: none;
+    color: #FF3F3A;
+    width: 186px;
+}
+
+.content .main .contentLK .mainLK .new_requests .buttons .close .form-lock button:hover,
 .content .main .contentLK .mainLK .new_requests .buttons a:hover {
     background: linear-gradient(55.95deg, #FF3F3A 0%, #F75E05 100%);
     color: #FFFFFF;
+    cursor: pointer;
 }
 
 .content .main .contentLK .mainLK .titleLK {
@@ -2229,21 +2248,18 @@ body {
 }
 
 .comment_author {
-    width: 130px;
     height: 26px;
     right: 0px;
     top: 46px;
-
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
     line-height: 160%;
-
     color: #787A80;
     flex: none;
     order: 1;
     flex-grow: 0;
-    margin: 4px 0px;
+    margin: 4px 50px 4px 0;
 }
 
 .comment_text {
@@ -2316,7 +2332,6 @@ body {
     background: linear-gradient(55.95deg, #FF3F3A 0%, #F75E05 100%);
     color: #FFFFFF;
 }
-
 
 /* end .comment-add */
 .sidebar-author .author-article_title {
@@ -2472,6 +2487,7 @@ body {
     border: 1px solid #D7DADD;
 }
 
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal button,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal input[type="submit"] {
     background: linear-gradient(55.95deg, #FF3F3A 0%, #F75E05 100%);
     border-radius: 6px;
@@ -2482,6 +2498,10 @@ body {
     letter-spacing: 0.5px;
     color: #FFFFFF;
     justify-content: center;
+}
+
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .unlock button {
+    background: linear-gradient(55.95deg, #5c9f54 0%, #1e8f36);
 }
 
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .toLk {
@@ -2516,6 +2536,7 @@ body {
     margin: 0 auto 40px;
 }
 
+.contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal button:hover,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK a:hover,
 .contentArticleAdd .mainArticleAdd .blokPersonInfoLK .baseInfoBlokLK .form-horizontal input[type="submit"]:hover {
     opacity: .9;
@@ -2778,7 +2799,6 @@ body {
 .content .main .menu .side .sort a:hover {
     opacity: .8;
 }
-
 
 .side .sort .date{
     width: 149px;

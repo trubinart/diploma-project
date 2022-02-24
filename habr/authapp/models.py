@@ -61,6 +61,21 @@ class User(AbstractUser, BaseModel, PermissionsMixin):
             status='R'
         ).count()
 
+    def get_count_notifications_on_article_for_re_moderation(self):
+        return mainapp_models.ModeratorNotificationAboutReModeration.objects.filter(
+            responsible_moderator=self
+        ).exclude(
+            status='R'
+        ).count()
+
+    @staticmethod
+    def get_count_notifications_on_moderation_new():
+        return mainapp_models.ModeratorNotification.objects.filter(status='N').count()
+
+    @staticmethod
+    def get_count_notifications_on_article_for_re_moderation_new():
+        return mainapp_models.ModeratorNotificationAboutReModeration.objects.filter(status='N').count()
+
     @property
     def is_now_banned(self) -> bool:
         if self.is_banned:
