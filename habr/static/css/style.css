@@ -1569,7 +1569,7 @@ body {
 .content .main .contentLK .mainLK .new_requests .buttons a {
     display: flex;
     text-decoration: none;
-    padding: 0px 32px;
+    padding: 0px 18px;
     width: 120px;
     height: 44px;
     border: 1px solid #F75E05;
@@ -2248,21 +2248,18 @@ body {
 }
 
 .comment_author {
-    width: 130px;
     height: 26px;
     right: 0px;
     top: 46px;
-
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
     line-height: 160%;
-
     color: #787A80;
     flex: none;
     order: 1;
     flex-grow: 0;
-    margin: 4px 0px;
+    margin: 4px 50px 4px 0;
 }
 
 .comment_text {

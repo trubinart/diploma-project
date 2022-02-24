@@ -38,7 +38,11 @@
                 {% include 'mainapp/includes/inc-menu.html' %}
                 <div class="accaunt">
                     {% if user.is_authenticated %}
-                        {% if user.get_notification_about_blocking.count or user.get_count_notifications_on_moderation or user.get_count_general_user_notification != 0 %}
+                        {% if user.get_count_notifications_on_moderation_new or user.get_count_notifications_on_article_for_re_moderation_new != 0 %}
+                            <a title="Есть новые уведомления" href="{% url 'lk' %}"><img class="shake_img" src={% static "img/notifications_black.png" %}></a>
+                        {% elif user.get_count_notifications_on_article_for_re_moderation or user.get_count_notifications_on_moderation != 0 %}
+                            <a title="Есть новые уведомления" href="{% url 'lk' %}"><img class="shake_img" src={% static "img/notifications_black.png" %}></a>
+                        {% elif user.get_count_notifications_about_blocking or user.get_count_general_user_notification != 0 %}
                             <a title="Есть новые уведомления" href="{% url 'lk' %}"><img class="shake_img" src={% static "img/notifications_black.png" %}></a>
                         {% else %}
                             <a title="Новых уведомлений нет"href="#"><img src={% static "img/notifications.png" %}></a>
@@ -62,6 +66,7 @@
                             <a href="{% url 'auth:registration' %}"> Register</a>
                         </div>
                     {% endif %}
+{#                    {% endif %}#}
                 </div>
             </div>
         {% endblock %}
@@ -114,6 +119,9 @@
                                     <a href="{% url 'category' categories.id %}">{{ categories.name }}</a>
                                 </li>
                             {% endfor %}
+                            <li class="home">
+                                <a href="{% url 'help' %}">Помощь</a>
+                            </li>
                         </ul>
 
                     </div>

@@ -25,7 +25,7 @@ from mainapp.forms import ArticleEditForm, CreationCommentForm, SearchForm
 from authapp.models import User, UserProfile
 from mainapp.models import Article, ArticleCategories, ArticleComment, ModeratorNotification, \
     ModeratorNotificationAboutReModeration, NotificationUsersFromModerator, \
-    NotificationUserAfterLikeAndComment
+    NotificationUserAfterLikeAndComment, ReplyComments
 
 """обозначение списка категорий для вывода в меню во разных view"""
 category_list = ArticleCategories.objects.all()
@@ -162,6 +162,22 @@ class ArticleDetailView(DetailView):
         if article_status != 'A' or article_blocked:
             self.template_name = 'mainapp/404.html'
         return super().dispatch(request, *args, **kwargs)
+
+
+class ChapterHelpView(ListView):
+    """Класс для вывода страницы «Помощь»"""
+    template_name = 'mainapp/chapterHelp.html'
+
+    # заглушка
+    def get_queryset(self):
+        pass
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        title = 'Помощь'
+        context['title'] = title
+        context['categories_list'] = category_list
+        return context
 
 
 class CategoriesListView(ListView):
@@ -552,7 +568,7 @@ class ModeratorNotificationUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Вы действительно хотите взять на модерацию статью?'
+        title = 'Вы действительно хотите взять статью на модерацию?'
         context['title'] = title
         context['categories_list'] = category_list
         return context
@@ -665,6 +681,18 @@ class UserCommentDeleteView(DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class UserCommentToCommentDeleteView(DeleteView):
+    model = ReplyComments
+
+    def get_success_url(self):
+        article_id = self.request.META['HTTP_REFERER'].split('/')[-2]
+        return reverse_lazy('article', kwargs={'pk': article_id})
+
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
 class ModeratorNotificationReviewedUpdate(UpdateView):
     """Снятие модератором статьи с модерации"""
     model = ModeratorNotification
@@ -674,7 +702,7 @@ class ModeratorNotificationReviewedUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        title = 'Вы действительно хотите снять с модерации статью?'
+        title = 'Вы действительно хотите снять статью с модерации?'
         context['title'] = title
         context['categories_list'] = category_list
         return context

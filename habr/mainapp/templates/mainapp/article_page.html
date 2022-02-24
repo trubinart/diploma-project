@@ -218,6 +218,15 @@
                                             </div>
                                             <div class="comment_text">{{ reply_comment.text }}</div>
                                         </div>
+                                        <div class="habr_info">
+                                            {% if user.is_staff %}
+                                            <form method="post" action="{% url 'comment_to_comment_delete' reply_comment.pk %}"
+                                                  class="delete_comment">
+                                                {% csrf_token %}
+                                                <button type="submit">Удалить комментарий</button>
+                                            </form>
+                                            {% endif %}
+                                        </div>
                                     {% endfor %}
                                 </div>
                             {% endif %}

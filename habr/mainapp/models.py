@@ -547,9 +547,9 @@ class NotificationUsersFromModerator(BaseModel):
 
         if not blocked and blocked_before:
             # Если статью заблокировали
-            part_1 = f'Модератор снял блокировку Вашей стати под заголовком: ' \
+            part_1 = f'Модератор снял блокировку Вашей статьи под заголовком: ' \
                      f'"{instance.title}" ' \
-                     f'Вы можете снова опубликовать эту статью.'
+                     f'Статья автоматически опубликована на портале!'
 
         if part_1 or part_2:
             message = NotificationUsersFromModerator.get_full_message(part_1, part_2)

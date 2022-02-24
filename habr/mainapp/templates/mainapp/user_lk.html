@@ -124,7 +124,7 @@
                     {% if user.get_count_notifications_on_moderation %}
                         <div class="new_requests my_request">
                             <div class="requests_title">
-                                Взятые в работу запросы на модерацию
+                                Взятые в работу запросы на модерацию контента
                             </div>
                             {% for notification in object_list %}
                                 {% if notification.responsible_moderator == user and notification.status != 'R' %}
@@ -190,7 +190,7 @@
                                                     action="{% url 'moder_not_re_mod_update' notification.pk %}">
                                                     {% csrf_token %}
                                                     <input hidden="true" name="status" value="R">
-                                                    <button type="submit">Закрыть заявку</button>
+                                                    <button type="submit">Закрыть заявку (после модерации!)</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -236,10 +236,11 @@
                         {% for notification in user.get_notification_about_blocking %}
                             <div class="itemMessage">
                                 <div class="moderImage">
-                                    <div class="infoModer">
-                                        Написать модератору
-                                    </div>
-                                    <a href="#"><img src={% static "img/moder.jpg" %} alt="avatar"></a>
+{#                                    <div class="infoModer">#}
+{#                                        Написать модератору#}
+{#                                    </div>#}
+{#                                    <a href="#"><img src={% static "img/moder.jpg" %} alt="avatar"></a>#}
+                                    <img src={% static "img/moder.jpg" %} alt="avatar">
                                 </div>
                                 <div class="messageWrapper">
                                     <div class="message">
