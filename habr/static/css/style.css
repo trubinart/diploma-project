@@ -2307,6 +2307,7 @@ body {
 }
 
 .add_comment_button {
+    color: #1E212C;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2325,7 +2326,6 @@ body {
     margin-left: 10px;
     margin-bottom: 20px;
     margin-top: 15px;
-
 }
 
 .add_comment_button:hover {
@@ -2647,6 +2647,7 @@ body {
 }
 
 .delete_comment button {
+    color: #1E212C;
     height: 23px;
     width: 150px;
     align-items: center;
@@ -2665,7 +2666,6 @@ body {
     color: #FFFFFF;
 }
 
-
 .showNotifications button {
     padding: 0 5px 0 5px;
     margin-left: 20px;
@@ -2682,7 +2682,6 @@ body {
 }
 
 .showNotifications button {
-    text-decoration: none;
     color: #1E212C;
 }
 
@@ -2696,6 +2695,7 @@ body {
 }
 
 .block_author_comment button {
+    color: #1E212C;
     height: 23px;
     width: 150px;
     align-items: center;
@@ -2716,7 +2716,7 @@ body {
 .delete_article button{
     height: 23px;
     width: 260px;
-
+    color: #1E212C;
     align-items: center;
     background: #FFFFFF;
     border: 1px solid #F75E05;
@@ -2748,7 +2748,7 @@ body {
 .block_author_article button {
     height: 23px;
     width: 150px;
-
+    color: #1E212C;
     align-items: center;
     background: #FFFFFF;
     border: 1px solid #F75E05;
@@ -2801,7 +2801,7 @@ body {
 }
 
 .side .sort .date{
-    width: 149px;
+    width: 145px;
     height: 24px;
 }
 
@@ -2824,12 +2824,13 @@ body {
     font-size: 14px;
     padding: 3px 3px 3px 3px;
     color: #787A80;
-    margin-left: 385px;
+    margin-left: 380px;
 }
 
 .side .sort input{
     margin-left: 10px;
-    -moz-appearance:textfield;
+    box-sizing: border-box;
+    text-indent: 5px;
 }
 
 .side .sort input::-webkit-outer-spin-button,

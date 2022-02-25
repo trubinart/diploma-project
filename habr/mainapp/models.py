@@ -238,7 +238,7 @@ class ReplyComments(BaseModel):
         return f'from {self.user.username} to {self.comment_to_reply.user.username}'
 
     class Meta:
-        ordering = ['-created_timestamp']
+        ordering = ['created_timestamp']
 
 
 class ModeratorNotification(BaseModel):

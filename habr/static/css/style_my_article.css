@@ -36,13 +36,21 @@
 .article-title {
     width: 342px;
     margin-left: 24px;
-
-/ / styleName: large / bold;
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
     line-height: 27px;
     text-align: left;
+}
+
+.article-title a {
+    color: #1E212C;
+    text-decoration: none;
+}
+
+.article-title a:hover {
+    color: #FF3F3A;
+    text-decoration: none;
 }
 
 .article-prewiev {

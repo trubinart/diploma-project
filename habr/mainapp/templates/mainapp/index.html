@@ -22,7 +22,9 @@
                     {% for instance_article in object_list %}
                         <div class="publication">
                             <div class="image">
+                                <a href="{% url 'article' instance_article.pk %}">
                                 <img src={{ instance_article.main_img.url }} alt="{{ instance_article.main_img }}">
+                                </a>
                             </div>
                             <div class="publicationInfo">
                                 <div class="category">
